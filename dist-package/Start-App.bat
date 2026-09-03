@@ -59,5 +59,4 @@ if exist "%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe" (
 ) else (
     start http://localhost:3002
 )
-
 exit
