@@ -1,7 +1,7 @@
-﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   ðŸš— CAR RECORDS SYSTEM â€” Application Engine
+/* ═══════════════════════════════════════════════════════════════
+   🚗 CAR RECORDS SYSTEM — Application Engine
    Multi-Server Management | Local File Config | Responsive Tabs
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ═══════════════════════════════════════════════════════════════ */
 
 document.addEventListener('DOMContentLoaded', () => {
   // Professional Log Filtering for Production
@@ -12,32 +12,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Global Unhandled Error Shield
   window.addEventListener('error', (e) => {
-    console.warn('ðŸ›¡ï¸ [App Shield] Handled error safely:', e.message);
+    console.warn('🛡️ [App Shield] Handled error safely:', e.message);
   });
   window.addEventListener('unhandledrejection', (e) => {
-    console.warn('ðŸ›¡ï¸ [App Shield] Handled rejection safely:', e.reason);
+    console.warn('🛡️ [App Shield] Handled rejection safely:', e.reason);
   });
 
-  // Global Submit Interceptor â€” Absolute guarantee that forms never trigger full-page navigation
+  // Global Submit Interceptor — Absolute guarantee that forms never trigger full-page navigation
   document.addEventListener('submit', (e) => {
     if (!e.defaultPrevented) {
       e.preventDefault();
-      console.log('ðŸ›¡ï¸ [App Shield] Intercepted default form submit on:', e.target && e.target.id);
+      console.log('🛡️ [App Shield] Intercepted default form submit on:', e.target && e.target.id);
     }
   }, true);
 
   if (window.lucide) lucide.createIcons();
 
-  // â”€â”€â”€ GLOBAL KURDISH TEXT STANDARDIZATION â”€â”€â”€
-  // This fixes issues with C4Kurd and Arabic keyboards (e.g. converting 'Ù‡Ù€' to 'Ù‡', Arabic 'ÙŠ' to 'ÛŒ', etc.)
+  // ─── GLOBAL KURDISH TEXT STANDARDIZATION ───
+  // This fixes issues with C4Kurd and Arabic keyboards (e.g. converting 'هـ' to 'ه', Arabic 'ي' to 'ی', etc.)
   function standardizeKurdishText(str) {
     if (!str) return '';
     return String(str)
-      .replace(/Ù€/g, '')      // Remove Kashida / Tatweel (U+0640)
-      .replace(/Ùƒ/g, 'Ú©')    // Replace Arabic Kaf (U+0643) with Keheh (U+06A9)
-      .replace(/ÙŠ/g, 'ÛŒ')    // Replace Arabic Yeh (U+064A) with Farsi Yeh (U+06CC)
-      .replace(/Ù‰/g, 'ÛŒ')    // Replace Alef Maksura (U+0649) with Farsi Yeh (U+06CC)
-      .replace(/Ø©/g, 'Û•');   // Replace Teh Marbuta (U+0629) with Ae (U+06D5)
+      .replace(/ـ/g, '')      // Remove Kashida / Tatweel (U+0640)
+      .replace(/ك/g, 'ک')    // Replace Arabic Kaf (U+0643) with Keheh (U+06A9)
+      .replace(/ي/g, 'ی')    // Replace Arabic Yeh (U+064A) with Farsi Yeh (U+06CC)
+      .replace(/ى/g, 'ی')    // Replace Alef Maksura (U+0649) with Farsi Yeh (U+06CC)
+      .replace(/ة/g, 'ە');   // Replace Teh Marbuta (U+0629) with Ae (U+06D5)
   }
 
   document.addEventListener('input', (e) => {
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // â”€â”€â”€ API BASE URL RESOLVER â”€â”€â”€
+  // ─── API BASE URL RESOLVER ───
   function getApiBase() {
     // If running from a live web server (http/https), use relative URLs
     if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
@@ -258,11 +258,11 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           if (callback) callback();
         } else {
-          secAuthErrorMsg.textContent = data.error || 'âŒ Ù†Ø§ÙˆÛŒ Ø¨Û•Ú©Ø§Ø±Ù‡ÛŽÙ†Û•Ø± ÛŒØ§Ù† ÙˆØ´Û•ÛŒ Ù†Ù‡ÛŽÙ†ÛŒ Ø¦Û•Ø¯Ù…ÛŒÙ† Ù‡Û•ÚµÛ•ÛŒÛ•!';
+          secAuthErrorMsg.textContent = data.error || '❌ ناوی بەکارهێنەر یان وشەی نهێنی ئەدمین هەڵەیە!';
           secAuthErrorMsg.style.display = 'block';
         }
       } catch (err) {
-        secAuthErrorMsg.textContent = 'âŒ Ù‡Û•ÚµÛ• Ù„Û• Ù¾Û•ÛŒÙˆÛ•Ù†Ø¯ÛŒ: ' + err.message;
+        secAuthErrorMsg.textContent = '❌ هەڵە لە پەیوەندی: ' + err.message;
         secAuthErrorMsg.style.display = 'block';
       }
     };
@@ -404,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return allowed.includes(pass) || pass === 'Na2652014Va';
   }
 
-  // Login Form â€” Supports Offline Standalone Admin Authentication
+  // Login Form — Supports Offline Standalone Admin Authentication
   const loginForm = document.getElementById('login-form');
   if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
@@ -413,11 +413,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = document.getElementById('login-password').value;
 
       if (!username || !password) {
-        alert('ØªÚ©Ø§ÛŒÛ• Ù†Ø§ÙˆÛŒ Ø¨Û•Ú©Ø§Ø±Ù‡ÛŽÙ†Û•Ø± Ùˆ ØªÛŽÙ¾Û•Ú•Û•ÙˆØ´Û• Ø¨Ù†ÙˆÙˆØ³Û• / Please enter username and password');
+        alert('تکایە ناوی بەکارهێنەر و تێپەڕەوشە بنووسە / Please enter username and password');
         return;
       }
 
-      // â”€â”€â”€ LOCAL STANDALONE ADMIN AUTHENTICATION â”€â”€â”€
+      // ─── LOCAL STANDALONE ADMIN AUTHENTICATION ───
       // Admin user does NOT require server/database connection to open config & admin features
       if (username.toLowerCase() === 'admin' && isMasterAdminPassword(password)) {
         const adminUser = {
@@ -429,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
           Role_: 'Admin',
           role: 'admin',
           permetion: 'Admin',
-          FullName_: 'Ù…. Ù†Û•Ú˜Ø§Ø¯ (Ø¦Û•Ø¯Ù…ÛŒÙ†)',
+          FullName_: 'م. نەژاد (ئەدمین)',
           isAdmin: true
         };
         state.currentUser = adminUser;
@@ -445,7 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // â”€â”€â”€ SERVER API LOGIN FOR OPERATOR / SQL USERS â”€â”€â”€
+      // ─── SERVER API LOGIN FOR OPERATOR / SQL USERS ───
       try {
         const res = await fetch(getApiBase() + '/api/login', {
           method: 'POST',
@@ -478,7 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showView('scanner');
             return;
           }
-          alert('Ú†ÙˆÙˆÙ†Û•Ú˜ÙˆÙˆØ±Û•ÙˆÛ• Ø³Û•Ø±Ù†Û•Ú©Û•ÙˆØª: ' + (data.error || 'Ø²Ø§Ù†ÛŒØ§Ø±ÛŒ Ù‡Û•ÚµÛ•ÛŒÛ•'));
+          alert('چوونەژوورەوە سەرنەکەوت: ' + (data.error || 'زانیاری هەڵەیە'));
         }
       } catch (err) {
         // Offline / Server Disconnected handling
@@ -493,7 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
           updateSessionUI();
           showView('scanner');
         } else {
-          alert('âš ï¸ Ø³ÛŽØ±Ú¤Û•Ø± Ù¾Û•ÛŒÙˆÛ•Ø³Øª Ù†ÛŒÛŒÛ•: ' + err.message + '\nØªÛ•Ù†Ù‡Ø§ Ø¦Û•Ø¯Ù…ÛŒÙ† Ø¯Û•ØªÙˆØ§Ù†ÛŽØª Ù„Û• Ø­Ø§ÚµÛ•ØªÛŒ Ø¦Û†ÙÙ„Ø§ÛŒÙ†Ø¯Ø§ Ø¨Ú†ÛŽØªÛ• Ú˜ÙˆÙˆØ±Û•ÙˆÛ• Ø¨Û† Ú•ÛŽÚ©Ø®Ø³ØªÙ†ÛŒ Ø³ÛŽØ±Ú¤Û•Ø±.');
+          alert('⚠️ سێرڤەر پەیوەست نییە: ' + err.message + '\nتەنها ئەدمین دەتوانێت لە حاڵەتی ئۆفلایندا بچێتە ژوورەوە بۆ ڕێکخستنی سێرڤەر.');
         }
       }
     });
@@ -559,16 +559,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Update Header Status
       if (data.isSqlServerConnected) {
-        headerStatus.innerHTML = `<span style="color:var(--accent-emerald); font-weight:700;">ðŸŸ¢ Server connected</span>`;
+        headerStatus.innerHTML = `<span style="color:var(--accent-emerald); font-weight:700;">🟢 Server connected</span>`;
         if (sqlStatusBanner) {
           sqlStatusBanner.className = 'config-status-banner connected';
           sqlStatusText.textContent = `Connected to: ${data.serverHost} (${data.dbName})`;
         }
       } else {
-        headerStatus.innerHTML = `<span style="color:var(--accent-amber); font-weight:700;">âš ï¸ Standby Mode</span>`;
+        headerStatus.innerHTML = `<span style="color:var(--accent-amber); font-weight:700;">⚠️ Standby Mode</span>`;
         if (sqlStatusBanner) {
           sqlStatusBanner.className = 'config-status-banner error';
-          sqlStatusText.textContent = data.lastSqlError || 'Not configured â€” enter details below';
+          sqlStatusText.textContent = data.lastSqlError || 'Not configured — enter details below';
         }
       }
 
@@ -689,12 +689,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (!payload.server || !payload.database) {
-      alert('ØªÚ©Ø§ÛŒÛ• Ù†Ø§ÙˆÙ†ÛŒØ´Ø§Ù†ÛŒ Ø³ÛŽØ±Ú¤Û•Ø± Ùˆ Ù†Ø§ÙˆÛŒ Ø¯Ø§ØªØ§Ø¨Û•ÛŒØ³ Ø¨Ù†ÙˆÙˆØ³Û• / Please fill in Server IP and Database Name');
+      alert('تکایە ناونیشانی سێرڤەر و ناوی داتابەیس بنووسە / Please fill in Server IP and Database Name');
       return;
     }
 
     sqlStatusBanner.className = 'config-status-banner';
-    sqlStatusText.textContent = 'â³ Testing connection to ' + payload.server + '...';
+    sqlStatusText.textContent = '⏳ Testing connection to ' + payload.server + '...';
 
     try {
       const res = await authFetch('/api/test-connection', {
@@ -706,17 +706,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (data.success) {
         sqlStatusBanner.className = 'config-status-banner connected';
-        sqlStatusText.textContent = 'âœ… ' + data.message;
+        sqlStatusText.textContent = '✅ ' + data.message;
         alert('Connection Successful to SQL Server!');
       } else {
         sqlStatusBanner.className = 'config-status-banner error';
-        sqlStatusText.textContent = 'âŒ Test failed: ' + data.error;
+        sqlStatusText.textContent = '❌ Test failed: ' + data.error;
         alert('Test Connection Result: ' + (data.error || 'Server error'));
       }
     } catch (err) {
       sqlStatusBanner.className = 'config-status-banner';
       sqlStatusText.textContent = 'Active Config: ' + payload.server;
-      alert(`âš ï¸ Ù¾Û•ÛŒÙˆÛ•Ù†Ø¯ÛŒ Ø¨Û• Ø³ÛŽØ±Ú¤Û•Ø±ÛŒ Ø³Û•Ø±Û•Ú©ÛŒ Ù†Û•Ú©Ø±Ø§: ${err.message}\nÚ•ÛŽÚ©Ø®Ø³ØªÙ†Û•Ú©Ø§Ù† Ù„Û•Ù†Ø§Ùˆ Ø¦Û•Ù¾Û•Ú©Û•Ø¯Ø§ Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø§ÙˆÙ†.`);
+      alert(`⚠️ پەیوەندی بە سێرڤەری سەرەکی نەکرا: ${err.message}\nڕێکخستنەکان لەناو ئەپەکەدا پاشەکەوتکراون.`);
     }
   });
 
@@ -758,13 +758,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
 
       if (data.success) {
-        alert(data.message || 'âœ… Ú•ÛŽÚ©Ø®Ø³ØªÙ†Û•Ú©Ø§Ù† Ø¨Û• Ø³Û•Ø±Ú©Û•ÙˆØªÙˆÙˆÛŒÛŒ Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø§Ù†');
+        alert(data.message || '✅ ڕێکخستنەکان بە سەرکەوتوویی پاشەکەوتکران');
         await fetchServerStatus();
       } else {
-        alert('âœ… Ú•ÛŽÚ©Ø®Ø³ØªÙ†Û•Ú©Ø§Ù† Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø§Ù†: ' + (data.message || 'Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø§ÙˆÛ•'));
+        alert('✅ ڕێکخستنەکان پاشەکەوتکران: ' + (data.message || 'پاشەکەوتکراوە'));
       }
     } catch (err) {
-      alert('âœ… Ú•ÛŽÚ©Ø®Ø³ØªÙ†Û•Ú©Ø§Ù† Ù„Û•Ù†Ø§Ùˆ Ø¦Û•Ù¾Û•Ú©Û•Ø¯Ø§ Ø¨Û• Ø³Û•Ø±Ú©Û•ÙˆØªÙˆÙˆÛŒÛŒ Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø§Ù† (Saved to Application)!');
+      alert('✅ ڕێکخستنەکان لەناو ئەپەکەدا بە سەرکەوتوویی پاشەکەوتکران (Saved to Application)!');
     }
   });
 
@@ -812,14 +812,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const data = await res.json();
         if (data.success) {
-          alert(`Ø¨Û•Ú©Ø§Ø±Ù‡ÛŽÙ†Û•Ø±ÛŒ '${User_}' Ø¨Û• Ø³Û•Ø±Ú©Û•ÙˆØªÙˆÙˆÛŒÛŒ Ø²ÛŒØ§Ø¯Ú©Ø±Ø§ Ø¨Û† dbo.image_user!`);
+          alert(`بەکارهێنەری '${User_}' بە سەرکەوتوویی زیادکرا بۆ dbo.image_user!`);
           addUserForm.reset();
           loadUsersList();
         } else {
-          alert('Ù‡Û•ÚµÛ• Ù„Û• Ø²ÛŒØ§Ø¯Ú©Ø±Ø¯Ù†ÛŒ Ø¨Û•Ú©Ø§Ø±Ù‡ÛŽÙ†Û•Ø±: ' + (data.error || 'Unknown error'));
+          alert('هەڵە لە زیادکردنی بەکارهێنەر: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
-        alert('Ù‡Û•ÚµÛ• Ù„Û• Ù¾Û•ÛŒÙˆÛ•Ù†Ø¯ÛŒ: ' + err.message);
+        alert('هەڵە لە پەیوەندی: ' + err.message);
       }
     });
   }
@@ -827,21 +827,21 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadUsersList() {
     const tbody = document.getElementById('users-table-tbody');
     if (!tbody) return;
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:1rem;">ðŸ”„ Ú†Ø§ÙˆÛ•Ú•ÙˆØ§Ù†Ø¨Û•... Ù‡ÛŽÙ†Ø§Ù†ÛŒ Ø¨Û•Ú©Ø§Ø±Ù‡ÛŽÙ†Û•Ø±Ø§Ù† Ù„Û• dbo.image_user</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:1rem;">🔄 چاوەڕوانبە... هێنانی بەکارهێنەران لە dbo.image_user</td></tr>`;
     
     try {
       const res = await authFetch('/api/users');
       const data = await res.json();
 
       if (!res.ok || data.error) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--accent-rose); padding:1.2rem;">âš ï¸ ${escapeHtml(data.error || 'Ù¾ÛŽÙˆÛŒØ³ØªÛ• ÙˆÛ•Ú© Ø¦Û•Ø¯Ù…ÛŒÙ† Ú†ÙˆÙˆÙ†Û•Ú˜ÙˆÙˆØ±Û•ÙˆÛ•Øª Ú©Ø±Ø¯Ø¨ÛŽØª')}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--accent-rose); padding:1.2rem;">⚠️ ${escapeHtml(data.error || 'پێویستە وەک ئەدمین چوونەژوورەوەت کردبێت')}</td></tr>`;
         return;
       }
 
       const users = Array.isArray(data) ? data : [];
 
       if (users.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:1.2rem;">Ù‡ÛŒÚ† Ø¨Û•Ú©Ø§Ø±Ù‡ÛŽÙ†Û•Ø±ÛŽÚ© Ù„Û• dbo.image_user Ù†Û•Ø¯Û†Ø²Ø±Ø§ÛŒÛ•ÙˆÛ•</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:1.2rem;">هیچ بەکارهێنەرێک لە dbo.image_user نەدۆزرایەوە</td></tr>`;
         return;
       }
 
@@ -864,18 +864,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 border: 1px solid ${isOn ? 'rgba(52, 211, 153, 0.3)' : 'rgba(239, 68, 68, 0.3)'};
                 padding: 0.25rem 0.65rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;
               ">
-                ${isOn ? 'â— ON (Ú†Ø§Ù„Ø§Ú©)' : 'â—‹ OFF (Ù†Ø§Ú†Ø§Ù„Ø§Ú©)'}
+                ${isOn ? '● ON (چالاک)' : '○ OFF (ناچالاک)'}
               </button>
             </td>
             <td>
-              <span class="user-pass-display" data-pass="${escapeHtml(passText)}" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight:600; color: #fff; background:rgba(0,0,0,0.3); padding:0.2rem 0.6rem; border-radius:4px; border:1px solid rgba(255,255,255,0.1); cursor:pointer;" title="Ú©Ù„ÛŒÚ© Ø¨Ú©Û• Ø¨Û† Ú©Û†Ù¾ÛŒÚ©Ø±Ø¯Ù†ÛŒ ÙˆØ´Û•ÛŒ Ù†Ù‡ÛŽÙ†ÛŒ">
+              <span class="user-pass-display" data-pass="${escapeHtml(passText)}" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight:600; color: #fff; background:rgba(0,0,0,0.3); padding:0.2rem 0.6rem; border-radius:4px; border:1px solid rgba(255,255,255,0.1); cursor:pointer;" title="کلیک بکە بۆ کۆپیکردنی وشەی نهێنی">
                 ${escapeHtml(passText)}
               </span>
             </td>
             <td>
               <button type="button" class="btn-delete-user" data-id="${u.id}" data-user="${escapeHtml(username)}" style="
                 background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--accent-rose); cursor: pointer; padding: 0.25rem 0.65rem; font-size: 0.8rem; font-weight: 700; border-radius:6px;
-              " title="Delete user">ðŸ—‘ï¸ Ø³Ú•ÛŒÙ†Û•ÙˆÛ•</button>
+              " title="Delete user">🗑️ سڕینەوە</button>
             </td>
           </tr>
         `;
@@ -888,7 +888,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (navigator.clipboard) {
             navigator.clipboard.writeText(pass).then(() => {
               const prev = el.innerText;
-              el.innerText = 'Ú©Û†Ù¾ÛŒÚ©Ø±Ø§!';
+              el.innerText = 'کۆپیکرا!';
               setTimeout(() => el.innerText = prev, 1500);
             });
           }
@@ -908,9 +908,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const d = await r.json();
             if (d.success) loadUsersList();
-            else alert('Ù‡Û•ÚµÛ• Ù„Û• Ú¯Û†Ú•ÛŒÙ†ÛŒ Ø¯Û†Ø®: ' + (d.error || 'Unknown error'));
+            else alert('هەڵە لە گۆڕینی دۆخ: ' + (d.error || 'Unknown error'));
           } catch (e) {
-            alert('Ù‡Û•ÚµÛ• Ù„Û• Ù¾Û•ÛŒÙˆÛ•Ù†Ø¯ÛŒ: ' + e.message);
+            alert('هەڵە لە پەیوەندی: ' + e.message);
           }
         });
       });
@@ -919,7 +919,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', async () => {
           const id = parseInt(btn.getAttribute('data-id'));
           const user = btn.getAttribute('data-user');
-          if (!confirm(`Ø¦Ø§ÛŒØ§ Ø¯ÚµÙ†ÛŒØ§ÛŒØª Ù„Û• Ø³Ú•ÛŒÙ†Û•ÙˆÛ•ÛŒ Ø¨Û•Ú©Ø§Ø±Ù‡ÛŽÙ†Û•Ø±ÛŒ '${user}' Ù„Û• dbo.image_userØŸ`)) return;
+          if (!confirm(`ئایا دڵنیایت لە سڕینەوەی بەکارهێنەری '${user}' لە dbo.image_user؟`)) return;
           try {
             const r = await authFetch('/api/users/delete', {
               method: 'POST',
@@ -928,15 +928,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const d = await r.json();
             if (d.success) loadUsersList();
-            else alert('Ù‡Û•ÚµÛ• Ù„Û• Ø³Ú•ÛŒÙ†Û•ÙˆÛ•: ' + (d.error || 'Unknown error'));
+            else alert('هەڵە لە سڕینەوە: ' + (d.error || 'Unknown error'));
           } catch (e) {
-            alert('Ù‡Û•ÚµÛ• Ù„Û• Ù¾Û•ÛŒÙˆÛ•Ù†Ø¯ÛŒ: ' + e.message);
+            alert('هەڵە لە پەیوەندی: ' + e.message);
           }
         });
       });
 
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--accent-rose); padding:1rem;">âŒ Ù‡Û•ÚµÛ• Ù„Û• Ù‡ÛŽÙ†Ø§Ù†ÛŒ Ø¨Û•Ú©Ø§Ø±Ù‡ÛŽÙ†Û•Ø±Ø§Ù†: ${escapeHtml(e.message)}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--accent-rose); padding:1rem;">❌ هەڵە لە هێنانی بەکارهێنەران: ${escapeHtml(e.message)}</td></tr>`;
     }
   }
 
@@ -948,7 +948,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter') loadSearchResults(searchInput.value.trim());
   });
 
-  // â”€â”€â”€ UTILITY: DEBOUNCE â”€â”€â”€
+  // ─── UTILITY: DEBOUNCE ───
   function debounce(fn, delay) {
     let timer;
     return function(...args) {
@@ -960,13 +960,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function normalizeKurdish(str) {
     if (!str) return '';
     return String(str)
-      .replace(/Ù€/g, '')
-      .replace(/[Û•Ú¾Ù‡]/g, 'Ù‡')
-      .replace(/[ÛŒÛŒÙŠÙ‰ÛŽ]/g, 'ÛŒ')
-      .replace(/[Û†ÙˆØ¤]/g, 'Ùˆ')
-      .replace(/[Ú©ÙƒÚ©]/g, 'Ú©')
-      .replace(/[ÚµÙ„]/g, 'Ù„')
-      .replace(/[Ú•Ø±]/g, 'Ø±')
+      .replace(/ـ/g, '')
+      .replace(/[ەھه]/g, 'ه')
+      .replace(/[ییيىێ]/g, 'ی')
+      .replace(/[ۆوؤ]/g, 'و')
+      .replace(/[کكک]/g, 'ک')
+      .replace(/[ڵل]/g, 'ل')
+      .replace(/[ڕر]/g, 'ر')
       .toLowerCase()
       .trim();
   }
@@ -1053,16 +1053,16 @@ document.addEventListener('DOMContentLoaded', () => {
       openCameraBtn.style.display = 'none';
       previewWrap.style.display = 'none';
     } catch (err) {
-      alert('ØªØ¹Ø°Ù‘Ø± ÙØªØ­ Ø§Ù„Ú©Ø§Ù…ÛŒØ±Ø§: ' + err.message + '\n\nØªØ£Ú©Ø¯ Ù…Ù† Ø¥Ø¹Ø·Ø§Ø¡ Ø¥Ø°Ù† Ø§Ù„Ú©Ø§Ù…ÛŒØ±Ø§ Ù„Ù„Ù…ØªØµÙØ­.');
+      alert('تعذّر فتح الکامیرا: ' + err.message + '\n\nتأکد من إعطاء إذن الکامیرا للمتصفح.');
     }
   }
 
   function captureFrameWithGPS() {
     const rawW = cameraVideo.videoWidth;
     const rawH = cameraVideo.videoHeight;
-    if (!rawW || !rawH) { alert('Ø§Ù„Ú©Ø§Ù…ÛŒØ±Ø§ ØºÛŒØ± Ø¬Ø§Ù‡Ø²Ø© Ø¨Ø¹Ø¯'); return; }
+    if (!rawW || !rawH) { alert('الکامیرا غیر جاهزة بعد'); return; }
 
-    // STANDARD LANDSCAPE HD DIMENSIONS (1280 x 720 â€” 16:9 Standard Automotive Inspection Format)
+    // STANDARD LANDSCAPE HD DIMENSIONS (1280 x 720 — 16:9 Standard Automotive Inspection Format)
     const TARGET_WIDTH = 1280;
     const TARGET_HEIGHT = 720;
 
@@ -1074,7 +1074,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Enforce Standard Horizontal Landscape Orientation
     if (rawH > rawW) {
-      // User held phone in portrait mode -> rotate 90Â° to make it horizontal standard
+      // User held phone in portrait mode -> rotate 90° to make it horizontal standard
       ctx.save();
       ctx.translate(TARGET_WIDTH / 2, TARGET_HEIGHT / 2);
       ctx.rotate(90 * Math.PI / 180);
@@ -1095,7 +1095,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const fontPrimary = Math.max(16, Math.round(vh * 0.026));
       const fontSecondary = Math.max(12, Math.round(vh * 0.019));
 
-      // Translucent Semi-Transparent Watermark Background (Ø´Ø¨Ù‡ Ù…Ø§Ø¦ÛŒ Ø´ÙØ§Ù Ù„Ø¥Ø¸Ù‡Ø§Ø± ØªÙØ§ØµÛŒÙ„ ÙˆÙ…Ø¹Ø§Ù„Ù… Ø§Ù„ØµÙˆØ±Ø© Ø®Ù„Ù Ø§Ù„Ù†Øµ)
+      // Translucent Semi-Transparent Watermark Background (شبه مائی شفاف لإظهار تفاصیل ومعالم الصورة خلف النص)
       // Modified to be darker for much better readability over bright images
       const grad = ctx.createLinearGradient(0, vh - barH, 0, vh);
       grad.addColorStop(0, 'rgba(0, 0, 0, 0.65)');
@@ -1124,7 +1124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Line 1: Place Name (with dynamic font sizing for long Arabic names)
         ctx.fillStyle = '#38bdf8'; // bright cyan
         let currentFont = fontPrimary;
-        let placeString = `${capturedGPS.placeName} ðŸ“`; // Emoji at the end for RTL
+        let placeString = `${capturedGPS.placeName} 📍`; // Emoji at the end for RTL
         ctx.font = `bold ${currentFont}px 'Segoe UI', Tahoma, sans-serif`;
         
         // Dynamically reduce font size if text is too wide
@@ -1138,7 +1138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillStyle = '#ffffff';
         ctx.direction = 'ltr'; // Switch back to LTR for coordinates/numbers
         let subFont = fontSecondary;
-        const subLabel = `ðŸŒ GPS: ${capturedGPS.lat}, ${capturedGPS.lng} (Â±${capturedGPS.accuracy}m)  |  ðŸ“… ${capturedGPS.timestamp}`;
+        const subLabel = `🌐 GPS: ${capturedGPS.lat}, ${capturedGPS.lng} (±${capturedGPS.accuracy}m)  |  📅 ${capturedGPS.timestamp}`;
         ctx.font = `600 ${subFont}px monospace`;
         
         while (ctx.measureText(subLabel).width > maxTextWidth && subFont > 8) {
@@ -1150,7 +1150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillStyle = '#ffffff';
         ctx.direction = 'ltr';
         let gpsFont = fontPrimary;
-        const gpsLabel = `ðŸ“ GPS: ${capturedGPS.lat}, ${capturedGPS.lng}  Â±${capturedGPS.accuracy}m  |  ${capturedGPS.timestamp}`;
+        const gpsLabel = `📍 GPS: ${capturedGPS.lat}, ${capturedGPS.lng}  ±${capturedGPS.accuracy}m  |  ${capturedGPS.timestamp}`;
         ctx.font = `bold ${gpsFont}px monospace`;
         
         while (ctx.measureText(gpsLabel).width > maxTextWidth && gpsFont > 10) {
@@ -1166,7 +1166,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       if (gpsOverlay) {
         gpsOverlay.style.display = 'block';
-        gpsOverlay.textContent = 'âš ï¸ Ù„Ø§ ÛŒÙˆØ¬Ø¯ Ø¨ÛŒØ§Ù†Ø§Øª GPS Ù„Ù„ØµÙˆØ±Ø©';
+        gpsOverlay.textContent = '⚠️ لا یوجد بیانات GPS للصورة';
       }
     }
 
@@ -1177,7 +1177,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const approxKb = Math.round((stampedDataUrl.length * 3 / 4) / 1024);
     const sizeBadge = document.getElementById('image-size-badge');
     if (sizeBadge) {
-      sizeBadge.textContent = `ðŸ“ 1280Ã—720 (Ø£ÙÙ‚ÛŒ Ø³ØªØ§Ù†Ø¯Ø§Ø±Ø¯) | ðŸ’¾ Ø­Ø¬Ù… Ø§Ù„Ø­ÙØ¸: ~${approxKb} KB`;
+      sizeBadge.textContent = `📐 1280×720 (أفقی ستاندارد) | 💾 حجم الحفظ: ~${approxKb} KB`;
     }
 
     imgPreview.src = stampedDataUrl;
@@ -1188,11 +1188,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   openCameraBtn.addEventListener('click', () => {
     gpsDot.style.background = '#f59e0b';
-    gpsText.textContent = 'ðŸ“¡ Ø¬Ø§Ø±ÛŒ Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ù„Ù…ÙˆÙ‚Ø¹ ÙˆØ§Ø³Ù… Ø§Ù„Ù…Ù†Ø·Ù‚Ø©...';
+    gpsText.textContent = '📡 جاری الحصول على الموقع واسم المنطقة...';
 
     if (!navigator.geolocation) {
       gpsDot.style.background = '#ef4444';
-      gpsText.textContent = 'âŒ Ù…ØªØµÙØ­Ú© Ù„Ø§ ÛŒØ¯Ø¹Ù… GPS. Ø³ØªÙÙ„ØªÙ‚Ø· Ø§Ù„ØµÙˆØ±Ø© Ø¨Ø¯ÙˆÙ† Ù…ÙˆÙ‚Ø¹.';
+      gpsText.textContent = '❌ متصفحک لا یدعم GPS. ستُلتقط الصورة بدون موقع.';
       capturedGPS = null;
       startCameraStream();
       return;
@@ -1212,7 +1212,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         gpsDot.style.background = '#10b981';
-        gpsText.textContent = `âœ… GPS: ${capturedGPS.lat}, ${capturedGPS.lng} (Â±${capturedGPS.accuracy}m) â€” ${capturedGPS.timestamp}`;
+        gpsText.textContent = `✅ GPS: ${capturedGPS.lat}, ${capturedGPS.lng} (±${capturedGPS.accuracy}m) — ${capturedGPS.timestamp}`;
 
         // Fetch Reverse Geocoded Place Name in background
         fetch(getApiBase() + `/api/reverse-geocode?lat=${capturedGPS.lat}&lng=${capturedGPS.lng}`)
@@ -1220,7 +1220,7 @@ document.addEventListener('DOMContentLoaded', () => {
           .then(geo => {
             if (geo.placeName) {
               capturedGPS.placeName = geo.placeName;
-              gpsText.textContent = `âœ… GPS: ${capturedGPS.lat}, ${capturedGPS.lng} (Â±${capturedGPS.accuracy}m) â€” ðŸ“ ${capturedGPS.placeName} â€” ${capturedGPS.timestamp}`;
+              gpsText.textContent = `✅ GPS: ${capturedGPS.lat}, ${capturedGPS.lng} (±${capturedGPS.accuracy}m) — 📍 ${capturedGPS.placeName} — ${capturedGPS.timestamp}`;
             }
           })
           .catch(() => {});
@@ -1230,7 +1230,7 @@ document.addEventListener('DOMContentLoaded', () => {
       (err) => {
         capturedGPS = null;
         gpsDot.style.background = '#ef4444';
-        gpsText.textContent = `âš ï¸ ØªØ¹Ø°Ù‘Ø± Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ GPS (${err.message}). Ø§Ù„Ú©Ø§Ù…ÛŒØ±Ø§ ØªØ¹Ù…Ù„ Ø¨Ø¯ÙˆÙ† Ù…ÙˆÙ‚Ø¹.`;
+        gpsText.textContent = `⚠️ تعذّر الحصول على GPS (${err.message}). الکامیرا تعمل بدون موقع.`;
         startCameraStream();
       },
       { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
@@ -1251,21 +1251,21 @@ document.addEventListener('DOMContentLoaded', () => {
     openCameraBtn.click();
   });
 
-  // â”€â”€â”€ AUTOMATIC ENGLISH UPPERCASE & DIGITS CONVERTER FOR CAR NUMBER â”€â”€â”€
+  // ─── AUTOMATIC ENGLISH UPPERCASE & DIGITS CONVERTER FOR CAR NUMBER ───
   const carNoInput = document.getElementById('car-carNo');
 
   window.__forceEnglishCarNo = function(inputEl) {
     if (!inputEl) return;
     const charMap = {
       // Kurdish & Arabic Digits -> English Digits (0-9)
-      'Ù ':'0', 'Ù¡':'1', 'Ù¢':'2', 'Ù£':'3', 'Ù¤':'4', 'Ù¥':'5', 'Ù¦':'6', 'Ù§':'7', 'Ù¨':'8', 'Ù©':'9',
-      'Û°':'0', 'Û±':'1', 'Û²':'2', 'Û³':'3', 'Û´':'4', 'Ûµ':'5', 'Û¶':'6', 'Û·':'7', 'Û¸':'8', 'Û¹':'9',
+      '٠':'0', '١':'1', '٢':'2', '٣':'3', '٤':'4', '٥':'5', '٦':'6', '٧':'7', '٨':'8', '٩':'9',
+      '۰':'0', '۱':'1', '۲':'2', '۳':'3', '۴':'4', '۵':'5', '۶':'6', '۷':'7', '۸':'8', '۹':'9',
 
       // Kurdish & Arabic Keyboard Letters -> English Uppercase (QWERTY Layout Mapping)
-      'Ø¶':'Q', 'Øµ':'W', 'Ø«':'E', 'Ù‚':'R', 'Ù':'T', 'Øº':'Y', 'Ø¹':'U', 'Ù‡':'I', 'Ø®':'O', 'Ø­':'P', 'Ø¬':'P', 'Ú†':'C', 'Ù¾':'P',
-      'Ø´':'A', 'Ø³':'S', 'ÛŒ':'D', 'ÛŽ':'D', 'Ø¨':'F', 'Ù„':'G', 'Ø§':'H', 'Øª':'J', 'Ù†':'K', 'Ù…':'L', 'Ú©':'K', 'Ú¯':'G', 'Úµ':'L',
-      'Ø¦':'Z', 'Ø¡':'X', 'Ø¤':'C', 'Ø±':'V', 'Ú•':'R', 'Ù‰':'N', 'ÛŒ':'N', 'Ø©':'M', 'Û•':'M', 'Û†':'O', 'Ú˜':'Z', 'Ú¤':'V',
-      'Ø·':'I', 'Ø¸':'Z', 'Ø°':'Z', 'Ø¯':'D', 'Ø²':'Z'
+      'ض':'Q', 'ص':'W', 'ث':'E', 'ق':'R', 'ف':'T', 'غ':'Y', 'ع':'U', 'ه':'I', 'خ':'O', 'ح':'P', 'ج':'P', 'چ':'C', 'پ':'P',
+      'ش':'A', 'س':'S', 'ی':'D', 'ێ':'D', 'ب':'F', 'ل':'G', 'ا':'H', 'ت':'J', 'ن':'K', 'م':'L', 'ک':'K', 'گ':'G', 'ڵ':'L',
+      'ئ':'Z', 'ء':'X', 'ؤ':'C', 'ر':'V', 'ڕ':'R', 'ى':'N', 'ی':'N', 'ة':'M', 'ە':'M', 'ۆ':'O', 'ژ':'Z', 'ڤ':'V',
+      'ط':'I', 'ظ':'Z', 'ذ':'Z', 'د':'D', 'ز':'Z'
     };
 
     let val = inputEl.value;
@@ -1309,25 +1309,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cd-date_').value = new Date().toISOString().slice(0, 10);
   }
 
-  // â”€â”€â”€ CUSTOM INTERACTIVE KURDISH SEARCHABLE COMBOBOX (PLET) â”€â”€â”€
+  // ─── CUSTOM INTERACTIVE KURDISH SEARCHABLE COMBOBOX (PLET) ───
   const pletInput = document.getElementById('car-plet');
   const pletMenu = document.getElementById('plet-dropdown-menu');
   const pletArrowBtn = document.getElementById('plet-arrow-btn');
 
   const pletList = [
-    "Ù‡Û•ÙˆÙ„ÛŽØ±", "Ø³Ù„ÛŽÙ…Ø§Ù†ÛŒ", "Ø¯Ù‡Û†Ú©", "Ù‡Û•ÚµÛ•Ø¨Ø¬Û•", "Ú©Û•Ø±Ú©ÙˆÚ©", "Ú©Ø§ØªÛŒ Ù‡Û•ÙˆÙ„ÛŽØ±", "Ú©Ø§ØªÛŒ Ø³Ù„ÛŽÙ…Ø§Ù†ÛŒ", "Ú©Ø§ØªÛŒ Ø¯Ù‡Û†Ú©",
-    "Ø§Ù„Ø§Ø±Ø¯Ù† ØªØµØ¯ÛŒØ±", "Ø§Ù„Ø§Ù†Ø¨Ø§Ø±", "Ø§Ù„Ø¨ØµØ±Ø©", "Ø§Ù„Ù‚Ø§Ø¯Ø³ÛŒØ©", "Ø§Ù„Ù†Ø¬Ù", "Ø§Ù†Ø¨Ø§Ø±", "Ø¨Ø§Ø¨Ù„", "Ø¨Ø§Ø²Ø±Ú¯Ø§Ù†ÛŒ Ùˆ Ù¾ÛŒØ´Û•Ø³Ø§Ø²ÛŒ",
-    "Ø¨ØµØ±Ø©", "Ø¨ØºØ¯Ø§Ø¯", "Ø¨ÛŽ Ú˜Ù…Ø§Ø±Û•", "Ø¨ÛŽ Ø³Û•Ø±Û•ØªØ§", "Ø¨Û•Ø±Ú¯Ø±ÛŒ Ø´Ø§Ø±Ø³ØªØ§Ù†ÛŒ", "Ø¨Û•Ø±Ú¯Ø±ÛŒ Ùˆ Ø´Ø§Ø±Ø³ØªØ§Ù†ÛŒ Ú¯Û•Ø±Ù…ÛŒØ§Ù†",
-    "Ø¨Û•Ø±Ú¯Ø±ÛŒ Ùˆ ÙØ±ÛŒØ§Ú©Û•ÙˆØªÙ†", "Ù¾Û†Ù„ÛŒØ³ÛŒ Ø¯Ø§Ø±Ø³ØªØ§Ù†", "ØªÛ•Ù†Ø¯Ø±ÙˆØ³ØªÛŒ", "Ù¾Û•Ø±ÙˆÛ•Ø±Ø¯Û•", "Ù¾Û†Ù„ÛŒØ³", "Ù¾Û†Ù„ÛŒØ³ÛŒ Ù†Û•ÙˆØª Ùˆ Ú¯Ø§Ø²",
-    "Ø®ÙˆÛŽÙ†Ø¯Ù†ÛŒ Ø¨Ø§ÚµØ§", "Ø¯Ø§Ø¯", "Ø¯Ø§Ø±Ø§ÛŒÛŒ", "Ø¯Û•Ø²Ú¯Ø§ÛŒ Ù…ÛŒÙ†", "Ø¯ÛŒØ§Ù„Ù‰", "Ø¯ÛŒØ§Ù„Ù‰ ÙØ­Øµ Ù…Ø¤Ù‚Øª", "Ú˜Ù…Ø§Ø±Û•ÛŒ Ø¨ÛŒØ§Ù†ÛŒ",
-    "Ú•Û†Ø´Ù†Ø¨ÛŒØ±ÛŒ", "Ú•ÛŽÚ©Ø®Ø±Ø§ÙˆÛ•Ú©Ø§Ù†", "Ú•Û•Ú¯Û•Ø²Ù†Ø§Ù…Û•", "Ø²ÛŒÙ‚Ø§Ø±", "Ø´Ø§Ø±Û•ÙˆØ§Ù†ÛŒ Ùˆ Ú¯Û•Ø´ØªÙˆÚ¯ÙˆØ²Ø§Ø±", "ØµÙ„Ø§Ø­ Ø§Ù„Ø¯ÛŒÙ†",
-    "ÙØ­Øµ Ù…Ø¤Ù‚Øª  Ù…Ø«Ù†Ù‰", "ÙØ­Øµ Ù…ÙˆÙ‚Øª Ø§Ù„Ø¨ØµØ±Ø©", "ÙØ­Øµ Ù…ÙˆÙ‚Øª Ø§Ù„Ù†Ø¬Ù", "ÙØ­Øµ Ù…ÙˆÙ‚Øª Ø¯ÛŒØ§Ù„Ù‰", "ÙØ­Øµ Ù…ÙˆÙ‚Øª Ú©Ø±Ú©ÙˆÚ©",
-    "ÙØ­Øµ Ù…ÙˆÙ‚Øª Ù†ÛŒÙ†ÙˆÙ‰", "ÙØ­Øµ Ù…Ø¤Ù‚Øª Ø§Ù„Ø§Ù†Ø¨Ø§Ø±", "ÙØ­Øµ Ù…Ø¤Ù‚Øª Ø§Ù†Ø¨Ø§Ø±", "ÙØ­Øµ Ù…Ø¤Ù‚Øª Ø¨Ø§Ø¨Ù„", "ÙØ­Øµ Ù…Ø¤Ù‚Øª Ø¨ØºØ¯Ø§Ø¯",
-    "ÙØ­Øµ Ù…Ø¤Ù‚Øª Ø²ÛŒÙ‚Ø§Ø±", "ÙØ­Øµ Ù…Ø¤Ù‚Øª ØµÙ„Ø§Ø­ Ø§Ù„Ø¯ÛŒÙ†", "ÙØ­Øµ Ù…Ø¤Ù‚Øª Ù‚Ø§Ø¯Ø³ÛŒØ©", "ÙØ­Øµ Ù…Ø¤Ù‚Øª Ú©Ø±Ø¨Ù„Ø§Ø¡",
-    "ÙØ­Øµ Ù…Ø¤Ù‚Øª Ù…ÛŒØ³Ø§Ù†", "ÙØ­Øµ Ù…Ø¤Ù‚Øª Ù†ÛŒÙ†ÙˆÙ‰", "ÙØ­Øµ Ù…Ø¤Ù‚Øª ÙˆØ§Ø³Ø·", "Ú©Ø§Ø±Û•Ø¨Ø§", "Ú©Û•Ø±Ø¨Û•Ù„Ø§", "Ú©Ø´ØªÙˆÚ©Ø§Úµ",
-    "Ú©Ø´ØªÙˆÚ©Ø§Úµ Ùˆ Ø³Û•Ø±Ú†Ø§ÙˆÛ•Ú©Ø§Ù†ÛŒ Ø¦Ø§Ùˆ", "Ú¯ÙˆØ§Ø³ØªÙ†Û•ÙˆÛ• Ùˆ Ú¯Û•ÛŒØ§Ù†Ø¯Ù†", "Ù…Ø«Ù†Ù‰", "Ù…ÛŒØ³Ø§Ù†", "Ù†Ø§ÙˆØ®Û†", "ï¿½ï¿½ÛŒÙ†ÙˆÙ‰",
-    "Ù‡Ø§ØªÙˆÙˆÚ†Û†", "ÙˆØ§Ø³Øª", "ÙˆÛ•Ø²Ø§Ø±Û•ØªÛŒ Ù¾ÛŽØ´Ù…Û•Ø±Ú¯Û•", "Ø¦Ø§ÙˆÛ•Ø¯Ø§Ù†Ú©Ø±Ø¯Ù†Û•ÙˆÛ•", "Ø¦Û•ÙˆØ±ÙˆÙ¾ÛŒ", "ØªØµØ¯ÛŒØ± Ø§Ù„Ø§Ù…Ø§Ø±Ø§Øª",
-    "Ù…Ø§ÙÛŒ Ù…Ø±Û†Ú¤", "ÙˆÛ•Ø²ÛŒØ±Ø§Ù†", "Ù¾Ù„Ø§Ù† Ø¯Ø§Ù†Ø§Ù†", "Ø¯Û•Ø³ØªÛ•ÛŒ Ú˜ÛŒÙ†Ú¯Û•"
+    "هەولێر", "سلێمانی", "دهۆک", "هەڵەبجە", "کەرکوک", "کاتی هەولێر", "کاتی سلێمانی", "کاتی دهۆک",
+    "الاردن تصدیر", "الانبار", "البصرة", "القادسیة", "النجف", "انبار", "بابل", "بازرگانی و پیشەسازی",
+    "بصرة", "بغداد", "بێ ژمارە", "بێ سەرەتا", "بەرگری شارستانی", "بەرگری و شارستانی گەرمیان",
+    "بەرگری و فریاکەوتن", "پۆلیسی دارستان", "تەندروستی", "پەروەردە", "پۆلیس", "پۆلیسی نەوت و گاز",
+    "خوێندنی باڵا", "داد", "دارایی", "دەزگای مین", "دیالى", "دیالى فحص مؤقت", "ژمارەی بیانی",
+    "ڕۆشنبیری", "ڕێکخراوەکان", "ڕەگەزنامە", "زیقار", "شارەوانی و گەشتوگوزار", "صلاح الدین",
+    "فحص مؤقت  مثنى", "فحص موقت البصرة", "فحص موقت النجف", "فحص موقت دیالى", "فحص موقت کرکوک",
+    "فحص موقت نینوى", "فحص مؤقت الانبار", "فحص مؤقت انبار", "فحص مؤقت بابل", "فحص مؤقت بغداد",
+    "فحص مؤقت زیقار", "فحص مؤقت صلاح الدین", "فحص مؤقت قادسیة", "فحص مؤقت کربلاء",
+    "فحص مؤقت میسان", "فحص مؤقت نینوى", "فحص مؤقت واسط", "کارەبا", "کەربەلا", "کشتوکاڵ",
+    "کشتوکاڵ و سەرچاوەکانی ئاو", "گواستنەوە و گەیاندن", "مثنى", "میسان", "ناوخۆ", "��ینوى",
+    "هاتووچۆ", "واست", "وەزارەتی پێشمەرگە", "ئاوەدانکردنەوە", "ئەوروپی", "تصدیر الامارات",
+    "مافی مرۆڤ", "وەزیران", "پلان دانان", "دەستەی ژینگە"
   ];
 
   function renderPletMenu(filterText = '') {
@@ -1338,12 +1338,12 @@ document.addEventListener('DOMContentLoaded', () => {
       : pletList;
 
     if (filtered.length === 0) {
-      pletMenu.innerHTML = `<div class="custom-dropdown-empty">Ø¯Û•ØªÙˆØ§Ù†ÛŒØª Ù‡Û•Ø± Ø¦Û•Ù… Ø¯Û•Ù‚Û• Ø¨Ù†ÙˆÙˆØ³ÛŒØª: "<strong>${escapeHtml(filterText)}</strong>"</div>`;
+      pletMenu.innerHTML = `<div class="custom-dropdown-empty">دەتوانیت هەر ئەم دەقە بنووسیت: "<strong>${escapeHtml(filterText)}</strong>"</div>`;
     } else {
       pletMenu.innerHTML = filtered.map(item => `
         <div class="custom-dropdown-item" data-value="${escapeHtml(item)}">
           <span>${escapeHtml(item)}</span>
-          <span style="font-size:0.75rem; color:var(--text-muted); opacity:0.5;">âœ“</span>
+          <span style="font-size:0.75rem; color:var(--text-muted); opacity:0.5;">✓</span>
         </div>
       `).join('');
     }
@@ -1409,7 +1409,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // â”€â”€â”€ CAR DETAILS TAB: CUSTOM INTERACTIVE KURDISH SEARCHABLE COMBOBOX (CD-PLET) â”€â”€â”€
+  // ─── CAR DETAILS TAB: CUSTOM INTERACTIVE KURDISH SEARCHABLE COMBOBOX (CD-PLET) ───
   const cdPletInput = document.getElementById('cd-plet');
   const cdPletMenu = document.getElementById('cd-plet-dropdown-menu');
   const cdPletArrowBtn = document.getElementById('cd-plet-arrow-btn');
@@ -1422,12 +1422,12 @@ document.addEventListener('DOMContentLoaded', () => {
       : pletList;
 
     if (filtered.length === 0) {
-      cdPletMenu.innerHTML = `<div class="custom-dropdown-empty">Ø¯Û•ØªÙˆØ§Ù†ÛŒØª Ù‡Û•Ø± Ø¦Û•Ù… Ø¯Û•Ù‚Û• Ø¨Ù†ÙˆÙˆØ³ÛŒØª: "<strong>${escapeHtml(filterText)}</strong>"</div>`;
+      cdPletMenu.innerHTML = `<div class="custom-dropdown-empty">دەتوانیت هەر ئەم دەقە بنووسیت: "<strong>${escapeHtml(filterText)}</strong>"</div>`;
     } else {
       cdPletMenu.innerHTML = filtered.map(item => `
         <div class="custom-dropdown-item" data-value="${escapeHtml(item)}">
           <span>${escapeHtml(item)}</span>
-          <span style="font-size:0.75rem; color:var(--text-muted); opacity:0.5;">âœ“</span>
+          <span style="font-size:0.75rem; color:var(--text-muted); opacity:0.5;">✓</span>
         </div>
       `).join('');
     }
@@ -1483,7 +1483,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // â”€â”€â”€ GENERIC CUSTOM COMBOBOX SETUP â”€â”€â”€
+  // ─── GENERIC CUSTOM COMBOBOX SETUP ───
   function setupCustomCombobox(idPrefix, dataList) {
     const input = document.getElementById(idPrefix);
     const menu = document.getElementById(`${idPrefix}-dropdown-menu`);
@@ -1503,12 +1503,12 @@ document.addEventListener('DOMContentLoaded', () => {
       highlightedIndex = -1;
 
       if (filtered.length === 0) {
-        menu.innerHTML = `<div class="custom-dropdown-empty">Ø¯Û•ØªÙˆØ§Ù†ÛŒØª Ù‡Û•Ø± Ø¦Û•Ù… Ø¯Û•Ù‚Û• Ø¨Ù†ÙˆÙˆØ³ÛŒØª: "<strong>${escapeHtml(filterText)}</strong>"</div>`;
+        menu.innerHTML = `<div class="custom-dropdown-empty">دەتوانیت هەر ئەم دەقە بنووسیت: "<strong>${escapeHtml(filterText)}</strong>"</div>`;
       } else {
         menu.innerHTML = filtered.map((item, index) => `
           <div class="custom-dropdown-item" data-index="${index}" data-value="${escapeHtml(item)}">
             <span>${escapeHtml(item)}</span>
-            <span style="font-size:0.75rem; color:var(--text-muted); opacity:0.5;">âœ“</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); opacity:0.5;">✓</span>
           </div>
         `).join('');
       }
@@ -1629,7 +1629,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // â”€â”€â”€ 4. CAR SCANNER FORM SUBMIT (#car-form & #btn-save-scanner â€” ØªÛ†Ù…Ø§Ø±Ú©Ø±Ø¯Ù†ÛŒ Ø²Ø§Ù†ÛŒØ§Ø±ÛŒ Ùˆ ÙˆÛŽÙ†Û•) â”€â”€â”€
+  // ─── 4. CAR SCANNER FORM SUBMIT (#car-form & #btn-save-scanner — تۆمارکردنی زانیاری و وێنە) ───
   async function handleScannerSave(e) {
     if (e) e.preventDefault();
 
@@ -1646,12 +1646,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const Nnote = (notesInput && notesInput.value) ? notesInput.value.trim() : null;
 
     if (!carNo) {
-      alert('âš ï¸ ØªÚ©Ø§ÛŒÛ• Ú˜Ù…Ø§Ø±Û•ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„ Ø¨Ù†ÙˆÙˆØ³Û•!');
+      alert('⚠️ تکایە ژمارەی ئۆتۆمبێل بنووسە!');
       if (carNoInput) carNoInput.focus();
       return;
     }
     if (!plet) {
-      alert('âš ï¸ ØªÚ©Ø§ÛŒÛ• Ù†Ø§ÙˆÛŒ Ù¾Ø§Ø±ÛŽØ²Ú¯Ø§ ÛŒØ§Ù† Ø´ÙˆÛŽÙ† Ù‡Û•ÚµØ¨Ú˜ÛŽØ±Û•!');
+      alert('⚠️ تکایە ناوی پارێزگا یان شوێن هەڵبژێرە!');
       if (pletInput) pletInput.focus();
       return;
     }
@@ -1663,7 +1663,7 @@ document.addEventListener('DOMContentLoaded', () => {
       pic: state.uploadedImageBase64 || null,
       date_into,
       Nnote,
-      uuser: (state.currentUser && state.currentUser.Username) ? state.currentUser.Username : 'Ú©Ø§Ø±Ù…Û•Ù†Ø¯',
+      uuser: (state.currentUser && state.currentUser.Username) ? state.currentUser.Username : 'کارمەند',
       bar_: capturedGPS ? (capturedGPS.placeName || `GPS: ${capturedGPS.lat}, ${capturedGPS.lng}`) : null
     };
 
@@ -1671,7 +1671,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const origBtnContent = submitBtn ? submitBtn.innerHTML : '';
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> <span>â³ Ú©Û•Ù…ÛŽÚ© Ú†Ø§ÙˆÛ•Ú•ÙˆØ§Ù†Ø¨Û•... Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø¯Ù†</span>';
+      submitBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> <span>⏳ کەمێک چاوەڕوانبە... پاشەکەوتکردن</span>';
       if (window.lucide) lucide.createIcons();
     }
 
@@ -1684,7 +1684,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
 
       if (data.success) {
-        alert('âœ… Ø²Ø§Ù†ÛŒØ§Ø±ÛŒ Ùˆ ÙˆÛŽÙ†Û•ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„ Ø¨Û• Ø³Û•Ø±Ú©Û•ÙˆØªÙˆÙˆÛŒÛŒ Ù„Û• SQL Server Ù¾Ø§Ø´Û•Ú©Û•ÙˆØª Ú©Ø±Ø§!');
+        alert('✅ زانیاری و وێنەی ئۆتۆمبێل بە سەرکەوتوویی لە SQL Server پاشەکەوت کرا!');
         state.lastCarRecord = payload;
 
         // Clear inputs
@@ -1703,10 +1703,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Refresh today's table
         loadCarRecords();
       } else {
-        alert('âš ï¸ Ù‡Û•ÚµÛ• Ù„Û• Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø¯Ù†: ' + (data.error || 'Ù‡Û•ÚµÛ•ÛŒÛ•Ú©ÛŒ Ù†Û•Ø²Ø§Ù†Ø±Ø§Ùˆ Ù„Û• Ú•Ø§Ú˜Û•Ú©Ø§Ø±'));
+        alert('⚠️ هەڵە لە پاشەکەوتکردن: ' + (data.error || 'هەڵەیەکی نەزانراو لە ڕاژەکار'));
       }
     } catch (err) {
-      alert('âŒ Ù‡Û•ÚµÛ•ÛŒ Ù¾Û•ÛŒÙˆÛ•Ù†Ø¯ÛŒ Ø¨Û• Ø³ÛŽØ±Ú¤Û•Ø±: ' + err.message);
+      alert('❌ هەڵەی پەیوەندی بە سێرڤەر: ' + err.message);
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -1725,7 +1725,7 @@ document.addEventListener('DOMContentLoaded', () => {
     scannerCarForm.addEventListener('submit', handleScannerSave);
   }
 
-  // â”€â”€â”€ CAR DETAILS FORM SUBMIT (#car-details-form & #btn-save-car-details) â”€â”€â”€
+  // ─── CAR DETAILS FORM SUBMIT (#car-details-form & #btn-save-car-details) ───
   async function handleCarDetailsSave(e) {
     if (e) e.preventDefault();
 
@@ -1734,7 +1734,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const plet = document.getElementById('cd-plet') ? document.getElementById('cd-plet').value.trim() : '';
 
     if (!carNo) {
-      alert('âš ï¸ ØªÚ©Ø§ÛŒÛ• Ú˜Ù…Ø§Ø±Û•ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„ Ø¨Ù†ÙˆÙˆØ³Û•!');
+      alert('⚠️ تکایە ژمارەی ئۆتۆمبێل بنووسە!');
       if (document.getElementById('cd-carNo')) document.getElementById('cd-carNo').focus();
       return;
     }
@@ -1746,7 +1746,7 @@ document.addEventListener('DOMContentLoaded', () => {
       pic: state.uploadedImageBase64 || null,
       date_into: document.getElementById('cd-date_') ? document.getElementById('cd-date_').value : new Date().toISOString().slice(0, 10),
       Nnote: document.getElementById('cd-notes') ? document.getElementById('cd-notes').value.trim() : null,
-      uuser: (state.currentUser && state.currentUser.Username) ? state.currentUser.Username : 'Ú©Ø§Ø±Ù…Û•Ù†Ø¯',
+      uuser: (state.currentUser && state.currentUser.Username) ? state.currentUser.Username : 'کارمەند',
       bar_: capturedGPS ? (capturedGPS.placeName || `GPS: ${capturedGPS.lat}, ${capturedGPS.lng}`) : null,
       N_pshknin: document.getElementById('cd-N_pshknin') ? document.getElementById('cd-N_pshknin').value.trim() : null,
       driver_name: document.getElementById('cd-driverName') ? document.getElementById('cd-driverName').value.trim() : null,
@@ -1768,7 +1768,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const origBtnContent = submitBtn ? submitBtn.innerHTML : '';
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> <span>â³ Ú©Û•Ù…ÛŽÚ© Ú†Ø§ÙˆÛ•Ú•ÙˆØ§Ù†Ø¨Û•... Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø¯Ù†</span>';
+      submitBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> <span>⏳ کەمێک چاوەڕوانبە... پاشەکەوتکردن</span>';
       if (window.lucide) lucide.createIcons();
     }
 
@@ -1781,7 +1781,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
 
       if (data.success) {
-        alert('âœ… Ø²Ø§Ù†ÛŒØ§Ø±ÛŒÛŒÛ•Ú©Ø§Ù† Ø¨Û• Ø³Û•Ø±Ú©Û•ÙˆØªÙˆÙˆÛŒÛŒ Ù¾Ø§Ø´Û•Ú©Û•ÙˆØª Ú©Ø±Ø§Ù†!');
+        alert('✅ زانیارییەکان بە سەرکەوتوویی پاشەکەوت کران!');
         state.lastCarRecord = payload;
         const cdf = document.getElementById('car-details-form');
         if (cdf) cdf.reset();
@@ -1798,10 +1798,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         loadCarRecords();
       } else {
-        alert('âš ï¸ Ù‡Û•ÚµÛ• Ù„Û• Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø¯Ù†: ' + (data.error || 'Unknown error'));
+        alert('⚠️ هەڵە لە پاشەکەوتکردن: ' + (data.error || 'Unknown error'));
       }
     } catch (err) {
-      alert('âŒ Ù‡Û•ÚµÛ•ÛŒ Ú•Ø§Ú˜Û•Ú©Ø§Ø± ÛŒØ§Ù† Ù‡ÛŽÚµ: ' + err.message);
+      alert('❌ هەڵەی ڕاژەکار یان هێڵ: ' + err.message);
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -1850,7 +1850,7 @@ document.addEventListener('DOMContentLoaded', () => {
               transition: all 0.2s; white-space: nowrap;
             " onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 4px 16px rgba(99,102,241,0.45)'"
                onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'">
-              ðŸ–¨ï¸ <span>Ú†Ø§Ù¾</span>
+              🖨️ <span>چاپ</span>
             </button>
           </td>
         </tr>
@@ -1860,13 +1860,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-  //  ðŸ–¨ï¸ PROFESSIONAL PRINT REPORT â€” Car Entry Inspection Report
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ═══════════════════════════════════════════════════════════════
+  //  🖨️ PROFESSIONAL PRINT REPORT — Car Entry Inspection Report
+  // ═══════════════════════════════════════════════════════════════
   window.__printCarReport = async function(recordId) {
     // Show loading feedback
     const btn = event && event.target ? event.target.closest('button') : null;
-    if (btn) { btn.innerHTML = 'â³ Loading...'; btn.disabled = true; }
+    if (btn) { btn.innerHTML = '⏳ Loading...'; btn.disabled = true; }
 
     try {
       const res = await fetch(getApiBase() + '/api/car-record?id=' + recordId);
@@ -1875,8 +1875,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const dateStr = r.date_into ? new Date(r.date_into).toLocaleDateString('en-GB', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-      }) : 'â€”';
-      const dateShort = r.date_into ? new Date(r.date_into).toLocaleDateString('en-GB') : 'â€”';
+      }) : '—';
+      const dateShort = r.date_into ? new Date(r.date_into).toLocaleDateString('en-GB') : '—';
       const printTime = new Date().toLocaleString('en-GB', {
         year: 'numeric', month: '2-digit', day: '2-digit',
         hour: '2-digit', minute: '2-digit', second: '2-digit'
@@ -1884,13 +1884,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const photoHtml = r.pic
         ? `<img src="${r.pic}" style="max-width:100%; max-height:220px; object-fit:contain; border-radius:6px; border:1.5px solid #cbd5e1; display:inline-block;" />`
-        : `<div style="width:100%; height:120px; background:#f1f5f9; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:0.95rem; border:1.5px dashed #cbd5e1;">ðŸ“· No photo available</div>`;
+        : `<div style="width:100%; height:120px; background:#f1f5f9; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:0.95rem; border:1.5px dashed #cbd5e1;">📷 No photo available</div>`;
 
       const reportHTML = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>Car Inspection Report â€” #${r.id}</title>
+  <title>Car Inspection Report — #${r.id}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
 
@@ -1919,7 +1919,7 @@ document.addEventListener('DOMContentLoaded', () => {
       line-height: 1.3;
     }
 
-    /* â”€â”€â”€ Single Page Container â”€â”€â”€ */
+    /* ─── Single Page Container ─── */
     .report-page {
       max-width: 190mm;
       margin: 0 auto;
@@ -1928,7 +1928,7 @@ document.addEventListener('DOMContentLoaded', () => {
       break-inside: avoid;
     }
 
-    /* â”€â”€â”€ Header â”€â”€â”€ */
+    /* ─── Header ─── */
     .report-header {
       display: flex;
       align-items: center;
@@ -1975,7 +1975,7 @@ document.addEventListener('DOMContentLoaded', () => {
       letter-spacing: 0.5px;
     }
 
-    /* â”€â”€â”€ Section Titles â”€â”€â”€ */
+    /* ─── Section Titles ─── */
     .section-title {
       font-size: 0.78rem;
       font-weight: 700;
@@ -1990,7 +1990,7 @@ document.addEventListener('DOMContentLoaded', () => {
       gap: 6px;
     }
 
-    /* â”€â”€â”€ Compact Data Grid â”€â”€â”€ */
+    /* ─── Compact Data Grid ─── */
     .data-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -2030,7 +2030,7 @@ document.addEventListener('DOMContentLoaded', () => {
       color: #4f46e5;
     }
 
-    /* â”€â”€â”€ Photo Section (Controlled Max Height for 1-Page Fit) â”€â”€â”€ */
+    /* ─── Photo Section (Controlled Max Height for 1-Page Fit) ─── */
     .photo-section {
       margin-top: 6px;
       text-align: center;
@@ -2042,7 +2042,7 @@ document.addEventListener('DOMContentLoaded', () => {
       font-style: italic;
     }
 
-    /* â”€â”€â”€ Signatures â”€â”€â”€ */
+    /* ─── Signatures ─── */
     .report-footer {
       margin-top: 10px;
       padding-top: 8px;
@@ -2067,7 +2067,7 @@ document.addEventListener('DOMContentLoaded', () => {
       color: #334155;
     }
 
-    /* â”€â”€â”€ Watermark â”€â”€â”€ */
+    /* ─── Watermark ─── */
     .watermark {
       position: fixed;
       top: 50%;
@@ -2083,7 +2083,7 @@ document.addEventListener('DOMContentLoaded', () => {
       white-space: nowrap;
     }
 
-    /* â”€â”€â”€ Print Stamp â”€â”€â”€ */
+    /* ─── Print Stamp ─── */
     .print-stamp {
       text-align: center;
       font-size: 0.62rem;
@@ -2091,7 +2091,7 @@ document.addEventListener('DOMContentLoaded', () => {
       margin-top: 6px;
     }
 
-    /* â”€â”€â”€ Screen-only toolbar â”€â”€â”€ */
+    /* ─── Screen-only toolbar ─── */
     @media screen {
       .no-print-toolbar {
         position: fixed; top: 0; left: 0; right: 0; z-index: 999;
@@ -2123,87 +2123,87 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="watermark">TAQEGA</div>
 
   <div class="no-print-toolbar">
-    <div style="font-size:1rem; font-weight:700;">ðŸ–¨ï¸ Ú•Ø§Ù¾Û†Ø±ØªÛŒ Ù¾Ø´Ú©Ù†ÛŒÙ†ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„ â€” Record #${r.id} (A4 One Page)</div>
+    <div style="font-size:1rem; font-weight:700;">🖨️ ڕاپۆرتی پشکنینی ئۆتۆمبێل — Record #${r.id} (A4 One Page)</div>
     <div style="display:flex; gap:10px;">
-      <button onclick="window.print()">ðŸ–¨ï¸ Print Now (Ú†Ø§Ù¾Ú©Ø±Ø¯Ù†)</button>
-      <button onclick="window.close()" style="background:rgba(255,255,255,0.15); color:#fff;">âœ• Close</button>
+      <button onclick="window.print()">🖨️ Print Now (چاپکردن)</button>
+      <button onclick="window.close()" style="background:rgba(255,255,255,0.15); color:#fff;">✕ Close</button>
     </div>
   </div>
 
   <div class="report-page">
-    <!-- â•â•â• HEADER â•â•â• -->
+    <!-- ═══ HEADER ═══ -->
     <div class="report-header">
       <div class="header-brand">
-        <div class="header-logo">ðŸš—<br>SYS</div>
+        <div class="header-logo">🚗<br>SYS</div>
         <div>
           <div class="header-title">Vehicle Inspection Report</div>
-          <div class="header-subtitle">Ú•Ø§Ù¾Û†Ø±ØªÛŒ Ù¾Ø´Ú©Ù†ÛŒÙ†ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„ â€” ØªÛ†Ù…Ø§Ø±Ú©Ø±Ø¯Ù†ÛŒ Ø²Ø§Ù†ÛŒØ§Ø±ÛŒ Ùˆ ÙˆÛŽÙ†Û•ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„</div>
+          <div class="header-subtitle">ڕاپۆرتی پشکنینی ئۆتۆمبێل — تۆمارکردنی زانیاری و وێنەی ئۆتۆمبێل</div>
         </div>
       </div>
       <div class="header-meta">
         <div class="record-id">#${r.id}</div>
-        <div>ðŸ“… ${dateStr}</div>
-        <div>ðŸ–¨ï¸ ${printTime}</div>
+        <div>📅 ${dateStr}</div>
+        <div>🖨️ ${printTime}</div>
       </div>
     </div>
 
-    <!-- â•â•â• VEHICLE & INSPECTION DATA (1-Row Clean Grid) â•â•â• -->
-    <div class="section-title">ðŸš— Vehicle & Inspection Details â€” Ø²Ø§Ù†ÛŒØ§Ø±ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„ Ùˆ Ù¾Ø´Ú©Ù†ÛŒÙ†</div>
+    <!-- ═══ VEHICLE & INSPECTION DATA (1-Row Clean Grid) ═══ -->
+    <div class="section-title">🚗 Vehicle & Inspection Details — زانیاری ئۆتۆمبێل و پشکنین</div>
     <div class="data-grid">
       <div class="data-cell">
-        <span class="data-label">Car No / Ú˜Ù…Ø§Ø±Û•</span>
-        <span class="data-value highlight">${escapeHtml(r.carNo || 'â€”')}</span>
+        <span class="data-label">Car No / ژمارە</span>
+        <span class="data-value highlight">${escapeHtml(r.carNo || '—')}</span>
       </div>
       <div class="data-cell">
-        <span class="data-label">(Ù¾Ø§Ø±ÛŽØ²Ú¯Ø§ ÛŒØ§Ù† Ø´ÙˆÛŽÙ†)</span>
-        <span class="data-value highlight">${escapeHtml(r.plet || 'â€”')}</span>
+        <span class="data-label">(پارێزگا یان شوێن)</span>
+        <span class="data-value highlight">${escapeHtml(r.plet || '—')}</span>
       </div>
       <div class="data-cell">
-        <span class="data-label">(Ø¨Û•Ø´ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„)</span>
-        <span class="data-value">${escapeHtml(r.bash || 'â€”')}</span>
+        <span class="data-label">(بەشی ئۆتۆمبێل)</span>
+        <span class="data-value">${escapeHtml(r.bash || '—')}</span>
       </div>
       <div class="data-cell">
-        <span class="data-label">Date / Ø¨Û•Ø±ÙˆØ§Ø±</span>
+        <span class="data-label">Date / بەروار</span>
         <span class="data-value">${dateShort}</span>
       </div>
     </div>
 
     <div class="data-grid" style="grid-template-columns: 1fr 1fr;">
       <div class="data-cell">
-        <span class="data-label">(Ù¾Ø´Ú©Ù†ÛŒÙ†ÛŒ)</span>
-        <span class="data-value">${escapeHtml(r.N_pshknin || 'â€”')}</span>
+        <span class="data-label">(پشکنینی)</span>
+        <span class="data-value">${escapeHtml(r.N_pshknin || '—')}</span>
       </div>
       <div class="data-cell">
-        <span class="data-label">Recorded By / ØªÛ†Ù…Ø§Ø±Ú©Û•Ø±</span>
-        <span class="data-value">${escapeHtml(r.uuser || 'â€”')}</span>
+        <span class="data-label">Recorded By / تۆمارکەر</span>
+        <span class="data-value">${escapeHtml(r.uuser || '—')}</span>
       </div>
     </div>
 
-    <!-- â•â•â• VEHICLE PHOTO â•â•â• -->
-    <div class="section-title">ðŸ“¸ Vehicle Photo â€” ÙˆÛŽÙ†Û•ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„ (GPS Stamped)</div>
+    <!-- ═══ VEHICLE PHOTO ═══ -->
+    <div class="section-title">📸 Vehicle Photo — وێنەی ئۆتۆمبێل (GPS Stamped)</div>
     <div class="photo-section">
       ${photoHtml}
       <div class="photo-caption">Captured with GPS geolocation & timestamp watermark</div>
     </div>
 
-    <!-- â•â•â• SIGNATURES â•â•â• -->
+    <!-- ═══ SIGNATURES ═══ -->
     <div class="report-footer">
       <div class="footer-signatures">
         <div class="sig-box">
-          <div class="sig-line">Inspector Signature<br>ÙˆØ§Ú˜ÙˆÙˆÛŒ Ù¾Ø´Ú©Ù†Û•Ø±</div>
+          <div class="sig-line">Inspector Signature<br>واژووی پشکنەر</div>
         </div>
         <div class="sig-box">
-          <div class="sig-line">Operator Signature<br>ÙˆØ§Ú˜ÙˆÙˆÛŒ ØªÛ†Ù…Ø§Ø±Ú©Û•Ø±</div>
+          <div class="sig-line">Operator Signature<br>واژووی تۆمارکەر</div>
         </div>
         <div class="sig-box">
-          <div class="sig-line">Manager Approval<br>Ù¾Û•Ø³Û•Ù†Ø¯Ú©Ø±Ø¯Ù†ÛŒ Ø¨Û•Ú•ÛŽÙˆÛ•Ø¨Û•Ø±</div>
+          <div class="sig-line">Manager Approval<br>پەسەندکردنی بەڕێوەبەر</div>
         </div>
       </div>
     </div>
 
     <div class="print-stamp" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; font-size:0.75rem; color:#64748b; border-top:1px dashed #cbd5e1; padding-top:0.6rem; margin-top:1rem;">
-      <div>Car Records System â€” Taqega Database â€” Page 1 of 1 â€” ${printTime}</div>
-      <div style="direction:rtl; font-weight:600;">Ø¯ÛŒØ²Ø§ÛŒÙ† Ùˆ Ù¾Û•Ø±Û•Ù¾ÛŽØ¯Ø§Ù†: Ù†Û•Ú˜Ø§Ø¯ Ù‚Ø§Ø¯Ø± Ù…Ø­Ù…Ø¯ â€” Ù‡Ø§ØªÙˆÙˆÚ†Û†ÛŒ Ø³Ù„ÛŽÙ…Ø§Ù†ÛŒ</div>
+      <div>Car Records System — Taqega Database — Page 1 of 1 — ${printTime}</div>
+      <div style="direction:rtl; font-weight:600;">دیزاین و پەرەپێدان: نەژاد قادر محمد — هاتووچۆی سلێمانی</div>
     </div>
   </div>
 </body>
@@ -2216,7 +2216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       alert('Error loading record for print: ' + err.message);
     } finally {
-      if (btn) { btn.innerHTML = 'ðŸ–¨ï¸ <span>Print</span>'; btn.disabled = false; }
+      if (btn) { btn.innerHTML = '🖨️ <span>Print</span>'; btn.disabled = false; }
     }
   };
 
@@ -2235,9 +2235,9 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/"/g, '&quot;');
   }
 
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-  // âš ï¸ VEHICLE DEFECTS ENTRY ENGINE (dbo.BB & dbo.XXX)
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ═══════════════════════════════════════════════════════════════
+  // ⚠️ VEHICLE DEFECTS ENTRY ENGINE (dbo.BB & dbo.XXX)
+  // ═══════════════════════════════════════════════════════════════
   const dfAA = document.getElementById('df-AA');
   const dfBBB = document.getElementById('df-BBB');
   const dfCCC = document.getElementById('df-CCC');
@@ -2301,7 +2301,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // â”€â”€â”€ CUSTOM INTERACTIVE KURDISH SEARCHABLE COMBOBOX (DF-CCC / PARIZGA) â”€â”€â”€
+  // ─── CUSTOM INTERACTIVE KURDISH SEARCHABLE COMBOBOX (DF-CCC / PARIZGA) ───
   const dfCccInput = document.getElementById('df-CCC');
   const dfCccMenu = document.getElementById('df-plet-dropdown-menu');
   const dfCccArrowBtn = document.getElementById('df-plet-arrow-btn');
@@ -2310,10 +2310,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!dfCccMenu) return;
     const nQ = normalizeKurdish(filterText);
     const pletList = [
-      "Ù‡Û•ÙˆÙ„ÛŽØ±", "Ø³Ù„ÛŽÙ…Ø§Ù†ÛŒ", "Ø¯Ù‡Û†Ú©", "Ù‡Û•ÚµÛ•Ø¨Ø¬Û•", "Ú©Û•Ø±Ú©ÙˆÚ©", "Ú©Ø§ØªÛŒ Ù‡Û•ÙˆÙ„ÛŽØ±", "Ú©Ø§ØªÛŒ Ø³Ù„ÛŽÙ…Ø§Ù†ÛŒ", "Ú©Ø§ØªÛŒ Ø¯Ù‡Û†Ú©",
-      "Ú©Ø§ØªÛŒ Ù‡Û•ÚµÛ•Ø¨Ø¬Û•", "Ù†Û•ÛŒÙ†Û•ÙˆØ§", "Ø¨Û•ØºØ¯Ø§", "Ø¨Û•Ø³Ø±Û•", "Ø¦Û•Ù†Ø¨Ø§Ø±", "Ø¨Ø§Ø¨Ù„", "Ø¯ÛŒØ§Ù„Û•", "Ø¯ÛŒÙˆØ§Ù†ÛŒÛ•", "Ø°ÛŒ Ù‚Ø§Ø±",
-      "ØµÙ„Ø§Ø­ Ø§Ù„Ø¯ÛŒÙ†", "Ú©Û•Ø±Ø¨Û•Ù„Ø§", "Ù…ÙˆØ³Û•Ù†Ù†Ø§", "Ù…ÛŒØ³Ø§Ù†", "Ù†Û•Ø¬Û•Ù", "ÙˆØ§Ø³Ø·", "Ø¦Ø§Ú©Ø±ÛŽ", "Ø¦Ø§Ù…ÛŽØ¯ÛŒ", "Ø¨Û•Ø±Ø¯Û•Ú•Û•Ø´",
-      "Ø¯Û•Ø±Ø¨Û•Ù†Ø¯ÛŒØ®Ø§Ù†", "Ú•Ø§Ù†ÛŒÛ•", "Ø²Ø§Ø®Û†", "Ø´Û•Ù‚ÚµØ§ÙˆÛ•", "Ø´Û•Ù†Ú¯Ø§Ù„", "Ú©Û•Ù„Ø§Ø±", "Ú©Û†ÛŒÛ•", "Ù‚Û•ÚµØ§Ø¯Ø²ÛŽ", "Ù…Û•Ø®Ù…ÙˆØ±", "ÙØ­Øµ"
+      "هەولێر", "سلێمانی", "دهۆک", "هەڵەبجە", "کەرکوک", "کاتی هەولێر", "کاتی سلێمانی", "کاتی دهۆک",
+      "کاتی هەڵەبجە", "نەینەوا", "بەغدا", "بەسرە", "ئەنبار", "بابل", "دیالە", "دیوانیە", "ذی قار",
+      "صلاح الدین", "کەربەلا", "موسەننا", "میسان", "نەجەف", "واسط", "ئاکرێ", "ئامێدی", "بەردەڕەش",
+      "دەربەندیخان", "ڕانیە", "زاخۆ", "شەقڵاوە", "شەنگال", "کەلار", "کۆیە", "قەڵادزێ", "مەخمور", "فحص"
     ];
 
     const filtered = filterText
@@ -2321,12 +2321,12 @@ document.addEventListener('DOMContentLoaded', () => {
       : pletList;
 
     if (filtered.length === 0) {
-      dfCccMenu.innerHTML = `<div class="custom-dropdown-empty">Ø¯Û•ØªÙˆØ§Ù†ÛŒØª Ù‡Û•Ø± Ø¦Û•Ù… Ø´ØªÛ• Ø¨Ù†ÙˆÙˆØ³ÛŒØª: "<strong>${escapeHtml(filterText)}</strong>"</div>`;
+      dfCccMenu.innerHTML = `<div class="custom-dropdown-empty">دەتوانیت هەر ئەم شتە بنووسیت: "<strong>${escapeHtml(filterText)}</strong>"</div>`;
     } else {
       dfCccMenu.innerHTML = filtered.map(item => `
         <div class="custom-dropdown-item" data-value="${escapeHtml(item)}">
-          <span>ðŸ“ ${escapeHtml(item)}</span>
-          <span style="font-size:0.75rem; color:var(--text-muted); opacity:0.5;">âœ“</span>
+          <span>📍 ${escapeHtml(item)}</span>
+          <span style="font-size:0.75rem; color:var(--text-muted); opacity:0.5;">✓</span>
         </div>
       `).join('');
     }
@@ -2375,7 +2375,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // â”€â”€â”€ AUTO-LOOKUP CAR DETAILS WHEN TYPING CAR NUMBER (DF-AA) â”€â”€â”€
+  // ─── AUTO-LOOKUP CAR DETAILS WHEN TYPING CAR NUMBER (DF-AA) ───
   if (dfAA) {
     ['input', 'change', 'blur'].forEach(evt => {
       dfAA.addEventListener(evt, async () => {
@@ -2403,21 +2403,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const dfCodeInput = document.getElementById('df-code-input');
 
   const defaultDefectsList = [
-    { id: 1, Xx_: 'Ø¦ÛŒØ³ØªÛ†Ù¾Ù‰ ØªÛ•Ú¯Û•Ø±Û•Ú©Ø§Ù†Ù‰ Ù¾ÛŽØ´Û•ÙˆÛ• Ù„Ø§ÙˆØ§Ø²Û•' },
-    { id: 2, Xx_: 'Ø¦ÛŒØ³ØªÛ†Ù¾Ù‰ ØªÛ•Ú¯Û•Ø±Û•Ú©Ø§Ù†Ù‰ Ø¯ÙˆØ§ÙˆÛ• Ù„Ø§ÙˆØ§Ø²Û•' },
-    { id: 3, Xx_: 'Ù„Ø§ÛŒØªÛŒ Ù¾ÛŽØ´Û•ÙˆÛ• Ú©Ø§Ø±Ù†Ø§Ú©Ø§Øª' },
-    { id: 4, Xx_: 'Ù„Ø§ÛŒØªÛŒ Ø¯ÙˆØ§ÙˆÛ• / Ø³ØªÛ†Ù¾ Ø´Ú©Ø§ÙˆÛ•' },
-    { id: 5, Xx_: 'ØªØ§ÛŒÛ•Ú©Ø§Ù† Ø³ÙˆØ§Ø¨ÙˆÙˆÙ† ÛŒØ§Ù† Ø®Ø±Ø§Ù¾Ù†' },
-    { id: 6, Xx_: 'Ø³ÛŒØ³ØªÛ•Ù…ÛŒ Ø¦ÛŒØ³ØªÛ†Ù¾ / ÙÛ•Ø±Ù…Û†Ù† Ú©ÛŽØ´Û•ÛŒ Ù‡Û•ÛŒÛ•' },
-    { id: 7, Xx_: 'Ø¬Ø§Ù… Ø´Ú©Ø§ÙˆÛ• ÛŒØ§Ù† Ø¯Ø±Ø²ÛŒ ØªÛŽØ¯Ø§ÛŒÛ•' },
-    { id: 8, Xx_: 'Ø¯Û•Ø±Ú†ÙˆÙˆÙ†ÛŒ Ø¯ÙˆÙˆÚ©Û•ÚµÛŒ Ú•Û•Ø´ / Ø´ÛŒÙ† Ù„Û• Ú¯Ø²Û†Ø²' },
-    { id: 9, Xx_: 'Ø¯Û•Ù†Ú¯ÛŒ Ù†Ø§Ø¦Ø§Ø³Ø§ÛŒÛŒ Ù„Û• Ù…Ø­Û•Ø±Û•Ú©' },
-    { id: 10, Xx_: 'Ú©ÛŽØ´Û• Ù„Û• Ø³ÛŒØ³ØªÛ•Ù…ÛŒ Ø¦Ø§Ú•Ø§Ø³ØªÛ•Ú©Ø±Ø¯Ù† (Ù‡Û†Ú•Ù† / Ø³ÙˆÙˆÚ©Ø§Ù†)' },
-    { id: 11, Xx_: 'Ø¬Ø§Ù…Ø´Û†Ø± ÛŒØ§Ù† ÙÚµÚ†Û•ÛŒ Ø¬Ø§Ù… Ú©Ø§Ø±Ù†Ø§Ú©Ø§Øª' },
-    { id: 12, Xx_: 'Ø´Ø§Ø³ÛŒ / Ù¾Û•ÛŒÚ©Û•Ø±ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„ Ú©ÛŽØ´Û•ÛŒ Ù‡Û•ÛŒÛ•' },
-    { id: 13, Xx_: 'ÙÚ•ÛŽÙ†ÛŒ Ø¯Û•Ø³ØªÛŒ (Ù‡Ø§Ù†Ø¯) Ù„Ø§ÙˆØ§Ø²Û•' },
-    { id: 14, Xx_: 'Ù„Ø§ÛŒØª Ùˆ Ø¦Ø§Ù…Ø§Ú˜Û•Ú©Ø§Ù†ÛŒ Ù„Ø§Ø¯Ø§Ù† Ú©Ø§Ø±Ù†Ø§Ú©Û•Ù†' },
-    { id: 15, Xx_: 'Ù„ÛŒØ²Û•Ø± ÛŒØ§Ù† Ù„Ø§ÛŒØªÛŒ Ø²ÛŒØ§Ø¯Û• Ø¨Û•Ø³ØªØ±Ø§ÙˆÛ•' }
+    { id: 1, Xx_: 'ئیستۆپى تەگەرەکانى پێشەوە لاوازە' },
+    { id: 2, Xx_: 'ئیستۆپى تەگەرەکانى دواوە لاوازە' },
+    { id: 3, Xx_: 'لایتی پێشەوە کارناکات' },
+    { id: 4, Xx_: 'لایتی دواوە / ستۆپ شکاوە' },
+    { id: 5, Xx_: 'تایەکان سوابوون یان خراپن' },
+    { id: 6, Xx_: 'سیستەمی ئیستۆپ / فەرمۆن کێشەی هەیە' },
+    { id: 7, Xx_: 'جام شکاوە یان درزی تێدایە' },
+    { id: 8, Xx_: 'دەرچوونی دووکەڵی ڕەش / شین لە گزۆز' },
+    { id: 9, Xx_: 'دەنگی نائاسایی لە محەرەک' },
+    { id: 10, Xx_: 'کێشە لە سیستەمی ئاڕاستەکردن (هۆڕن / سووکان)' },
+    { id: 11, Xx_: 'جامشۆر یان فڵچەی جام کارناکات' },
+    { id: 12, Xx_: 'شاسی / پەیکەری ئۆتۆمبێل کێشەی هەیە' },
+    { id: 13, Xx_: 'فڕێنی دەستی (هاند) لاوازە' },
+    { id: 14, Xx_: 'لایت و ئاماژەکانی لادان کارناکەن' },
+    { id: 15, Xx_: 'لیزەر یان لایتی زیادە بەستراوە' }
   ];
 
   function getActiveDefectsList() {
@@ -2439,8 +2439,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function populateDefectsNativeSelect() {
     if (!dfXxSelect) return;
     const list = getActiveDefectsList();
-    dfXxSelect.innerHTML = `<option value="">ðŸ“‹ Ù‡Û•ÚµØ¨Ú˜Ø§Ø±Ø¯Ù†ÛŒ Ø®ÛŽØ±Ø§ Ù„Û• Ù„ÛŒØ³Øª...</option>` +
-      list.map(item => `<option value="${escapeHtml(item.Xx_)}">#${item.id} â”€â”€ ${escapeHtml(item.Xx_)}</option>`).join('');
+    dfXxSelect.innerHTML = `<option value="">📋 هەڵبژاردنی خێرا لە لیست...</option>` +
+      list.map(item => `<option value="${escapeHtml(item.Xx_)}">#${item.id} ── ${escapeHtml(item.Xx_)}</option>`).join('');
   }
 
   if (dfXxSelect) {
@@ -2488,12 +2488,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (filtered.length === 0) {
-      dfXxMenu.innerHTML = `<div class="custom-dropdown-empty">Ø¯Û•ØªÙˆØ§Ù†ÛŒØª Ù‡Û•Ø± Ø¦Û•Ù… Ú©Û•Ù…ÙˆÚ©ÙˆÚ•ÛŒÛŒÛ• Ø¨Ù†ÙˆÙˆØ³ÛŒØª: "<strong>${escapeHtml(rawFilter)}</strong>"</div>`;
+      dfXxMenu.innerHTML = `<div class="custom-dropdown-empty">دەتوانیت هەر ئەم کەموکوڕییە بنووسیت: "<strong>${escapeHtml(rawFilter)}</strong>"</div>`;
     } else {
       dfXxMenu.innerHTML = filtered.map(item => `
         <div class="custom-dropdown-item" data-value="${escapeHtml(item.Xx_)}">
-          <span><strong style="color:var(--accent-amber); font-family:monospace;">#${item.id}</strong> â”€â”€ ${escapeHtml(item.Xx_)}</span>
-          <span style="font-size:0.75rem; color:var(--text-muted); opacity:0.5;">âœ“</span>
+          <span><strong style="color:var(--accent-amber); font-family:monospace;">#${item.id}</strong> ── ${escapeHtml(item.Xx_)}</span>
+          <span style="font-size:0.75rem; color:var(--text-muted); opacity:0.5;">✓</span>
         </div>
       `).join('');
     }
@@ -2593,14 +2593,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!defectsGridTbody) return;
 
     if (defectGridCountBadge) {
-      defectGridCountBadge.textContent = `${state.queuedDefects.length} Ù‡Û•ÚµØ¨Ú˜ÛŽØ±Ø¯Ø±Ø§Ùˆ`;
+      defectGridCountBadge.textContent = `${state.queuedDefects.length} هەڵبژێردراو`;
     }
 
     if (state.queuedDefects.length === 0) {
       defectsGridTbody.innerHTML = `
         <tr>
           <td colspan="3" style="text-align:center; color:var(--text-muted); padding:1.5rem;">
-            Ù‡ÛŒÚ† Ú©Û•Ù…ÙˆÚ©ÙˆÚ•ÛŒÛŒÛ•Ú© Ø²ÛŒØ§Ø¯Ù†Û•Ú©Ø±Ø§ÙˆÛ•. Ù„Û• Ø³Û•Ø±Û•ÙˆÛ• Ú©Û•Ù…ÙˆÚ©ÙˆÚ•ÛŒ Ù‡Û•ÚµØ¨Ú˜ÛŽØ±Û• Ùˆ Ø¯ÙˆÚ¯Ù…Û•ÛŒ (âž• Ø²ÛŒØ§Ø¯Ú©Ø±Ø¯Ù†) Ø¯Ø§Ø¨Ú¯Ø±Û•.
+            هیچ کەموکوڕییەک زیادنەکراوە. لە سەرەوە کەموکوڕی هەڵبژێرە و دوگمەی (➕ زیادکردن) دابگرە.
           </td>
         </tr>`;
       return;
@@ -2609,12 +2609,12 @@ document.addEventListener('DOMContentLoaded', () => {
     defectsGridTbody.innerHTML = state.queuedDefects.map((defText, idx) => `
       <tr>
         <td style="font-weight:700; text-align:center;"><span class="tag-badge" style="background:var(--accent-amber); color:#000;">#${idx + 1}</span></td>
-        <td style="font-weight:600; color:#fbbf24;">âš ï¸ ${escapeHtml(defText)}</td>
+        <td style="font-weight:600; color:#fbbf24;">⚠️ ${escapeHtml(defText)}</td>
         <td style="text-align:center;">
           <button type="button" onclick="window.__removeDefectFromGrid(${idx})" style="
             background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.4);
             border-radius: 6px; padding: 0.3rem 0.65rem; font-size: 0.75rem; font-weight: 700; cursor: pointer;
-          ">ðŸ—‘ï¸ Ø³Ú•ÛŒÙ†Û•ÙˆÛ•</button>
+          ">🗑️ سڕینەوە</button>
         </td>
       </tr>
     `).join('');
@@ -2634,7 +2634,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dddVal = dfDDD ? dfDDD.value.trim() : '';
 
     if (!aaVal) {
-      alert('âš ï¸ Ø¦Ø§Ú¯Ø§Ø¯Ø§Ø±ÛŒ: Ø®Ø§Ù†Û•ÛŒ (Ú˜Ù…Ø§Ø±Û•ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„) Ø¨Û• Ø¨Û•ØªØ§ÚµÛŒ Ø¨Û•Ø¬ÛŽÙ…Ø§ÙˆÛ•! ØªÚ©Ø§ÛŒÛ• Ù¾Ú•ÛŒ Ø¨Ú©Û•Ø±Û•ÙˆÛ•.');
+      alert('⚠️ ئاگاداری: خانەی (ژمارەی ئۆتۆمبێل) بە بەتاڵی بەجێماوە! تکایە پڕی بکەرەوە.');
       if (dfAA) {
         dfAA.scrollIntoView({ behavior: 'smooth', block: 'center' });
         dfAA.focus();
@@ -2643,7 +2643,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (!bbbVal) {
-      alert('âš ï¸ Ø¦Ø§Ú¯Ø§Ø¯Ø§Ø±ÛŒ: Ø®Ø§Ù†Û•ÛŒ (Ø¨Û•Ø´ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„) Ø¨Û• Ø¨Û•ØªØ§ÚµÛŒ Ø¨Û•Ø¬ÛŽÙ…Ø§ÙˆÛ•! ØªÚ©Ø§ÛŒÛ• Ù‡Û•ÚµØ¨Ú˜Ø§Ø±Ø¯Ù†ÛŽÚ© Ø¨Ú©Û•.');
+      alert('⚠️ ئاگاداری: خانەی (بەشی ئۆتۆمبێل) بە بەتاڵی بەجێماوە! تکایە هەڵبژاردنێک بکە.');
       if (dfBBB) {
         dfBBB.scrollIntoView({ behavior: 'smooth', block: 'center' });
         dfBBB.focus();
@@ -2652,7 +2652,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (!cccVal) {
-      alert('âš ï¸ Ø¦Ø§Ú¯Ø§Ø¯Ø§Ø±ÛŒ: Ø®Ø§Ù†Û•ÛŒ (Ù¾Ø§Ø±ÛŽØ²Ú¯Ø§ ÛŒØ§Ù† Ø´ÙˆÛŽÙ†) Ø¨Û• Ø¨Û•ØªØ§ÚµÛŒ Ø¨Û•Ø¬ÛŽÙ…Ø§ÙˆÛ•! ØªÚ©Ø§ÛŒÛ• Ø¨Ù†ÙˆÙˆØ³Û• ÛŒØ§Ù† Ù‡Û•ÚµØ¨Ú˜ÛŽØ±Û•.');
+      alert('⚠️ ئاگاداری: خانەی (پارێزگا یان شوێن) بە بەتاڵی بەجێماوە! تکایە بنووسە یان هەڵبژێرە.');
       if (dfCCC) {
         dfCCC.scrollIntoView({ behavior: 'smooth', block: 'center' });
         dfCCC.focus();
@@ -2661,7 +2661,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (!dddVal) {
-      alert('âš ï¸ Ø¦Ø§Ú¯Ø§Ø¯Ø§Ø±ÛŒ: Ø®Ø§Ù†Û•ÛŒ (Ù¾Ø´Ú©Ù†ÛŒÙ†ÛŒ) Ø¨Û• Ø¨Û•ØªØ§ÚµÛŒ Ø¨Û•Ø¬ÛŽÙ…Ø§ÙˆÛ•! ØªÚ©Ø§ÛŒÛ• Ù‡Û•ÚµØ¨Ú˜Ø§Ø±Ø¯Ù†ÛŽÚ© Ø¨Ú©Û•.');
+      alert('⚠️ ئاگاداری: خانەی (پشکنینی) بە بەتاڵی بەجێماوە! تکایە هەڵبژاردنێک بکە.');
       if (dfDDD) {
         dfDDD.scrollIntoView({ behavior: 'smooth', block: 'center' });
         dfDDD.focus();
@@ -2679,7 +2679,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const text = dfXxInput.value.trim();
       if (!text) {
-        alert('ØªÚ©Ø§ÛŒÛ• Ú©Û•Ù…ÙˆÚ©ÙˆÚ•ÛŒÛŒÛ•Ú© Ù„Û• Ù„ÛŒØ³Øª Ù‡Û•ÚµØ¨Ú˜ÛŽØ±Û• ÛŒØ§Ù† Ø¨Ù†ÙˆÙˆØ³Û•');
+        alert('تکایە کەموکوڕییەک لە لیست هەڵبژێرە یان بنووسە');
         dfXxInput.focus();
         return;
       }
@@ -2691,7 +2691,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // â”€â”€â”€ BATCH SAVE DEFECTS TO dbo.BB â”€â”€â”€
+  // ─── BATCH SAVE DEFECTS TO dbo.BB ───
   let isBatchSaving = false;
   async function handleDefectsBatchSave(e) {
     if (e && typeof e.preventDefault === 'function') {
@@ -2701,7 +2701,7 @@ document.addEventListener('DOMContentLoaded', () => {
     isBatchSaving = true;
 
     if (!state.currentUser) {
-      alert('Ú©Ø§ØªÛŒ Ø¯Ø§Ù†ÛŒØ´ØªÙ†Û•Ú©Û• Ø¨Û•Ø³Û•Ø±Ú†ÙˆÙˆ. ØªÚ©Ø§ÛŒÛ• Ø¯ÙˆÙˆØ¨Ø§Ø±Û• Ø¨Ú†Û†Ú˜ÙˆÙˆØ±Û•ÙˆÛ•.');
+      alert('کاتی دانیشتنەکە بەسەرچوو. تکایە دووبارە بچۆژوورەوە.');
       showView('login');
       return;
     }
@@ -2720,7 +2720,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dfXxSelect.value = '';
         renderDefectsGrid();
       } else {
-        alert('âš ï¸ ØªÚ©Ø§ÛŒÛ• Ù„Ø§Ù†ÛŒÚ©Û•Ù… ÛŒÛ•Ú© Ú©Û•Ù…ÙˆÚ©ÙˆÚ•ÛŒ Ø²ÛŒØ§Ø¯ Ø¨Ú©Û• Ø¨Û† Ù„ÛŒØ³Øª Ø¨Û•Ø±Ù„Û•ÙˆÛ•ÛŒ Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÛŒ Ø¨Ú©Û•ÛŒØª!');
+        alert('⚠️ تکایە لانیکەم یەک کەموکوڕی زیاد بکە بۆ لیست بەرلەوەی پاشەکەوتی بکەیت!');
         if (dfXxInput) dfXxInput.focus();
         return;
       }
@@ -2743,7 +2743,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveBtn = document.getElementById('btn-save-all-defects');
     if (saveBtn) {
       saveBtn.disabled = true;
-      saveBtn.innerHTML = 'â³ <span>Ù„Û• Ø­Ø§ÚµÛ•ØªÛŒ Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø¯Ù†...</span>';
+      saveBtn.innerHTML = '⏳ <span>لە حاڵەتی پاشەکەوتکردن...</span>';
     }
 
     try {
@@ -2755,21 +2755,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        alert(`âœ… Ú©Û•Ù…ÙˆÚ©ÙˆÚ•ÛŒÛŒÛ•Ú©Ø§Ù† Ø¨Û• Ø³Û•Ø±Ú©Û•ÙˆØªÙˆÙˆÛŒÛŒ Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø§Ù† (ÙˆÛ•Ø³Úµ #${data.Psulla})`);
+        alert(`✅ کەموکوڕییەکان بە سەرکەوتوویی پاشەکەوتکران (وەسڵ #${data.Psulla})`);
         state.queuedDefects = [];
         renderDefectsGrid();
         if (dfPsulla) dfPsulla.value = '';
         loadDefectsBBHistory();
       } else {
-        alert('Ù‡Û•ÚµÛ• Ù„Û• Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø¯Ù†: ' + (data.error || 'Ú©ÛŽØ´Û• Ù„Û• Ù¾Û•ÛŒÙˆÛ•Ù†Ø¯ÛŒ Ø³ÛŽØ±Ú¤Û•Ø±'));
+        alert('هەڵە لە پاشەکەوتکردن: ' + (data.error || 'کێشە لە پەیوەندی سێرڤەر'));
       }
     } catch (err) {
-      alert('Ù‡Û•ÚµÛ•ÛŒ Ù¾Û•ÛŒÙˆÛ•Ù†Ø¯ÛŒ Ø³ÛŽØ±Ú¤Û•Ø±: ' + err.message);
+      alert('هەڵەی پەیوەندی سێرڤەر: ' + err.message);
     } finally {
       isBatchSaving = false;
       if (saveBtn) {
         saveBtn.disabled = false;
-        saveBtn.innerHTML = '<i data-lucide="database"></i> <span>ðŸ’¾ Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø¯Ù†ÛŒ Ù‡Û•Ù…ÙˆÙˆ Ú©Û•Ù…ÙˆÚ©ÙˆÚ•ÛŒÛŒÛ•Ú©Ø§Ù† Ø¨Û• ÛŒÛ•Ú© Ø¬Ø§Ø±</span>';
+        saveBtn.innerHTML = '<i data-lucide="database"></i> <span>💾 پاشەکەوتکردنی هەموو کەموکوڕییەکان بە یەک جار</span>';
         if (window.lucide) lucide.createIcons();
       }
     }
@@ -2814,11 +2814,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const records = await res.json();
 
       if (bbHistoryCountBadge) {
-        bbHistoryCountBadge.textContent = `ðŸ“Š ${Array.isArray(records) ? records.length : 0} Ú©Û•Ù…ÙˆÚ©ÙˆÚ•ÛŒÛŒ Ø¦Û•Ù…Ú•Û†`;
+        bbHistoryCountBadge.textContent = `📊 ${Array.isArray(records) ? records.length : 0} کەموکوڕیی ئەمڕۆ`;
       }
 
       if (!Array.isArray(records) || records.length === 0) {
-        savedBbTbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:var(--text-muted); padding:1.5rem;">Ù‡ÛŒÚ† Ú©Û•Ù…ÙˆÚ©ÙˆÚ•ÛŒÛŒÛ•Ú© ØªÛ†Ù…Ø§Ø± Ù†Û•Ú©Ø±Ø§ÙˆÛ• Ø¨Û† Ø¦Û•Ù…Ú•Û†</td></tr>`;
+        savedBbTbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:var(--text-muted); padding:1.5rem;">هیچ کەموکوڕییەک تۆمار نەکراوە بۆ ئەمڕۆ</td></tr>`;
         return;
       }
 
@@ -2829,7 +2829,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td><strong style="color:var(--accent-cyan);">${escapeHtml(r.AA || '-')}</strong></td>
           <td>${escapeHtml(r.BBB || '-')}</td>
           <td>${escapeHtml(r.CCC || '-')}</td>
-          <td style="font-weight:600; color:#fbbf24;">âš ï¸ ${escapeHtml(r.Xx_ || '-')}</td>
+          <td style="font-weight:600; color:#fbbf24;">⚠️ ${escapeHtml(r.Xx_ || '-')}</td>
           <td>${formatDateDisplay(r.date_)}</td>
           <td>${escapeHtml(r.user_ || '-')}</td>
           <td>
@@ -2842,7 +2842,7 @@ document.addEventListener('DOMContentLoaded', () => {
             " onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 4px 16px rgba(239,68,68,0.45)'"
                onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'"
             title="Delete defect">
-              <i data-lucide="trash-2" style="width:14px;height:14px;"></i> Ø³Ú•ÛŒÙ†Û•ÙˆÛ•
+              <i data-lucide="trash-2" style="width:14px;height:14px;"></i> سڕینەوە
             </button>
           </td>
         </tr>
@@ -2874,7 +2874,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
     } catch (e) {
       console.error('loadDefectsBBHistory error:', e);
-      savedBbTbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--accent-rose);">Ù‡Û•ÚµÛ• Ù„Û• Ù‡ÛŽÙ†Ø§Ù†ÛŒ Ø²Ø§Ù†ÛŒØ§Ø±ÛŒÛŒÛ•Ú©Ø§Ù†: ${escapeHtml(e.message)}</td></tr>`;
+      savedBbTbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--accent-rose);">هەڵە لە هێنانی زانیارییەکان: ${escapeHtml(e.message)}</td></tr>`;
     }
   }
 
@@ -2895,9 +2895,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const baseDate = new Date(baseDateStr);
       let daysToAdd = 0;
       
-      if (result.includes('Ø¯Û•Ø±Ù†Û•Ú†ÙˆÙˆÛ•')) {
+      if (result.includes('دەرنەچووە')) {
         daysToAdd = 30; // 30 days for fail
-      } else if (result.includes('Ø¯Û•Ø±Ú†ÙˆÙˆÛ•')) {
+      } else if (result.includes('دەرچووە')) {
         daysToAdd = 365; // 365 days for pass
       }
       
@@ -2913,7 +2913,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // â”€â”€â”€ Auto-Updater Frontend Integration â”€â”€â”€
+  // ─── Auto-Updater Frontend Integration ───
   const updatePageVersionBadge = document.getElementById('update-page-version-badge');
   const appCurrentVersionLabel = document.getElementById('app-current-version-label');
   const btnStartSystemUpdate = document.getElementById('btn-start-system-update');
@@ -2957,8 +2957,8 @@ document.addEventListener('DOMContentLoaded', () => {
       el.style.color = '#38bdf8';
       el.innerHTML = `
         <div style="display:flex; align-items:center; gap:0.75rem; justify-content:center; padding:0.5rem 0;">
-          <span style="font-size:1.4rem;">â³</span>
-          <span style="font-weight:700; font-size:0.95rem;">Ú©Û•Ù…ÛŽÚ© Ú†Ø§ÙˆÛ•Ú•ÙˆØ§Ù† Ø¨Û•... Ù¾Û•ÛŒÙˆÛ•Ù†Ø¯ÛŒ Ø¨Û• Ø³ÛŽØ±Ú¤Û•Ø±ÛŒ Ø³Û•Ø±Û•Ú©ÛŒ Ø¯Û•Ú©Ø±ÛŽØª Ø¨Û† Ù¾Ø´Ú©Ù†ÛŒÙ† Ùˆ Ø¯Ø§Ú¯Ø±ØªÙ†ÛŒ ÙØ§ÛŒÙ„Û• Ù†ÙˆÛŽÛŒÛ•Ú©Ø§Ù†...</span>
+          <span style="font-size:1.4rem;">⏳</span>
+          <span style="font-weight:700; font-size:0.95rem;">کەمێک چاوەڕوان بە... پەیوەندی بە سێرڤەری سەرەکی دەکرێت بۆ پشکنین و داگرتنی فایلە نوێیەکان...</span>
         </div>
       `;
     };
@@ -2979,9 +2979,9 @@ document.addEventListener('DOMContentLoaded', () => {
         data = JSON.parse(text);
       } catch (jsonErr) {
         if (res.status === 404 || text.includes('404')) {
-          throw new Error('Ø³ÛŽØ±Ú¤Û•Ø±ÛŒ Ù¾Ø±Û†Ú¯Ø±Ø§Ù…Û•Ú©Û• Ù¾ÛŽÙˆÛŒØ³ØªÛŒ Ø¨Û• ÛŒÛ•Ú©Ø¬Ø§Ø± Ø¯Ø§Ø®Ø³ØªÙ† Ùˆ Ú©Ø±Ø¯Ù†Û•ÙˆÛ•ÛŒÛ• (Restart) Ø¨Û† Ø¦Û•ÙˆÛ•ÛŒ Ø®Ø²Ù…Û•ØªÚ¯ÙˆØ²Ø§Ø±ÛŒ Ù†ÙˆÛŽÚ©Ø§Ø±ÛŒ Ú†Ø§Ù„Ø§Ú© Ø¨ÛŽØª.');
+          throw new Error('سێرڤەری پرۆگرامەکە پێویستی بە یەکجار داخستن و کردنەوەیە (Restart) بۆ ئەوەی خزمەتگوزاری نوێکاری چالاک بێت.');
         } else {
-          throw new Error(`ÙˆÛ•ÚµØ§Ù…ÛŒ Ø³ÛŽØ±Ú¤Û•Ø±: ${text.substring(0, 80)}`);
+          throw new Error(`وەڵامی سێرڤەر: ${text.substring(0, 80)}`);
         }
       }
 
@@ -2989,11 +2989,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Updated successfully
         const successHtml = `
           <div style="font-size:1.15rem; font-weight:800; margin-bottom:0.4rem; color:#34d399;">
-            ðŸŽ‰ Ù¾ÛŒØ±Û†Ø²Û•! Ø³ÛŒØ³ØªÛ•Ù…Û•Ú©Û• Ø¨Û• Ø³Û•Ø±Ú©Û•ÙˆØªÙˆÙˆÛŒÛŒ Ù†ÙˆÛŽÚ©Ø±Ø§ÛŒÛ•ÙˆÛ• Ø¨Û† ÙˆÛ•Ø´Ø§Ù†ÛŒ (${escapeHtml(data.newVersion)})
+            🎉 پیرۆزە! سیستەمەکە بە سەرکەوتوویی نوێکرایەوە بۆ وەشانی (${escapeHtml(data.newVersion)})
           </div>
           <div style="font-size:0.88rem; color:var(--text-main); line-height:1.7;">
-            ÙØ§ÛŒÙ„Û• Ø³Û•Ø±Û•Ú©ÛŒÛŒÛ•Ú©Ø§Ù† Ù†ÙˆÛŽÚ©Ø±Ø§Ù†Û•ÙˆÛ•: <b>${escapeHtml((data.updatedFiles || []).join(', '))}</b><br>
-            <span style="color:var(--accent-cyan); font-weight:700;">ðŸ”„ Ø¨Û•Ø±Ù†Ø§Ù…Û•Ú©Û• Ø¯ÙˆØ§ÛŒ Ù£ Ú†Ø±Ú©Û• Ø¨Û• Ø´ÛŽÙˆÛ•ÛŒÛ•Ú©ÛŒ Ø®Û†Ú©Ø§Ø± Ú•ÛŒÙØ±ÛŽØ´ Ø¯Û•Ø¨ÛŽØª Ø¨Û† Ú©Û•ÙˆØªÙ†Û•Ú¯Û•Ú•ÛŒ Ú¯Û†Ú•Ø§Ù†Ú©Ø§Ø±ÛŒÛŒÛ•Ú©Ø§Ù†...</span>
+            فایلە سەرەکییەکان نوێکرانەوە: <b>${escapeHtml((data.updatedFiles || []).join(', '))}</b><br>
+            <span style="color:var(--accent-cyan); font-weight:700;">🔄 بەرنامەکە دوای ٣ چرکە بە شێوەیەکی خۆکار ڕیفرێش دەبێت بۆ کەوتنەگەڕی گۆڕانکارییەکان...</span>
           </div>
         `;
 
@@ -3009,8 +3009,8 @@ document.addEventListener('DOMContentLoaded', () => {
         applySuccess(feedbackBox);
         applySuccess(updateStatusMsg);
 
-        if (titleEl) titleEl.textContent = 'âœ… Ù†ÙˆÛŽÚ©Ø§Ø±ÛŒ Ø¨Û• Ø³Û•Ø±Ú©Û•ÙˆØªÙˆÙˆÛŒÛŒ ØªÛ•ÙˆØ§Ùˆ Ø¨ÙˆÙˆ!';
-        if (descEl) descEl.textContent = 'Ø³ÛŒØ³ØªÛ•Ù…Û•Ú©Û• Ú¯Û•ÛŒØ´ØªÛ• Ù†ÙˆÛŽØªØ±ÛŒÙ† ÙˆÛ•Ø´Ø§Ù†.';
+        if (titleEl) titleEl.textContent = '✅ نوێکاری بە سەرکەوتوویی تەواو بوو!';
+        if (descEl) descEl.textContent = 'سیستەمەکە گەیشتە نوێترین وەشان.';
         loadSystemVersion();
 
         // Smart Auto-reload with health polling to ensure server is ready
@@ -3036,10 +3036,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Already latest version
         const latestHtml = `
           <div style="font-size:1.05rem; font-weight:800; margin-bottom:0.3rem; color:#38bdf8;">
-            âœ… Ø³ÛŒØ³ØªÛ•Ù…Û•Ú©Û•Øª Ù„Û•Ø³Û•Ø± Ù†ÙˆÛŽØªØ±ÛŒÙ† ÙˆÛ•Ø´Ø§Ù†Û• (${escapeHtml(data.currentVersion)})
+            ✅ سیستەمەکەت لەسەر نوێترین وەشانە (${escapeHtml(data.currentVersion)})
           </div>
           <div style="font-size:0.88rem; color:var(--text-main);">
-            Ø¦Û•Ù…Û• Ø¯ÙˆØ§ Ú¯Û†Ú•Ø§Ù†Ú©Ø§Ø±ÛŒÛŒÛ• Ùˆ Ù„Û• Ø¦ÛŽØ³ØªØ§Ø¯Ø§ Ù¾ÛŽÙˆÛŒØ³Øª Ø¨Û• Ù‡ÛŒÚ† Ù†ÙˆÛŽÚ©Ø§Ø±ÛŒÛŒÛ•Ú© Ù†Ø§Ú©Ø§Øª.
+            ئەمە دوا گۆڕانکارییە و لە ئێستادا پێویست بە هیچ نوێکارییەک ناکات.
           </div>
         `;
 
@@ -3055,16 +3055,16 @@ document.addEventListener('DOMContentLoaded', () => {
         applyLatest(feedbackBox);
         applyLatest(updateStatusMsg);
 
-        if (titleEl) titleEl.textContent = 'âœ… Ø³ÛŒØ³ØªÛ•Ù…Û•Ú©Û•Øª Ù†ÙˆÛŽØªØ±ÛŒÙ† ÙˆÛ•Ø´Ø§Ù†Û•';
+        if (titleEl) titleEl.textContent = '✅ سیستەمەکەت نوێترین وەشانە';
       } else {
         // Error or failed
         const errHtml = `
           <div style="font-size:1.05rem; font-weight:800; margin-bottom:0.3rem; color:#f87171;">
-            âš ï¸ Ù†Û•ØªÙˆØ§Ù†Ø±Ø§ Ù†ÙˆÛŽÚ©Ø§Ø±ÛŒ Ø¨Ú©Ø±ÛŽØª
+            ⚠️ نەتوانرا نوێکاری بکرێت
           </div>
           <div style="font-size:0.86rem; color:var(--text-main);">
-            ${escapeHtml(data.error || 'Ù†Û•ØªÙˆØ§Ù†Ø±Ø§ Ù¾Û•ÛŒÙˆÛ•Ù†Ø¯ÛŒ Ø¨Û• Ø³ÛŽØ±Ú¤Û•Ø±ÛŒ Ù†ÙˆÛŽÚ©Ø§Ø±ÛŒ Ø¨Ú©Ø±ÛŽØª.')}<br>
-            ØªÚ©Ø§ÛŒÛ• Ø¯ÚµÙ†ÛŒØ§Ø¨Û•Ø±Û•ÙˆÛ• Ù„Û• Ù¾Û•ÛŒÙˆÛ•Ù†Ø¯ÛŒ Ù‡ÛŽÚµÛŒ Ø¦ÛŒÙ†ØªÛ•Ø±Ù†ÛŽØª Ùˆ Ø¯ÙˆÙˆØ¨Ø§Ø±Û• Ù‡Û•ÙˆÚµØ¨Ø¯Û•Ø±Û•ÙˆÛ•.
+            ${escapeHtml(data.error || 'نەتوانرا پەیوەندی بە سێرڤەری نوێکاری بکرێت.')}<br>
+            تکایە دڵنیابەرەوە لە پەیوەندی هێڵی ئینتەرنێت و دووبارە هەوڵبدەرەوە.
           </div>
         `;
 
@@ -3083,7 +3083,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       const netErrHtml = `
         <div style="font-size:1.05rem; font-weight:800; margin-bottom:0.3rem; color:#f87171;">
-          âš ï¸ Ù‡Û•ÚµÛ• Ù„Û• Ù¾Û•ÛŒÙˆÛ•Ù†Ø¯ÛŒ Ù‡ÛŽÚµÛŒ Ø¦ÛŒÙ†ØªÛ•Ø±Ù†ÛŽØª
+          ⚠️ هەڵە لە پەیوەندی هێڵی ئینتەرنێت
         </div>
         <div style="font-size:0.86rem; color:var(--text-main);">
           ${escapeHtml(err.message)}
@@ -3127,17 +3127,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText('07726171818').then(() => {
           const original = btnCopyAboutPhone.innerHTML;
-          btnCopyAboutPhone.innerHTML = '<i data-lucide="check" style="width:14px;height:14px;color:#34d399;"></i> <span>Ú©Û†Ù¾ÛŒÚ©Ø±Ø§!</span>';
+          btnCopyAboutPhone.innerHTML = '<i data-lucide="check" style="width:14px;height:14px;color:#34d399;"></i> <span>کۆپیکرا!</span>';
           if (window.lucide) lucide.createIcons();
           setTimeout(() => {
             btnCopyAboutPhone.innerHTML = original;
             if (window.lucide) lucide.createIcons();
           }, 2000);
         }).catch(() => {
-          alert('Ú˜Ù…Ø§Ø±Û•ÛŒ Ù…Û†Ø¨Ø§ÛŒÙ„: 07726171818');
+          alert('ژمارەی مۆبایل: 07726171818');
         });
       } else {
-        alert('Ú˜Ù…Ø§Ø±Û•ÛŒ Ù…Û†Ø¨Ø§ÛŒÙ„: 07726171818');
+        alert('ژمارەی مۆبایل: 07726171818');
       }
     });
   }

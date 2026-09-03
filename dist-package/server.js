@@ -1,8 +1,8 @@
-﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   ðŸš— CAR RECORDS & INSPECTION SYSTEM â€” BACKEND SERVER
-   ðŸ‘‘ DESIGNED & DEVELOPED BY: NAZHAD Q. MAHAMMED
-   Â© 2026 NAZHAD Q. MAHAMMED â€” ALL RIGHTS RESERVED
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════
+   🚗 CAR RECORDS & INSPECTION SYSTEM — BACKEND SERVER
+   👑 DESIGNED & DEVELOPED BY: NAZHAD Q. MAHAMMED
+   © 2026 NAZHAD Q. MAHAMMED — ALL RIGHTS RESERVED
+   ═══════════════════════════════════════════════════════════════ */
 
 require('dotenv').config();
 const http = require('http');
@@ -200,21 +200,21 @@ let carRecords = [];
 
 // In-Memory Fallback XXX & BB Tables Store
 let defectsXXXList = [
-  { id: 1, Xx_: 'Ø¦ÛŒØ³ØªÛ†Ù¾Ù‰ ØªÛ•Ú¯Û•Ø±Û•Ú©Ø§Ù†Ù‰ Ù¾ÛŽØ´Û•ÙˆÛ• Ù„Ø§ÙˆØ§Ø²Û•' },
-  { id: 2, Xx_: 'Ø¦ÛŒØ³ØªÛ†Ù¾Ù‰ ØªÛ•Ú¯Û•Ø±Û•Ú©Ø§Ù†Ù‰ Ø¯ÙˆØ§ÙˆÛ• Ù„Ø§ÙˆØ§Ø²Û•' },
-  { id: 3, Xx_: 'Ù„Ø§ÛŒØªÛŒ Ù¾ÛŽØ´Û•ÙˆÛ• Ú©Ø§Ø±Ù†Ø§Ú©Ø§Øª' },
-  { id: 4, Xx_: 'Ù„Ø§ÛŒØªÛŒ Ø¯ÙˆØ§ÙˆÛ• / Ø³ØªÛ†Ù¾ Ø´Ú©Ø§ÙˆÛ•' },
-  { id: 5, Xx_: 'ØªØ§ÛŒÛ•Ú©Ø§Ù† Ø³ÙˆØ§Ø¨ÙˆÙˆÙ† ÛŒØ§Ù† Ø®Ø±Ø§Ù¾Ù†' },
-  { id: 6, Xx_: 'Ø³ÛŒØ³ØªÛ•Ù…ÛŒ Ø¦ÛŒØ³ØªÛ†Ù¾ / ÙÛ•Ø±Ù…Û†Ù† Ú©ÛŽØ´Û•ÛŒ Ù‡Û•ÛŒÛ•' },
-  { id: 7, Xx_: 'Ø¬Ø§Ù… Ø´Ú©Ø§ÙˆÛ• ÛŒØ§Ù† Ø¯Ø±Ø²ÛŒ ØªÛŽØ¯Ø§ÛŒÛ•' },
-  { id: 8, Xx_: 'Ø¯Û•Ø±Ú†ÙˆÙˆÙ†ÛŒ Ø¯ÙˆÙˆÚ©Û•ÚµÛŒ Ú•Û•Ø´ / Ø´ÛŒÙ† Ù„Û• Ú¯Ø²Û†Ø²' },
-  { id: 9, Xx_: 'Ø¯Û•Ù†Ú¯ÛŒ Ù†Ø§Ø¦Ø§Ø³Ø§ÛŒÛŒ Ù„Û• Ù…Ø­Û•Ø±Û•Ú©' },
-  { id: 10, Xx_: 'Ú©ÛŽØ´Û• Ù„Û• Ø³ÛŒØ³ØªÛ•Ù…ÛŒ Ø¦Ø§Ú•Ø§Ø³ØªÛ•Ú©Ø±Ø¯Ù† (Ù‡Û†Ú•Ù† / Ø³ÙˆÙˆÚ©Ø§Ù†)' },
-  { id: 11, Xx_: 'Ø¬Ø§Ù…Ø´Û†Ø± ÛŒØ§Ù† ÙÚµÚ†Û•ÛŒ Ø¬Ø§Ù… Ú©Ø§Ø±Ù†Ø§Ú©Ø§Øª' },
-  { id: 12, Xx_: 'Ø´Ø§Ø³ÛŒ / Ù¾Û•ÛŒÚ©Û•Ø±ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„ Ú©ÛŽØ´Û•ÛŒ Ù‡Û•ÛŒÛ•' },
-  { id: 13, Xx_: 'ÙÚ•ÛŽÙ†ÛŒ Ø¯Û•Ø³ØªÛŒ (Ù‡Ø§Ù†Ø¯) Ù„Ø§ÙˆØ§Ø²Û•' },
-  { id: 14, Xx_: 'Ù„Ø§ÛŒØª Ùˆ Ø¦Ø§Ù…Ø§Ú˜Û•Ú©Ø§Ù†ÛŒ Ù„Ø§Ø¯Ø§Ù† Ú©Ø§Ø±Ù†Ø§Ú©Û•Ù†' },
-  { id: 15, Xx_: 'Ù„ÛŒØ²Û•Ø± ÛŒØ§Ù† Ù„Ø§ÛŒØªÛŒ Ø²ÛŒØ§Ø¯Û• Ø¨Û•Ø³ØªØ±Ø§ÙˆÛ•' }
+  { id: 1, Xx_: 'ئیستۆپى تەگەرەکانى پێشەوە لاوازە' },
+  { id: 2, Xx_: 'ئیستۆپى تەگەرەکانى دواوە لاوازە' },
+  { id: 3, Xx_: 'لایتی پێشەوە کارناکات' },
+  { id: 4, Xx_: 'لایتی دواوە / ستۆپ شکاوە' },
+  { id: 5, Xx_: 'تایەکان سوابوون یان خراپن' },
+  { id: 6, Xx_: 'سیستەمی ئیستۆپ / فەرمۆن کێشەی هەیە' },
+  { id: 7, Xx_: 'جام شکاوە یان درزی تێدایە' },
+  { id: 8, Xx_: 'دەرچوونی دووکەڵی ڕەش / شین لە گزۆز' },
+  { id: 9, Xx_: 'دەنگی نائاسایی لە محەرەک' },
+  { id: 10, Xx_: 'کێشە لە سیستەمی ئاڕاستەکردن (هۆڕن / سووکان)' },
+  { id: 11, Xx_: 'جامشۆر یان فڵچەی جام کارناکات' },
+  { id: 12, Xx_: 'شاسی / پەیکەری ئۆتۆمبێل کێشەی هەیە' },
+  { id: 13, Xx_: 'فڕێنی دەستی (هاند) لاوازە' },
+  { id: 14, Xx_: 'لایت و ئاماژەکانی لادان کارناکەن' },
+  { id: 15, Xx_: 'لیزەر یان لایتی زیادە بەستراوە' }
 ];
 let defectsBBRecords = [];
 
@@ -372,22 +372,22 @@ async function initSqlServer(config) {
               [Xx_] [nvarchar](250) NULL
           );
           INSERT INTO dbo.XXX ([Xx_]) VALUES
-          (N'Ù„Ø§ÛŒØªÛŒ Ù¾ÛŽØ´Û•ÙˆÛ• Ú©Ø§Ø±Ù†Ø§Ú©Ø§Øª'),
-          (N'Ù„Ø§ÛŒØªÛŒ Ø¯ÙˆØ§ÙˆÛ• / Ø³ØªÛ†Ù¾ Ø´Ú©Ø§ÙˆÛ•'),
-          (N'ØªØ§ÛŒÛ•Ú©Ø§Ù† Ø³ÙˆØ§Ø¨ÙˆÙˆÙ† ÛŒØ§Ù† Ø®Ø±Ø§Ù¾Ù†'),
-          (N'Ø³ÛŒØ³ØªÛ•Ù…ÛŒ Ø¦ÛŒØ³ØªÛ†Ù¾ / ÙÛ•Ø±Ù…Û†Ù† Ú©ÛŽØ´Û•ÛŒ Ù‡Û•ÛŒÛ•'),
-          (N'Ø¬Ø§Ù… Ø´Ú©Ø§ÙˆÛ• ÛŒØ§Ù† Ø¯Ø±Ø²ÛŒ ØªÛŽØ¯Ø§ÛŒÛ•'),
-          (N'Ø¯Û•Ø±Ú†ÙˆÙˆÙ†ÛŒ Ø¯ÙˆÙˆÚ©Û•ÚµÛŒ Ú•Û•Ø´ / Ø´ÛŒÙ† Ù„Û• Ú¯Ø²Û†Ø²'),
-          (N'Ø¯Û•Ù†Ú¯ÛŒ Ù†Ø§Ø¦Ø§Ø³Ø§ÛŒÛŒ Ù„Û• Ù…Ø­Û•Ø±Û•Ú©'),
-          (N'Ú©ÛŽØ´Û• Ù„Û• Ø³ÛŒØ³ØªÛ•Ù…ÛŒ Ø¦Ø§Ú•Ø§Ø³ØªÛ•Ú©Ø±Ø¯Ù† (Ù‡Û†Ú•Ù† / Ø³ÙˆÙˆÚ©Ø§Ù†)'),
-          (N'Ø¬Ø§Ù…Ø´Û†Ø± ÛŒØ§Ù† ÙÚµÚ†Û•ÛŒ Ø¬Ø§Ù… Ú©Ø§Ø±Ù†Ø§Ú©Ø§Øª'),
-          (N'Ø´Ø§Ø³ÛŒ / Ù¾Û•ÛŒÚ©Û•Ø±ÛŒ Ø¦Û†ØªÛ†Ù…Ø¨ÛŽÙ„ Ú©ÛŽØ´Û•ÛŒ Ù‡Û•ÛŒÛ•');
+          (N'لایتی پێشەوە کارناکات'),
+          (N'لایتی دواوە / ستۆپ شکاوە'),
+          (N'تایەکان سوابوون یان خراپن'),
+          (N'سیستەمی ئیستۆپ / فەرمۆن کێشەی هەیە'),
+          (N'جام شکاوە یان درزی تێدایە'),
+          (N'دەرچوونی دووکەڵی ڕەش / شین لە گزۆز'),
+          (N'دەنگی نائاسایی لە محەرەک'),
+          (N'کێشە لە سیستەمی ئاڕاستەکردن (هۆڕن / سووکان)'),
+          (N'جامشۆر یان فڵچەی جام کارناکات'),
+          (N'شاسی / پەیکەری ئۆتۆمبێل کێشەی هەیە');
       END
     `;
-    console.log(`ðŸ”’ [SECURE SHIELD] Connected to SQL Server [${config.server}/${config.database}]`);
+    console.log(`🔒 [SECURE SHIELD] Connected to SQL Server [${config.server}/${config.database}]`);
     return true;
   } catch (err) {
-    console.warn(`âš ï¸ [SQL WARNING] Could not connect to SQL Server [${config.server}]:`, err.message);
+    console.warn(`⚠️ [SQL WARNING] Could not connect to SQL Server [${config.server}]:`, err.message);
     isSqlServerConnected = false;
     lastSqlError = err.message;
     return false;
@@ -669,7 +669,7 @@ const server = http.createServer((req, res) => {
         }));
       } else {
         res.writeHead(401, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ success: false, error: 'âŒ Ù†Ø§ÙˆÛŒ Ø¨Û•Ú©Ø§Ø±Ù‡ÛŽÙ†Û•Ø± ÛŒØ§Ù† ØªÛŽÙ¾Û•Ú•Û•ÙˆØ´Û•ÛŒ Ø¦Û•Ø¯Ù…ÛŒÙ† Ù‡Û•ÚµÛ•ÛŒÛ•!' }));
+        return res.end(JSON.stringify({ success: false, error: '❌ ناوی بەکارهێنەر یان تێپەڕەوشەی ئەدمین هەڵەیە!' }));
       }
     });
     return;
@@ -691,7 +691,7 @@ const server = http.createServer((req, res) => {
         res.writeHead(403, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({
           success: false,
-          error: 'âŒ ØªÛŽÙ¾Û•Ú•Û•ÙˆØ´Û•ÛŒ Ø¦Û•Ø¯Ù…ÛŒÙ† Ù‡Û•ÚµÛ•ÛŒÛ• ÛŒØ§Ù† Ù†Û•Ù†ÙˆÙˆØ³Ø±Ø§ÙˆÛ•! (Admin Authorization Required)'
+          error: '❌ تێپەڕەوشەی ئەدمین هەڵەیە یان نەنووسراوە! (Admin Authorization Required)'
         }));
       }
 
@@ -753,7 +753,7 @@ const server = http.createServer((req, res) => {
       if (!isSessionAdmin && !validAdminPass && isSqlServerConnected) {
         res.writeHead(403, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({
-          error: 'âŒ ØªÛŽÙ¾Û•Ú•Û•ÙˆØ´Û•ÛŒ Ø¦Û•Ø¯Ù…ÛŒÙ† Ù¾ÛŽÙˆÛŒØ³ØªÛ• Ø¨Û† Ú¯Û†Ú•ÛŒÙ†ÛŒ Ø³ÛŽØ±Ú¤Û•Ø± (Admin Authorization Required)'
+          error: '❌ تێپەڕەوشەی ئەدمین پێویستە بۆ گۆڕینی سێرڤەر (Admin Authorization Required)'
         }));
       }
 
@@ -823,7 +823,7 @@ const server = http.createServer((req, res) => {
       if (!isSessionAdmin && !validAdminPass) {
         res.writeHead(403, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({
-          error: 'âŒ ØªÛŽÙ¾Û•Ú•Û•ÙˆØ´Û•ÛŒ Ø¦Û•Ø¯Ù…ÛŒÙ† Ù‡Û•ÚµÛ•ÛŒÛ• ÛŒØ§Ù† Ù†Û•Ù†ÙˆÙˆØ³Ø±Ø§ÙˆÛ•! (Admin Authorization Required)'
+          error: '❌ تێپەڕەوشەی ئەدمین هەڵەیە یان نەنووسراوە! (Admin Authorization Required)'
         }));
       }
 
@@ -832,7 +832,7 @@ const server = http.createServer((req, res) => {
       if (!validAdmin) {
         res.writeHead(403, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({
-          error: 'âŒ ØªÛŽÙ¾Û•Ú•Û•ÙˆØ´Û•ÛŒ Ø¦Û•Ø¯Ù…ÛŒÙ† Ù¾ÛŽÙˆÛŒØ³ØªÛ• Ø¨Û† Ú¯Û†Ú•ÛŒÙ†ÛŒ Ø³ÛŽØ±Ú¤Û•Ø± (Admin Password required to switch server).'
+          error: '❌ تێپەڕەوشەی ئەدمین پێویستە بۆ گۆڕینی سێرڤەر (Admin Password required to switch server).'
         }));
       }
 
@@ -1197,7 +1197,7 @@ const server = http.createServer((req, res) => {
           success: true,
           count: insertedCount,
           Psulla,
-          message: `âœ… ${insertedCount} Ú©Û•Ù…ÙˆÚ©ÙˆÚ•ÛŒ Ø¨Û• Ø³Û•Ø±Ú©Û•ÙˆØªÙˆÙˆÛŒÛŒ Ù„Û• Ø®Ø´ØªÛ•ÛŒ [dbo].[BB] Ù¾Ø§Ø´Û•Ú©Û•ÙˆØªÚ©Ø±Ø§Ù† (ÙˆÛ•Ø³Úµ #${Psulla})`
+          message: `✅ ${insertedCount} کەموکوڕی بە سەرکەوتوویی لە خشتەی [dbo].[BB] پاشەکەوتکران (وەسڵ #${Psulla})`
         }));
       } catch (batchErr) {
         console.error('defects-batch SQL error:', batchErr);
@@ -1451,9 +1451,9 @@ const server = http.createServer((req, res) => {
         const state = a.state || a.district || a.province || '';
         const country = a.country || '';
         const parts = [local, state, country].filter(Boolean);
-        placeName = parts.join('ØŒ ');
+        placeName = parts.join('، ');
       } else if (data.display_name) {
-        placeName = data.display_name.split(',').slice(0, 3).join('ØŒ ');
+        placeName = data.display_name.split(',').slice(0, 3).join('، ');
       }
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ placeName: placeName || '', raw: data.address }));
@@ -1531,6 +1531,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`ðŸ”’ [SECURE SHIELD ACTIVE] 3-Page App running at http://localhost:${PORT}`);
+  console.log(`🔒 [SECURE SHIELD ACTIVE] 3-Page App running at http://localhost:${PORT}`);
 });
-
