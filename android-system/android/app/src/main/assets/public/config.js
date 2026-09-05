@@ -14,26 +14,26 @@ window.APP_CONFIG = {
   // ئای‌پی و پۆڕتی سێرڤەری پرۆگرامەکە (بۆ بەستنەوەی ئەندرۆید و تابلێت)
   serverUrl: "http://62.201.232.190:3002",
 
-  // Default SQL Server Database parameters
+  // Lock server URL: When true, the app strictly uses the serverUrl above and prevents accidental overrides
+  // قوفڵکردنی ئای‌پی: ئەگەر ئەمە true بێت، ئای‌پیەکە جێگیر (ثابت) دەبێت و کەس ناتوانێت لە تابلێت یان وێب بیگۆڕێت
+  lockServerUrl: true,
+
+  // Default SQL Server Database parameters (Database connection credentials are securely stored on backend server)
   // زانیارییە سەرەکییەکانی بنکەی دراوەی ئێس کیو ئێڵ
   sqlServer: {
     server: "62.201.232.190",
     database: "Taqega",
     user: "sa",
-    password: "Nazhad@5759",
     port: 1433
   },
 
-  // Master Admin Passwords (works 100% offline & online)
-  // وشەکانی نهێنی ئەدمین کە بە بێ سێرڤەر و بە ئۆفلاین کار دەکەن
+  // Master Admin Passwords (works offline & online - weak passwords removed)
+  // وشەی نهێنی سەرەکی ئەدمین
   adminMasterPasswords: [
-    "Na2652014Va",
-    "ChangeMeInDotEnv123",
-    "admin",
-    "123456"
+    "Na2652014Va"
   ],
 
   // App Metadata
   appName: "تۆمارکردنی زانیاری ئۆتۆمبێل",
-  appVersion: "1.3.3"
+  appVersion: "1.3.5"
 };

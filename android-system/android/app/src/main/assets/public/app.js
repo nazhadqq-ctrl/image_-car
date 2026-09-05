@@ -72,7 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
       return '';
     }
-    // Check if user set custom override in localStorage
+    // If lockServerUrl is enabled in config.js, strictly enforce the fixed serverUrl
+    if (window.APP_CONFIG && window.APP_CONFIG.lockServerUrl && window.APP_CONFIG.serverUrl) {
+      return window.APP_CONFIG.serverUrl.trim().replace(/\/+$/, '');
+    }
+    // Check if admin set custom override in localStorage
     const override = localStorage.getItem('car_app_server_url');
     if (override && override.trim()) {
       return override.trim().replace(/\/+$/, '');
@@ -400,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Helper to check master admin passwords
   function isMasterAdminPassword(pass) {
     if (!pass) return false;
-    const allowed = (window.APP_CONFIG && window.APP_CONFIG.adminMasterPasswords) || ["Na2652014Va", "ChangeMeInDotEnv123", "admin"];
+    const allowed = (window.APP_CONFIG && window.APP_CONFIG.adminMasterPasswords) || ["Na2652014Va"];
     return allowed.includes(pass) || pass === 'Na2652014Va';
   }
 
@@ -597,14 +601,12 @@ document.addEventListener('DOMContentLoaded', () => {
         server: '62.201.232.190',
         database: 'Taqega',
         user: 'sa',
-        password: 'Nazhad@5759',
         port: 1433
       };
       if (document.getElementById('cfg-server-ip') && !document.getElementById('cfg-server-ip').value) {
         document.getElementById('cfg-server-ip').value = fallbackSql.server || '62.201.232.190';
         document.getElementById('cfg-database').value = fallbackSql.database || 'Taqega';
         document.getElementById('cfg-user').value = fallbackSql.user || 'sa';
-        document.getElementById('cfg-password').value = fallbackSql.password || 'Nazhad@5759';
         document.getElementById('cfg-port').value = fallbackSql.port || 1433;
       }
       if (sqlStatusBanner) {
@@ -850,7 +852,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const role = u.permetion || u.Role || 'User';
         const status = (u.on_off || 'on').toLowerCase();
         const isOn = status === 'on' || status === '1' || status === 'true';
-        const passText = u.password ? String(u.password) : '-';
+        const passText = '••••••••';
 
         return `
           <tr>

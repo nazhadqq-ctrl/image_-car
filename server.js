@@ -151,34 +151,12 @@ if (fs.existsSync(CONFIG_PATH)) {
   } catch (e) {
     console.error('Error loading local config.json:', e);
   }
+} else {
+  // If config.json doesn't exist yet, create initial default
+  try {
+    fs.writeFileSync(CONFIG_PATH, JSON.stringify(dbConfig, null, 2), 'utf8');
+  } catch (e) {}
 }
-
-// FORCE OVERRIDE to ensure only the target server is used and others are removed
-dbConfig.server = '62.201.232.190';
-dbConfig.database = 'Taqega';
-dbConfig.user = 'sa';
-dbConfig.password = 'Nazhad@5759';
-dbConfig.port = 1433;
-dbConfig.windowsAuth = false;
-dbConfig.setupCompleted = true;
-
-dbConfig.savedServers = [
-  {
-    id: 'srv-185-181-111-17',
-    name: '62.201.232.190 (Taqega)',
-    server: '62.201.232.190',
-    database: 'Taqega',
-    user: 'sa',
-    password: 'Nazhad@5759',
-    port: 1433,
-    windowsAuth: false
-  }
-];
-
-// Re-save immediately so local config is corrected on disk
-try {
-  fs.writeFileSync(CONFIG_PATH, JSON.stringify(dbConfig, null, 2), 'utf8');
-} catch (e) {}
 
 function saveLocalConfig() {
   try {
@@ -188,8 +166,8 @@ function saveLocalConfig() {
   }
 }
 
-// In-Memory Fallback App Users Store
-const MASTER_ADMIN_PASSWORDS = ['Na2652014Va', 'ChangeMeInDotEnv123', 'admin', '123456', process.env.ADMIN_PASSWORD].filter(Boolean);
+// In-Memory Fallback App Users Store (Removed weak defaults like 'admin' and '123456')
+const MASTER_ADMIN_PASSWORDS = ['Na2652014Va', 'ChangeMeInDotEnv123', process.env.ADMIN_PASSWORD].filter(Boolean);
 let inMemoryImageUsers = [
   { id: 1, User_: 'admin', password: 'Na2652014Va', permetion: 'Admin', on_off: 'on' },
   { id: 1, User_: 'admin', password: process.env.ADMIN_PASSWORD || 'ChangeMeInDotEnv123', permetion: 'Admin', on_off: 'on' }
@@ -422,7 +400,9 @@ function sanitizeBody(req, callback) {
 }
 
 async function verifyAdminPassword(adminPassword) {
-  if (!adminPassword) return true; // Default allow if authenticated session
+  if (!adminPassword || typeof adminPassword !== 'string' || !adminPassword.trim()) {
+    return false; // Strictly disallow empty or missing passwords
+  }
   const passStr = String(adminPassword).trim();
   if (MASTER_ADMIN_PASSWORDS.includes(passStr)) return true;
   
@@ -637,7 +617,8 @@ const server = http.createServer((req, res) => {
           const result = await request.query(`
             SELECT id, User_, permetion, on_off, password 
             FROM dbo.image_user 
-            WHERE (LOWER(User_) = LOWER(@User_) OR LOWER(permetion) = 'admin') 
+            WHERE LOWER(User_) = LOWER(@User_) 
+              AND (LOWER(permetion) = 'admin' OR LOWER(User_) = 'admin')
               AND (on_off = 'on' OR on_off = 'yes' OR on_off = 'YES' OR on_off = '1' OR on_off = 'true' OR on_off IS NULL)
           `);
           for (const row of result.recordset) {
@@ -685,9 +666,9 @@ const server = http.createServer((req, res) => {
 
       const session = verifySession(req);
       const isSessionAdmin = session && (session.role === 'admin' || session.username.toLowerCase() === 'admin');
-      const validAdminPass = config.adminPassword ? await verifyAdminPassword(config.adminPassword) : true;
+      const validAdminPass = config.adminPassword ? await verifyAdminPassword(config.adminPassword) : false;
 
-      if (!isSessionAdmin && !validAdminPass && isSqlServerConnected) {
+      if (!isSessionAdmin && !validAdminPass) {
         res.writeHead(403, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({
           success: false,
@@ -747,10 +728,10 @@ const server = http.createServer((req, res) => {
 
       const session = verifySession(req);
       const isSessionAdmin = session && (session.role === 'admin' || session.username.toLowerCase() === 'admin');
-      const validAdminPass = data.adminPassword ? await verifyAdminPassword(data.adminPassword) : true;
+      const validAdminPass = data.adminPassword ? await verifyAdminPassword(data.adminPassword) : false;
 
-      // Allow saving if admin session, valid master password, or configuring disconnected server
-      if (!isSessionAdmin && !validAdminPass && isSqlServerConnected) {
+      // Strictly require admin session or valid master password
+      if (!isSessionAdmin && !validAdminPass) {
         res.writeHead(403, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({
           error: '❌ تێپەڕەوشەی ئەدمین پێویستە بۆ گۆڕینی سێرڤەر (Admin Authorization Required)'
@@ -972,12 +953,12 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // --- API 7: GET USERS FROM dbo.image_user (ADMIN ONLY) ---
+  // --- API 7: GET USERS FROM dbo.image_user (ADMIN ONLY - PASSWORDS NEVER EXPOSED) ---
   if (pathname === '/api/users' && req.method === 'GET') {
     if (!requireAdmin(req, res)) return;
 
     if (isSqlServerConnected && sql) {
-      sql.query`SELECT id, User_, permetion, on_off, password FROM dbo.image_user ORDER BY id DESC`.then(result => {
+      sql.query`SELECT id, User_, permetion, on_off FROM dbo.image_user ORDER BY id DESC`.then(result => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(result.recordset));
       }).catch(err => {
@@ -986,12 +967,13 @@ const server = http.createServer((req, res) => {
       });
     } else {
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify(inMemoryImageUsers));
+      const safeUsers = inMemoryImageUsers.map(u => ({ id: u.id, User_: u.User_, permetion: u.permetion, on_off: u.on_off }));
+      return res.end(JSON.stringify(safeUsers));
     }
     return;
   }
 
-  // --- API 8: ADD USER TO dbo.image_user (ADMIN ONLY) ---
+  // --- API 8: ADD USER TO dbo.image_user (ADMIN ONLY - PASSWORDS HASHED VIA BCRYPT) ---
   if (pathname === '/api/users' && req.method === 'POST') {
     if (!requireAdmin(req, res)) return;
 
@@ -1010,12 +992,13 @@ const server = http.createServer((req, res) => {
       const role = String(permetion || 'User').trim();
       const status = String(on_off || 'on').trim();
       const rawPassword = String(password).trim();
+      const hashedPassword = bcrypt.hashSync(rawPassword, 10);
 
       try {
         if (isSqlServerConnected && sql) {
           const request = new sql.Request();
           request.input('User_', sql.NVarChar(50), String(User_).trim());
-          request.input('password', sql.NVarChar(255), rawPassword);
+          request.input('password', sql.NVarChar(255), hashedPassword);
           request.input('permetion', sql.NVarChar(50), role);
           request.input('on_off', sql.NVarChar(50), status);
           await request.query(`
@@ -1026,7 +1009,7 @@ const server = http.createServer((req, res) => {
           inMemoryImageUsers.push({
             id: inMemoryImageUsers.length + 1,
             User_: String(User_).trim(),
-            password: rawPassword,
+            password: hashedPassword,
             permetion: role,
             on_off: status
           });
@@ -1243,9 +1226,13 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // --- API 8.6: DELETE DEFECT RECORD FROM dbo.BB ---
+  // --- API 8.6: DELETE DEFECT RECORD FROM dbo.BB (AUTHENTICATED SESSIONS ONLY) ---
   if (pathname === '/api/defects-delete' && req.method === 'POST') {
     const session = verifySession(req);
+    if (!session) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Unauthorized: Active login session required to delete defects.' }));
+    }
     sanitizeBody(req, async (err, body) => {
       if (err || !body || !body.id) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -1433,12 +1420,14 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/reverse-geocode' && req.method === 'GET') {
     const lat = parsedUrl.query.lat;
     const lng = parsedUrl.query.lng;
-    if (!lat || !lng) {
+    const latNum = parseFloat(lat);
+    const lngNum = parseFloat(lng);
+    if (isNaN(latNum) || isNaN(lngNum) || latNum < -90 || latNum > 90 || lngNum < -180 || lngNum > 180) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: 'lat and lng required' }));
+      return res.end(JSON.stringify({ error: 'Valid numeric lat (-90..90) and lng (-180..180) coordinates required' }));
     }
 
-    const geoUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}&accept-language=ar,ckb,en`;
+    const geoUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latNum}&lon=${lngNum}&accept-language=ar,ckb,en`;
     fetch(geoUrl, {
       headers: { 'User-Agent': 'CarRecordsApp/1.0' }
     })

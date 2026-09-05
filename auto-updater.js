@@ -14,7 +14,6 @@ const BASE_RAW_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAM
 
 const FILES_TO_UPDATE = [
   'version.json',
-  'config.json',
   'auto-updater.js',
   'github-sync.js',
   'Start-App-Silent.vbs',
@@ -133,6 +132,10 @@ async function checkForUpdates(force = false) {
       const content = await fetchUrl(fileUrl, 10000);
 
       const localPath = path.join(__dirname, relPath);
+      // Never overwrite existing local configuration files
+      if (relPath.endsWith('config.js') && fs.existsSync(localPath)) {
+        continue;
+      }
       const dir = path.dirname(localPath);
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
