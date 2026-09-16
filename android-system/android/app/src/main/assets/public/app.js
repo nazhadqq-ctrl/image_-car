@@ -1017,17 +1017,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const cameraLiveWrap = document.getElementById('camera-live-wrap');
   const cameraVideo    = document.getElementById('camera-video');
   const captureBtn     = document.getElementById('capture-photo-btn');
-  const closeCameraBtn = document.getElementById('close-camera-btn');
-  const retakeBtn      = document.getElementById('retake-btn');
-  const imgPreview     = document.getElementById('image-preview');
-  const gpsCanvas      = document.getElementById('gps-canvas');
-  const gpsDot         = document.getElementById('gps-dot');
-  const gpsText        = document.getElementById('gps-text');
-  const previewWrap    = document.getElementById('capture-preview-wrap');
-  const gpsOverlay     = document.getElementById('gps-overlay-label');
+  const closeCameraBtn  = document.getElementById('close-camera-btn');
+  const switchCameraBtn = document.getElementById('switch-camera-btn');
+  const retakeBtn       = document.getElementById('retake-btn');
+  const imgPreview      = document.getElementById('image-preview');
+  const gpsCanvas       = document.getElementById('gps-canvas');
+  const gpsDot          = document.getElementById('gps-dot');
+  const gpsText         = document.getElementById('gps-text');
+  const previewWrap     = document.getElementById('capture-preview-wrap');
+  const gpsOverlay      = document.getElementById('gps-overlay-label');
+  const cameraLabelEl   = document.getElementById('camera-active-label');
 
-  let capturedGPS   = null;
-  let cameraStream  = null;
+  let capturedGPS       = null;
+  let cameraStream      = null;
+  let availableVideoDevs = [];
+  let preferredCameraId = localStorage.getItem('car_app_preferred_camera_id') || null;
 
   function stopCameraStream() {
     if (cameraStream) {
@@ -1038,24 +1042,156 @@ document.addEventListener('DOMContentLoaded', () => {
     cameraLiveWrap.style.display = 'none';
   }
 
-  async function startCameraStream() {
+  async function getVideoDevices() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return [];
     try {
-      const constraints = {
+      const allDevs = await navigator.mediaDevices.enumerateDevices();
+      return allDevs.filter(d => d.kind === 'videoinput');
+    } catch (e) {
+      console.warn('Error enumerating video devices:', e);
+      return [];
+    }
+  }
+
+  function isRearCameraLabel(label) {
+    if (!label) return false;
+    const l = label.toLowerCase();
+    // Matches Surface Pro: 'Microsoft Camera Rear', 'Surface Camera Rear', 'Intel AVStream Camera Rear', and generic rear tags
+    return /rear|back|environment|خلف|پشت|دواوە|world|facing\s*back|camera\s*2|camera2/i.test(l);
+  }
+
+  function isFrontCameraLabel(label) {
+    if (!label) return false;
+    const l = label.toLowerCase();
+    return /front|forward|user|selfie|مقدمة|پیش|پێشەوە|facing\s*front|camera\s*1|camera1/i.test(l);
+  }
+
+  function updateCameraBadge(activeLabel) {
+    if (!cameraLabelEl) return;
+    let text = '📷 کامێرای دواوە (Rear)';
+    if (activeLabel) {
+      if (isRearCameraLabel(activeLabel)) {
+        text = '📷 کامێرای دواوە (Rear)';
+      } else if (isFrontCameraLabel(activeLabel)) {
+        text = '📷 کامێرای پێشەوە (Front)';
+      } else {
+        text = `📷 ${activeLabel.slice(0, 24)}`;
+      }
+    }
+    cameraLabelEl.innerHTML = `<span>${escapeHtml(text)}</span>`;
+  }
+
+  async function startCameraStream(targetDeviceId = null) {
+    try {
+      stopCameraStream();
+
+      let videoInputs = await getVideoDevices();
+      availableVideoDevs = videoInputs;
+
+      let chosenDeviceId = targetDeviceId || preferredCameraId;
+
+      // Surface Pro / Windows Tablet Auto-Detection for Rear Camera
+      if (!chosenDeviceId && videoInputs.length > 0) {
+        // 1. Look for explicit rear camera label
+        const rearDev = videoInputs.find(d => isRearCameraLabel(d.label));
+        if (rearDev) {
+          chosenDeviceId = rearDev.deviceId;
+        } else if (videoInputs.length > 1) {
+          // 2. On dual-camera Surface Pro / Windows tablets, device[1] is the rear camera
+          const nonFront = videoInputs.find(d => !isFrontCameraLabel(d.label));
+          if (nonFront) {
+            chosenDeviceId = nonFront.deviceId;
+          } else {
+            chosenDeviceId = videoInputs[videoInputs.length - 1].deviceId;
+          }
+        }
+      }
+
+      let constraints = {
         video: {
-          facingMode: { ideal: 'environment' },
           width: { ideal: 1920, min: 1280 },
           height: { ideal: 1080, min: 720 },
           aspectRatio: { ideal: 1.777777778 }
         },
         audio: false
       };
-      cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+
+      if (chosenDeviceId) {
+        constraints.video.deviceId = { exact: chosenDeviceId };
+      } else {
+        constraints.video.facingMode = { ideal: 'environment' };
+      }
+
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+      } catch (tryErr) {
+        console.warn('Initial camera constraints failed, attempting fallback:', tryErr);
+        // Relax resolution constraints if hardware driver requires standard resolution
+        constraints.video = chosenDeviceId ? { deviceId: { exact: chosenDeviceId } } : { facingMode: 'environment' };
+        cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+      }
+
       cameraVideo.srcObject = cameraStream;
       cameraLiveWrap.style.display = 'block';
       openCameraBtn.style.display = 'none';
       previewWrap.style.display = 'none';
+
+      // Re-enumerate with full device labels now available after permission grant
+      videoInputs = await getVideoDevices();
+      availableVideoDevs = videoInputs;
+
+      const activeTrack = cameraStream.getVideoTracks()[0];
+      const settings = activeTrack ? activeTrack.getSettings() : {};
+      const actualDeviceId = settings.deviceId || chosenDeviceId;
+
+      // If initial run opened front camera by default on Surface Pro, auto-switch to rear camera!
+      if (!targetDeviceId && videoInputs.length > 1 && actualDeviceId) {
+        const activeObj = videoInputs.find(d => d.deviceId === actualDeviceId);
+        const rearObj = videoInputs.find(d => isRearCameraLabel(d.label));
+        if (activeObj && isFrontCameraLabel(activeObj.label) && rearObj && rearObj.deviceId !== actualDeviceId) {
+          console.log('Detected Front Camera on Surface Pro. Auto-switching to Rear Camera:', rearObj.label);
+          preferredCameraId = rearObj.deviceId;
+          localStorage.setItem('car_app_preferred_camera_id', preferredCameraId);
+          return startCameraStream(rearObj.deviceId);
+        }
+      }
+
+      const activeObj = videoInputs.find(d => d.deviceId === actualDeviceId);
+      const activeLabel = activeTrack ? (activeTrack.label || (activeObj ? activeObj.label : '')) : '';
+      updateCameraBadge(activeLabel);
+
+      if (switchCameraBtn) {
+        switchCameraBtn.style.display = videoInputs.length > 1 ? 'flex' : 'none';
+      }
+
+      if (actualDeviceId) {
+        preferredCameraId = actualDeviceId;
+        localStorage.setItem('car_app_preferred_camera_id', actualDeviceId);
+      }
+
     } catch (err) {
       alert('تعذّر فتح الکامیرا: ' + err.message + '\n\nتأکد من إعطاء إذن الکامیرا للمتصفح.');
+    }
+  }
+
+  async function switchCamera() {
+    const videoInputs = await getVideoDevices();
+    if (videoInputs.length <= 1) {
+      alert('ئەم ئامێرە تەنها یەک کامێرای هەیە.');
+      return;
+    }
+
+    const activeTrack = cameraStream ? cameraStream.getVideoTracks()[0] : null;
+    const currentId = (activeTrack && activeTrack.getSettings()) ? activeTrack.getSettings().deviceId : preferredCameraId;
+
+    let currentIndex = videoInputs.findIndex(d => d.deviceId === currentId);
+    let nextIndex = (currentIndex + 1) % videoInputs.length;
+    let nextDevice = videoInputs[nextIndex];
+
+    if (nextDevice) {
+      preferredCameraId = nextDevice.deviceId;
+      localStorage.setItem('car_app_preferred_camera_id', preferredCameraId);
+      await startCameraStream(preferredCameraId);
     }
   }
 
@@ -1245,6 +1381,12 @@ document.addEventListener('DOMContentLoaded', () => {
     stopCameraStream();
     openCameraBtn.style.display = 'flex';
   });
+
+  if (switchCameraBtn) {
+    switchCameraBtn.addEventListener('click', () => {
+      switchCamera();
+    });
+  }
 
   retakeBtn.addEventListener('click', () => {
     state.uploadedImageBase64 = null;
@@ -1639,12 +1781,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const bashInput = document.getElementById('car-bash');
     const pletInput = document.getElementById('car-plet');
     const dateIntoInput = document.getElementById('car-date_into');
+    const nPshkninInput = document.getElementById('car-N_pshknin');
     const notesInput = document.getElementById('car-notes');
 
     const carNo = carNoInput ? carNoInput.value.trim() : '';
     const bash = bashInput ? bashInput.value.trim() : '';
     const plet = pletInput ? pletInput.value.trim() : '';
     const date_into = (dateIntoInput && dateIntoInput.value) ? dateIntoInput.value : new Date().toISOString().slice(0, 10);
+    const N_pshknin = (nPshkninInput && nPshkninInput.value) ? nPshkninInput.value.trim() : 'یەکەم';
     const Nnote = (notesInput && notesInput.value) ? notesInput.value.trim() : null;
 
     if (!carNo) {
@@ -1664,8 +1808,9 @@ document.addEventListener('DOMContentLoaded', () => {
       plet,
       pic: state.uploadedImageBase64 || null,
       date_into,
+      N_pshknin,
       Nnote,
-      uuser: (state.currentUser && state.currentUser.Username) ? state.currentUser.Username : 'کارمەند',
+      uuser: (state.currentUser && (state.currentUser.User_ || state.currentUser.Username)) ? (state.currentUser.User_ || state.currentUser.Username) : 'کارمەند',
       bar_: capturedGPS ? (capturedGPS.placeName || `GPS: ${capturedGPS.lat}, ${capturedGPS.lng}`) : null
     };
 
@@ -1686,7 +1831,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
 
       if (data.success) {
-        alert('✅ زانیاری و وێنەی ئۆتۆمبێل بە سەرکەوتوویی لە SQL Server پاشەکەوت کرا!');
+        alert('✅ زانیاری، پشکنین (' + N_pshknin + ') و وێنەی ئۆتۆمبێل بە سەرکەوتوویی لە SQL Server پاشەکەوت کرا!');
         state.lastCarRecord = payload;
 
         // Clear inputs
@@ -1694,6 +1839,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (bashInput) bashInput.value = '';
         if (pletInput) pletInput.value = '';
         if (notesInput) notesInput.value = '';
+        if (nPshkninInput) nPshkninInput.value = 'یەکەم';
 
         // Reset photo & camera preview
         state.uploadedImageBase64 = null;

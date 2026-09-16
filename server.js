@@ -284,6 +284,12 @@ async function initSqlServer(config) {
       ELSE
       BEGIN
           -- Add new columns to existing table safely if they don't exist
+          IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID(N'dbo.CAR_') AND name = 'N_pshknin')
+              ALTER TABLE dbo.CAR_ ADD [N_pshknin] [nvarchar](50) NULL;
+          IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID(N'dbo.CAR_') AND name = 'bar_')
+              ALTER TABLE dbo.CAR_ ADD [bar_] [nvarchar](255) NULL;
+          ELSE
+              ALTER TABLE dbo.CAR_ ALTER COLUMN [bar_] [nvarchar](255) NULL;
           IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID(N'dbo.CAR_') AND name = 'driver_name')
               ALTER TABLE dbo.CAR_ ADD [driver_name] [nvarchar](100) NULL;
           IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID(N'dbo.CAR_') AND name = 'mobile')
@@ -1412,6 +1418,40 @@ const server = http.createServer((req, res) => {
       }
       res.writeHead(200, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify(rec));
+    }
+    return;
+  }
+
+  // --- API 10c: SEARCH CAR RECORDS (BY CAR NUMBER OR TERM) ---
+  if (pathname === '/api/search' && req.method === 'GET') {
+    const q = (parsedUrl.query.q || '').trim();
+    if (isSqlServerConnected && sql) {
+      const request = new sql.Request();
+      request.input('q', sql.NVarChar(50), `%${q}%`);
+      request.query(`
+        SELECT TOP 25 id, carNo, bash, plet, date_into, Nnote, uuser, bar_, N_pshknin,
+               driver_name, mobile, address, chassis, color, gear, fuel, pistons,
+               inspector_name, price, result, expire_date, lab_name
+        FROM dbo.CAR_
+        WHERE carNo LIKE @q OR bash LIKE @q OR plet LIKE @q OR @q = ''
+        ORDER BY id DESC
+      `).then(result => {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result.recordset));
+      }).catch(err => {
+        console.error('/api/search error:', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err.message }));
+      });
+    } else {
+      const nQ = q.toLowerCase();
+      const filtered = carRecords.filter(r => !nQ || 
+        (r.carNo && r.carNo.toLowerCase().includes(nQ)) ||
+        (r.bash && r.bash.toLowerCase().includes(nQ)) ||
+        (r.plet && r.plet.toLowerCase().includes(nQ))
+      );
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify(filtered.slice(0, 25)));
     }
     return;
   }
