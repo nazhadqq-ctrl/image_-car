@@ -1482,6 +1482,20 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cd-date_').value = new Date().toISOString().slice(0, 10);
   }
 
+  // Set default values for fast car registration: تایبەت, سلێمانی, یەکەم
+  const defaultBashEl = document.getElementById('car-bash');
+  if (defaultBashEl && !defaultBashEl.value) {
+    defaultBashEl.value = 'تایبەت';
+  }
+  const defaultPletEl = document.getElementById('car-plet');
+  if (defaultPletEl && !defaultPletEl.value) {
+    defaultPletEl.value = 'سلێمانی';
+  }
+  const defaultNpshkninEl = document.getElementById('car-N_pshknin');
+  if (defaultNpshkninEl && !defaultNpshkninEl.value) {
+    defaultNpshkninEl.value = 'یەکەم';
+  }
+
   // ─── CUSTOM INTERACTIVE KURDISH SEARCHABLE COMBOBOX (PLET) ───
   const pletInput = document.getElementById('car-plet');
   const pletMenu = document.getElementById('plet-dropdown-menu');
@@ -1812,9 +1826,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const dateIntoInput = document.getElementById('car-date_into');
 
     if (carNoInput) carNoInput.value = '';
-    if (bashInput) bashInput.value = '';
-    if (pletInput) pletInput.value = '';
-    if (nPshkninInput) nPshkninInput.value = '';
+    if (bashInput) bashInput.value = 'تایبەت';
+    if (pletInput) pletInput.value = 'سلێمانی';
+    if (nPshkninInput) nPshkninInput.value = 'یەکەم';
     if (notesInput) notesInput.value = '';
     if (dateIntoInput) {
       const today = new Date();
@@ -3201,7 +3215,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(getApiBase() + '/api/system/version');
       if (res.ok) {
         const data = await res.json();
-        const verStr = `v${data.version || '1.5.0'}`;
+        const verStr = `v${data.version || '1.5.1'}`;
         if (appCurrentVersionLabel) appCurrentVersionLabel.textContent = `${verStr} (Build ${data.build || 100})`;
         if (updatePageVersionBadge) updatePageVersionBadge.textContent = verStr;
       }

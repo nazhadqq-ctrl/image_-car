@@ -1,7 +1,7 @@
 {
-  "version": "1.5.0",
-  "build": 1000,
+  "version": "1.5.1",
+  "build": 1001,
   "developer": "نەژاد قادر محمد",
-  "description": "وەشانی نوێ v1.5.0: مەرجی قەدەغەکردنی تۆمار بەبێ وێنە + ڕێگریکردن لە دووبارەی ڕۆژانە",
-  "lastSha": "v1.5.0-strict-image-and-daily-duplicate-protection"
+  "description": "وەشانی نوێ v1.5.1: دیاریکردنی بەها سەرەتاییەکان (تایبەت، سلێمانی، یەکەم) بۆ خێراکردنی تۆمارکردنی ئۆتۆمبێلەکان",
+  "lastSha": "v1.5.1-fast-default-values"
 }
