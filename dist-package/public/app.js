@@ -1803,43 +1803,117 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ─── 4. CAR SCANNER FORM SUBMIT (#car-form & #btn-save-scanner — تۆمارکردنی زانیاری و وێنە) ───
+  function resetScannerForm() {
+    const carNoInput = document.getElementById('car-carNo');
+    const bashInput = document.getElementById('car-bash');
+    const pletInput = document.getElementById('car-plet');
+    const nPshkninInput = document.getElementById('car-N_pshknin');
+    const notesInput = document.getElementById('car-notes');
+    const dateIntoInput = document.getElementById('car-date_into');
+
+    if (carNoInput) carNoInput.value = '';
+    if (bashInput) bashInput.value = '';
+    if (pletInput) pletInput.value = '';
+    if (nPshkninInput) nPshkninInput.value = '';
+    if (notesInput) notesInput.value = '';
+    if (dateIntoInput) {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      dateIntoInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    // Reset photo & camera preview
+    state.uploadedImageBase64 = null;
+    const previewWrap = document.getElementById('capture-preview-wrap');
+    const openCameraBtn = document.getElementById('open-camera-btn');
+    const cameraLiveWrap = document.getElementById('camera-live-wrap');
+    if (previewWrap) previewWrap.style.display = 'none';
+    if (cameraLiveWrap) cameraLiveWrap.style.display = 'none';
+    if (openCameraBtn) openCameraBtn.style.display = 'flex';
+
+    if (typeof stopCameraStream === 'function') {
+      try { stopCameraStream(); } catch(e) {}
+    }
+
+    if (carNoInput) {
+      setTimeout(() => { try { carNoInput.focus(); } catch(e) {} }, 100);
+    }
+  }
+
   async function handleScannerSave(e) {
     if (e) e.preventDefault();
 
     const carNoInput = document.getElementById('car-carNo');
     const bashInput = document.getElementById('car-bash');
     const pletInput = document.getElementById('car-plet');
-    const dateIntoInput = document.getElementById('car-date_into');
     const nPshkninInput = document.getElementById('car-N_pshknin');
+    const dateIntoInput = document.getElementById('car-date_into');
     const notesInput = document.getElementById('car-notes');
 
     const carNo = carNoInput ? carNoInput.value.trim() : '';
     const bash = bashInput ? bashInput.value.trim() : '';
     const plet = pletInput ? pletInput.value.trim() : '';
+    const N_pshknin = nPshkninInput ? nPshkninInput.value.trim() : '';
     const date_into = (dateIntoInput && dateIntoInput.value) ? dateIntoInput.value : new Date().toISOString().slice(0, 10);
-    const N_pshknin = (nPshkninInput && nPshkninInput.value) ? nPshkninInput.value.trim() : 'یەکەم';
     const Nnote = (notesInput && notesInput.value) ? notesInput.value.trim() : null;
+    const pic = state.uploadedImageBase64 || null;
 
-    if (!carNo) {
-      alert('⚠️ تکایە ژمارەی ئۆتۆمبێل بنووسە!');
-      if (carNoInput) carNoInput.focus();
+    // ══════════════════════════════════════════════════════════════════
+    // مەرجی یەکەم: ئەگەر (ژمارە + بەش + ناوی پارێزگا + پشکنینی + وێنەی گیراو) بەتاڵ بوو، کارەکە ڕابگرە و بە مەسج بۆکس ئاگاداری بکەرەوە
+    // ══════════════════════════════════════════════════════════════════
+    if (!carNo || !bash || !plet || !N_pshknin || !pic) {
+      const missing = [];
+      if (!carNo) missing.push('ژمارەی ئۆتۆمبێل');
+      if (!bash) missing.push('بەش');
+      if (!plet) missing.push('ناوی پارێزگا یان شوێن');
+      if (!N_pshknin) missing.push('پشکنینی');
+      if (!pic) missing.push('وێنەی گیراو');
+
+      alert('⚠️ ڕاگرتن: تکایە ئەم خانانە بەتاڵن، پێویستە هەموویان دیاریبکرێن و پڕبکرێنەوە:\n\n• ' + missing.join('\n• '));
+
+      if (!carNo && carNoInput) carNoInput.focus();
+      else if (!bash && bashInput) bashInput.focus();
+      else if (!plet && pletInput) pletInput.focus();
+      else if (!N_pshknin && nPshkninInput) nPshkninInput.focus();
+      else if (!pic) {
+        const openCameraBtn = document.getElementById('open-camera-btn');
+        if (openCameraBtn) openCameraBtn.focus();
+      }
       return;
     }
-    if (!plet) {
-      alert('⚠️ تکایە ناوی پارێزگا یان شوێن هەڵبژێرە!');
-      if (pletInput) pletInput.focus();
-      return;
+
+    // ══════════════════════════════════════════════════════════════════
+    // مەرجی دووەم: ڕۆژانە یەک جار وێنە تۆمار دەکرێت
+    // ئەگەر هاتوو (ژمارە + بەش + ناوی پارێزگا + پشکنینی + بەرواری پشکنین) یەکسان بوو تۆماری مەکە
+    // مەسج بۆکس ئاگادار بکاتەوە کە (ئەم وێنەیە پێشتر تۆمار کراوە) و هەمووی بەتاڵ بکەرەوە
+    // ══════════════════════════════════════════════════════════════════
+    if (Array.isArray(state.todayCarRecords)) {
+      const isClientDup = state.todayCarRecords.some(r =>
+        String(r.carNo || '').trim().toUpperCase() === carNo.toUpperCase() &&
+        String(r.bash || '').trim() === bash &&
+        String(r.plet || '').trim() === plet &&
+        String(r.N_pshknin || '').trim() === N_pshknin &&
+        String(r.date_into || '').slice(0, 10) === date_into.slice(0, 10)
+      );
+
+      if (isClientDup) {
+        alert('ئەم وێنەیە پێشتر تۆمار کراوە');
+        resetScannerForm();
+        return;
+      }
     }
 
     const payload = {
       carNo,
       bash,
       plet,
-      pic: state.uploadedImageBase64 || null,
+      pic,
       date_into,
       N_pshknin,
       Nnote,
-      uuser: (state.currentUser && (state.currentUser.User_ || state.currentUser.Username)) ? (state.currentUser.User_ || state.currentUser.Username) : 'کارمەند',
+      uuser: (state.currentUser && state.currentUser.Username) ? state.currentUser.Username : 'کارمەند',
       bar_: capturedGPS ? (capturedGPS.placeName || `GPS: ${capturedGPS.lat}, ${capturedGPS.lng}`) : null
     };
 
@@ -1859,25 +1933,16 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const data = await res.json();
 
+      if (data.duplicate || res.status === 409 || (data.error && data.error.includes('ئەم وێنەیە پێشتر تۆمار کراوە'))) {
+        alert('ئەم وێنەیە پێشتر تۆمار کراوە');
+        resetScannerForm();
+        return;
+      }
+
       if (data.success) {
-        alert('✅ زانیاری، پشکنین (' + N_pshknin + ') و وێنەی ئۆتۆمبێل بە سەرکەوتوویی لە SQL Server پاشەکەوت کرا!');
+        alert('✅ زانیاری و وێنەی ئۆتۆمبێل بە سەرکەوتوویی لە SQL Server پاشەکەوت کرا!');
         state.lastCarRecord = payload;
-
-        // Clear inputs
-        if (carNoInput) carNoInput.value = '';
-        if (bashInput) bashInput.value = '';
-        if (pletInput) pletInput.value = '';
-        if (notesInput) notesInput.value = '';
-        if (nPshkninInput) nPshkninInput.value = 'یەکەم';
-
-        // Reset photo & camera preview
-        state.uploadedImageBase64 = null;
-        const previewWrap = document.getElementById('capture-preview-wrap');
-        const openCameraBtn = document.getElementById('open-camera-btn');
-        if (previewWrap) previewWrap.style.display = 'none';
-        if (openCameraBtn) openCameraBtn.style.display = 'flex';
-
-        // Refresh today's table
+        resetScannerForm();
         loadCarRecords();
       } else {
         alert('⚠️ هەڵە لە پاشەکەوتکردن: ' + (data.error || 'هەڵەیەکی نەزانراو لە ڕاژەکار'));
@@ -1909,11 +1974,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const carNo = document.getElementById('cd-carNo') ? document.getElementById('cd-carNo').value.trim() : '';
     const bash = document.getElementById('cd-bash') ? document.getElementById('cd-bash').value.trim() : '';
     const plet = document.getElementById('cd-plet') ? document.getElementById('cd-plet').value.trim() : '';
+    const N_pshknin = document.getElementById('cd-N_pshknin') ? document.getElementById('cd-N_pshknin').value.trim() : '';
+    const pic = state.uploadedImageBase64 || null;
+    const date_into = document.getElementById('cd-date_') ? document.getElementById('cd-date_').value.slice(0, 10) : new Date().toISOString().slice(0, 10);
 
-    if (!carNo) {
-      alert('⚠️ تکایە ژمارەی ئۆتۆمبێل بنووسە!');
-      if (document.getElementById('cd-carNo')) document.getElementById('cd-carNo').focus();
+    // مەرجی یەکەم: ئەگەر (ژمارە + بەش + ناوی پارێزگا + پشکنینی + وێنەی گیراو) بەتاڵ بوو، کارەکە ڕابگرە
+    if (!carNo || !bash || !plet || !N_pshknin || !pic) {
+      const missing = [];
+      if (!carNo) missing.push('ژمارەی ئۆتۆمبێل');
+      if (!bash) missing.push('بەش');
+      if (!plet) missing.push('ناوی پارێزگا');
+      if (!N_pshknin) missing.push('پشکنینی');
+      if (!pic) missing.push('وێنەی گیراو');
+
+      alert('⚠️ ڕاگرتن: پێویستە هەموو ئەم خانانە دیاریبکرێن و پڕبکرێنەوە:\n\n• ' + missing.join('\n• '));
       return;
+    }
+
+    // مەرجی دووەم: پشکنینی دووبارە
+    if (Array.isArray(state.todayCarRecords)) {
+      const isClientDup = state.todayCarRecords.some(r =>
+        String(r.carNo || '').trim().toUpperCase() === carNo.toUpperCase() &&
+        String(r.bash || '').trim() === bash &&
+        String(r.plet || '').trim() === plet &&
+        String(r.N_pshknin || '').trim() === N_pshknin &&
+        String(r.date_into || '').slice(0, 10) === date_into
+      );
+
+      if (isClientDup) {
+        alert('ئەم وێنەیە پێشتر تۆمار کراوە');
+        const cdf = document.getElementById('car-details-form');
+        if (cdf) cdf.reset();
+        state.uploadedImageBase64 = null;
+        const previewWrap = document.getElementById('capture-preview-wrap');
+        const openCameraBtn = document.getElementById('open-camera-btn');
+        if (previewWrap) previewWrap.style.display = 'none';
+        if (openCameraBtn) openCameraBtn.style.display = 'flex';
+        return;
+      }
     }
 
     const payload = {
@@ -2003,6 +2101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch(getApiBase() + '/api/car-records');
       const records = await res.json();
+      state.todayCarRecords = Array.isArray(records) ? records : [];
 
       if (records.length === 0) {
         tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:1rem;">No records submitted today</td></tr>`;
@@ -3102,7 +3201,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(getApiBase() + '/api/system/version');
       if (res.ok) {
         const data = await res.json();
-        const verStr = `v${data.version || '1.1.0'}`;
+        const verStr = `v${data.version || '1.5.0'}`;
         if (appCurrentVersionLabel) appCurrentVersionLabel.textContent = `${verStr} (Build ${data.build || 100})`;
         if (updatePageVersionBadge) updatePageVersionBadge.textContent = verStr;
       }

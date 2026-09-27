@@ -1,7 +1,7 @@
 {
-  "version": "1.3.7",
-  "build": 205,
+  "version": "1.5.0",
+  "build": 1000,
   "developer": "نەژاد قادر محمد",
-  "description": "چاککردنی فۆرمی بەڕێوەبردنی بەکارهێنەران (User Management / dbo.image_user)، چارەسەری لۆدبوونی لیستی کارمەندان و توانای زیادکردن و نوێکردنەوەی بەکارهێنەر",
-  "lastSha": "v1.3.7-user-management-image-user-fix"
+  "description": "وەشانی نوێ v1.5.0: مەرجی قەدەغەکردنی تۆمار بەبێ وێنە + ڕێگریکردن لە دووبارەی ڕۆژانە",
+  "lastSha": "v1.5.0-strict-image-and-daily-duplicate-protection"
 }

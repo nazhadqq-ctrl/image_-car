@@ -1376,8 +1376,8 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/car-records' && req.method === 'POST') {
     sanitizeBody(req, async (err, data) => {
       if (err || !data) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ error: 'Invalid record payload' }));
+        res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+        return res.end(JSON.stringify({ success: false, error: 'Invalid record payload' }));
       }
 
       try {
@@ -1387,23 +1387,71 @@ const server = http.createServer((req, res) => {
           inspector_name, price, result, expire_date, lab_name
         } = data;
 
-        if (isSqlServerConnected && sql) {
-          let picBuffer = null;
-          if (pic && typeof pic === 'string' && pic.includes('base64,')) {
-            const base64Data = pic.split('base64,')[1];
+        const cleanCarNo = carNo ? String(carNo).trim().slice(0, 8) : '';
+        const cleanBash = bash ? String(bash).trim().slice(0, 30) : '';
+        const cleanPlet = plet ? String(plet).trim().slice(0, 30) : '';
+        const cleanNPshknin = N_pshknin ? String(N_pshknin).trim().slice(0, 50) : '';
+        const dateToCheck = (date_into && String(date_into).trim()) ? String(date_into).trim().slice(0, 10) : new Date().toISOString().slice(0, 10);
+
+        let picBuffer = null;
+        if (pic && typeof pic === 'string' && pic.includes('base64,')) {
+          const base64Data = pic.split('base64,')[1];
+          if (base64Data && base64Data.trim().length > 0) {
             picBuffer = Buffer.from(base64Data, 'base64');
+          }
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // مەرجی یەکەم: ئەگەر (ژمارە + بەش + ناوی پارێزگا + پشکنینی + وێنەی گیراو) بەتاڵ بوو، کارەکە ڕابگرە
+        // ══════════════════════════════════════════════════════════════════
+        if (!cleanCarNo || !cleanBash || !cleanPlet || !cleanNPshknin || !picBuffer || picBuffer.length === 0) {
+          res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+          return res.end(JSON.stringify({ 
+            success: false, 
+            error: 'تکایە هەموو خانە پێویستەکان (ژمارە، بەش، ناوی پارێزگا، پشکنینی، وێنەی گیراو) پڕبکەرەوە!' 
+          }));
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // مەرجی دووەم: ڕۆژانە یەک جار وێنە تۆمار دەکرێت
+        // ئەگەر هاتوو (ژمارە + بەش + ناوی پارێزگا + پشکنینی + بەرواری پشکنین) یەکسان بوو تۆماری مەکە
+        // ══════════════════════════════════════════════════════════════════
+        if (isSqlServerConnected && sql) {
+          const checkReq = new sql.Request();
+          checkReq.input('chkCarNo', sql.NVarChar(8), cleanCarNo);
+          checkReq.input('chkBash', sql.NVarChar(30), cleanBash);
+          checkReq.input('chkPlet', sql.NVarChar(30), cleanPlet);
+          checkReq.input('chkNPshknin', sql.NVarChar(50), cleanNPshknin);
+          checkReq.input('chkDateInto', sql.Date, dateToCheck);
+
+          const dupCheck = await checkReq.query(`
+            SELECT TOP 1 id FROM dbo.CAR_
+            WHERE UPPER(LTRIM(RTRIM(ISNULL(carNo, '')))) = UPPER(@chkCarNo)
+              AND LTRIM(RTRIM(ISNULL(bash, ''))) = @chkBash
+              AND LTRIM(RTRIM(ISNULL(plet, ''))) = @chkPlet
+              AND LTRIM(RTRIM(ISNULL(N_pshknin, ''))) = @chkNPshknin
+              AND CAST(date_into AS DATE) = CAST(@chkDateInto AS DATE)
+          `);
+
+          if (dupCheck.recordset && dupCheck.recordset.length > 0) {
+            res.writeHead(409, { 'Content-Type': 'application/json; charset=utf-8' });
+            return res.end(JSON.stringify({ 
+              success: false, 
+              duplicate: true, 
+              error: 'ئەم وێنەیە پێشتر تۆمار کراوە' 
+            }));
           }
 
           const request = new sql.Request();
-          request.input('carNo', sql.NVarChar(8), carNo ? String(carNo).trim().slice(0, 8) : null);
-          request.input('bash', sql.NVarChar(30), bash ? String(bash).trim().slice(0, 30) : null);
-          request.input('plet', sql.NVarChar(30), plet ? String(plet).trim().slice(0, 30) : null);
+          request.input('carNo', sql.NVarChar(8), cleanCarNo);
+          request.input('bash', sql.NVarChar(30), cleanBash);
+          request.input('plet', sql.NVarChar(30), cleanPlet);
           request.input('pic', sql.Image, picBuffer);
-          request.input('date_into', sql.Date, date_into || new Date());
+          request.input('date_into', sql.Date, dateToCheck);
           request.input('Nnote', sql.NChar(100), Nnote ? String(Nnote).trim().slice(0, 100) : null);
           request.input('uuser', sql.NVarChar(50), uuser ? String(uuser).trim().slice(0, 50) : 'Operator');
           request.input('bar_', sql.NVarChar(255), bar_ ? String(bar_).trim().slice(0, 255) : null);
-          request.input('N_pshknin', sql.NVarChar(50), N_pshknin ? String(N_pshknin).trim().slice(0, 50) : null);
+          request.input('N_pshknin', sql.NVarChar(50), cleanNPshknin);
           
           request.input('driver_name', sql.NVarChar(100), driver_name ? String(driver_name).trim().slice(0, 100) : null);
           request.input('mobile', sql.NVarChar(20), mobile ? String(mobile).trim().slice(0, 20) : null);
@@ -1433,17 +1481,40 @@ const server = http.createServer((req, res) => {
           `);
         } else {
           // In-memory fallback
+          const isDuplicate = carRecords.some(r =>
+            String(r.carNo || '').trim().toUpperCase() === cleanCarNo.toUpperCase() &&
+            String(r.bash || '').trim() === cleanBash &&
+            String(r.plet || '').trim() === cleanPlet &&
+            String(r.N_pshknin || '').trim() === cleanNPshknin &&
+            String(r.date_into || '').slice(0, 10) === dateToCheck
+          );
+
+          if (isDuplicate) {
+            res.writeHead(409, { 'Content-Type': 'application/json; charset=utf-8' });
+            return res.end(JSON.stringify({ 
+              success: false, 
+              duplicate: true, 
+              error: 'ئەم وێنەیە پێشتر تۆمار کراوە' 
+            }));
+          }
+
           carRecords.unshift({
             id: carRecords.length + 1,
-            carNo: carNo ? String(carNo).trim().slice(0, 8) : null,
-            bash, plet, pic, date_into: date_into || new Date().toISOString().slice(0, 10),
-            Nnote, uuser: uuser || 'Operator', bar_: bar_ || null, N_pshknin,
+            carNo: cleanCarNo,
+            bash: cleanBash,
+            plet: cleanPlet,
+            pic,
+            date_into: dateToCheck,
+            Nnote,
+            uuser: uuser || 'Operator',
+            bar_: bar_ || null,
+            N_pshknin: cleanNPshknin,
             driver_name, mobile, address, chassis, color, gear, fuel, pistons,
             inspector_name, price, result, expire_date, lab_name
           });
         }
 
-        res.writeHead(201, { 'Content-Type': 'application/json' });
+        res.writeHead(201, { 'Content-Type': 'application/json; charset=utf-8' });
         return res.end(JSON.stringify({ success: true, message: 'Record inserted into CAR_ table successfully!' }));
       } catch (insertErr) {
         console.error('Error inserting into CAR_', insertErr);
