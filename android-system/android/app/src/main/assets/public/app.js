@@ -991,15 +991,89 @@ document.addEventListener('DOMContentLoaded', () => {
   function normalizeKurdish(str) {
     if (!str) return '';
     return String(str)
-      .replace(/ـ/g, '')
+      .replace(/[\u200c\u200d\u0640ـ]/g, '')
       .replace(/[ەھه]/g, 'ه')
       .replace(/[ییيىێ]/g, 'ی')
       .replace(/[ۆوؤ]/g, 'و')
-      .replace(/[کكک]/g, 'ک')
+      .replace(/[کك]/g, 'ک')
       .replace(/[ڵل]/g, 'ل')
       .replace(/[ڕر]/g, 'ر')
       .toLowerCase()
       .trim();
+  }
+
+  // ══════════════════════════════════════════════════════════════════
+  // ALIGN WITH TABLE [AA] & C4KURD ENCODING (FOR RDLC REPORT ACCURACY)
+  // ══════════════════════════════════════════════════════════════════
+  function alignWithAATable(text) {
+    if (!text || typeof text !== 'string') return text;
+    const trimmed = text.trim();
+    const map = {
+      // Section (بەش)
+      'کرێ': 'كرێ',
+      'كری': 'كرێ',
+      'كرئ': 'كرێ',
+      'تايبةت': 'تایبەت',
+      'كشتوكاڵی': 'کشتوکاڵی',
+
+      // Governorate / Location (پارێزگا)
+      'سلێمانی': 'سلێمانى',
+      'هەولێر': 'ه\u0647\u200cولێر',
+      'ههولێر': 'ه\u0647\u200cولێر',
+      'کاتی سلێمانی': 'كاتی سلێمانى',
+      'كاتی سلێمانی': 'كاتی سلێمانى',
+      'کاتى سلێمانى': 'كاتی سلێمانى',
+      'کاتی دهۆک': 'كاتی دهۆک',
+      'کاتی هەولێر': 'كاتی هەولێر',
+      'کاتی هه‌ولێر': 'كاتی هەولێر',
+      'کەرکوک': 'كرکوک',
+      'کرکوک': 'كرکوک',
+      'کەرکووک': 'كرکوک',
+      'دیالە': 'ديالى',
+      'دیالی': 'ديالى',
+      'نەینەوا': 'نینوى',
+      'نەینەوا / موسڵ': 'نینوى',
+      'نینوی': 'نینوى',
+      'بەغدا': 'بغداد',
+      'بەسرە': 'بصرة',
+      'ئەنبار': 'الانبار',
+      'کەربەلا': 'كربلاء',
+      'قادسیە': 'القادسیة',
+      'قادسیة': 'القادسیة',
+      'کارەبا': 'كارەبا',
+      'شارەوانی و گەشتوگوزار': 'شارەوانى و گەشت و گوزار',
+      'کشتوکاڵ و سەرچاوەکانی ئاو': 'كشتوکاڵ و سەرچاوەکانى ئاو',
+    // Inspection (پشکنین - یەکەم، دووەم، سێهەم، چوارەم)
+    '1': 'یەکەم',
+    '١': 'یەکەم',
+    'یەكەم': 'یەکەم',
+    'يه‌كه‌م': 'یەکەم',
+    'يةكةم': 'یەکەم',
+    'يه ك م': 'یەکەم',
+    'يه كه م': 'یەکەم',
+    'یکەم': 'یەکەم',
+    'یەکه م': 'یەکەم',
+    'یەکەمچ': 'یەکەم',
+
+    '2': 'دووەم',
+    '٢': 'دووەم',
+    'دووه‌م': 'دووەم',
+    'دووه م': 'دووەم',
+    'دووهم': 'دووەم',
+
+    '3': 'سێهەم',
+    '٣': 'سێهەم',
+    'سێیەم': 'سێهەم',
+    'سێ یەم': 'سێهەم',
+    'سێیه‌م': 'سێهەم',
+    'سێهه‌م': 'سێهەم',
+
+    '4': 'چوارەم',
+    '٤': 'چوارەم',
+    'چواره‌م': 'چوارەم',
+    'چوارهم': 'چوارەم'
+    };
+    return map[trimmed] || trimmed;
   }
 
   async function loadSearchResults(query) {
@@ -1489,7 +1563,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   const defaultPletEl = document.getElementById('car-plet');
   if (defaultPletEl && !defaultPletEl.value) {
-    defaultPletEl.value = 'سلێمانی';
+    defaultPletEl.value = 'سلێمانى';
   }
   const defaultNpshkninEl = document.getElementById('car-N_pshknin');
   if (defaultNpshkninEl && !defaultNpshkninEl.value) {
@@ -1502,19 +1576,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const pletArrowBtn = document.getElementById('plet-arrow-btn');
 
   const pletList = [
-    "هەولێر", "سلێمانی", "دهۆک", "هەڵەبجە", "کەرکوک", "کاتی هەولێر", "کاتی سلێمانی", "کاتی دهۆک",
-    "الاردن تصدیر", "الانبار", "البصرة", "القادسیة", "النجف", "انبار", "بابل", "بازرگانی و پیشەسازی",
-    "بصرة", "بغداد", "بێ ژمارە", "بێ سەرەتا", "بەرگری شارستانی", "بەرگری و شارستانی گەرمیان",
-    "بەرگری و فریاکەوتن", "پۆلیسی دارستان", "تەندروستی", "پەروەردە", "پۆلیس", "پۆلیسی نەوت و گاز",
-    "خوێندنی باڵا", "داد", "دارایی", "دەزگای مین", "دیالى", "دیالى فحص مؤقت", "ژمارەی بیانی",
-    "ڕۆشنبیری", "ڕێکخراوەکان", "ڕەگەزنامە", "زیقار", "شارەوانی و گەشتوگوزار", "صلاح الدین",
-    "فحص مؤقت  مثنى", "فحص موقت البصرة", "فحص موقت النجف", "فحص موقت دیالى", "فحص موقت کرکوک",
-    "فحص موقت نینوى", "فحص مؤقت الانبار", "فحص مؤقت انبار", "فحص مؤقت بابل", "فحص مؤقت بغداد",
-    "فحص مؤقت زیقار", "فحص مؤقت صلاح الدین", "فحص مؤقت قادسیة", "فحص مؤقت کربلاء",
-    "فحص مؤقت میسان", "فحص مؤقت نینوى", "فحص مؤقت واسط", "کارەبا", "کەربەلا", "کشتوکاڵ",
-    "کشتوکاڵ و سەرچاوەکانی ئاو", "گواستنەوە و گەیاندن", "مثنى", "میسان", "ناوخۆ", "��ینوى",
-    "هاتووچۆ", "واست", "وەزارەتی پێشمەرگە", "ئاوەدانکردنەوە", "ئەوروپی", "تصدیر الامارات",
-    "مافی مرۆڤ", "وەزیران", "پلان دانان", "دەستەی ژینگە"
+    "سلێمانى", "ه\u0647\u200cولێر", "كاتی سلێمانى", "كاتی دهۆک", "دهۆک", "بغداد", "كاتی هەولێر",
+    "نینوى", "صلاح الدین", "كرکوک", "ديالى", "بێ ژمارە", "هەڵەبجە", "پۆلیس", "فحص مؤقت بغداد",
+    "الانبار", "انبار", "ناوخؤ", "هاتووچۆ", "بصرة", "خوێندنی باڵا", "بابل", "شارەوانى و گەشت و گوزار",
+    "كارەبا", "فحص موقت نينوى", "واست", "مزایده‌", "ڕەگەزنامە", "بێ سەرەتا", "دارایی", "دیالی",
+    "ئاوەدان کردنەوە", "كشتوکاڵ و سەرچاوەکانى ئاو", "فحص مؤقت نینوى", "فحص مؤقت", "فحص موقت ديالى",
+    "پەروەردە", "كربلاء", "دیالى فحص مؤقت", "گواستنەوە و گەیاندن", "القادسية", "تەندروستی",
+    "النجف", "فحص بغداد", "فحص مؤقت الانبار", "فحص مؤقت بابل", "فحص موقت البصرة", "میسان",
+    "زیقار", "فحص مؤقت واسط", "فحص مؤقت میسان", "فحص مؤقت زیقار", "فحص مؤقت کرکوک", "الدیوانیة",
+    "المثنى", "فحص موقت النجف", "فحص مؤقت صلاح الدین", "کەربەلا", "بازرگانی و پیشەسازی",
+    "بەرگری شارستانی", "بەرگری و شارستانی گەرمیان", "بەرگری و فریاکەوتن", "پۆلیسی دارستان",
+    "پۆلیسی نەوت و گاز", "داد", "دەزگای مین", "ژمارەی بیانی", "ڕۆشنبیری", "ڕێکخراوەکان",
+    "وەزارەتی پێشمەرگە", "تصدیر الامارات", "مافی مرۆڤ", "وەزیران", "پلان دانان", "دەستەی ژینگە"
   ];
 
   function renderPletMenu(filterText = '') {
@@ -1827,7 +1900,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (carNoInput) carNoInput.value = '';
     if (bashInput) bashInput.value = 'تایبەت';
-    if (pletInput) pletInput.value = 'سلێمانی';
+    if (pletInput) pletInput.value = 'سلێمانى';
     if (nPshkninInput) nPshkninInput.value = 'یەکەم';
     if (notesInput) notesInput.value = '';
     if (dateIntoInput) {
@@ -1867,9 +1940,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const notesInput = document.getElementById('car-notes');
 
     const carNo = carNoInput ? carNoInput.value.trim() : '';
-    const bash = bashInput ? bashInput.value.trim() : '';
-    const plet = pletInput ? pletInput.value.trim() : '';
-    const N_pshknin = nPshkninInput ? nPshkninInput.value.trim() : '';
+    const bash = bashInput ? alignWithAATable(bashInput.value.trim()) : '';
+    const plet = pletInput ? alignWithAATable(pletInput.value.trim()) : '';
+    const N_pshknin = nPshkninInput ? alignWithAATable(nPshkninInput.value.trim()) : 'یەکەم';
     const date_into = (dateIntoInput && dateIntoInput.value) ? dateIntoInput.value : new Date().toISOString().slice(0, 10);
     const Nnote = (notesInput && notesInput.value) ? notesInput.value.trim() : null;
     const pic = state.uploadedImageBase64 || null;
@@ -1986,9 +2059,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e) e.preventDefault();
 
     const carNo = document.getElementById('cd-carNo') ? document.getElementById('cd-carNo').value.trim() : '';
-    const bash = document.getElementById('cd-bash') ? document.getElementById('cd-bash').value.trim() : '';
-    const plet = document.getElementById('cd-plet') ? document.getElementById('cd-plet').value.trim() : '';
-    const N_pshknin = document.getElementById('cd-N_pshknin') ? document.getElementById('cd-N_pshknin').value.trim() : '';
+    const bash = document.getElementById('cd-bash') ? alignWithAATable(document.getElementById('cd-bash').value.trim()) : '';
+    const plet = document.getElementById('cd-plet') ? alignWithAATable(document.getElementById('cd-plet').value.trim()) : '';
+    const N_pshknin = document.getElementById('cd-N_pshknin') ? alignWithAATable(document.getElementById('cd-N_pshknin').value.trim()) : 'یەکەم';
     const pic = state.uploadedImageBase64 || null;
     const date_into = document.getElementById('cd-date_') ? document.getElementById('cd-date_').value.slice(0, 10) : new Date().toISOString().slice(0, 10);
 
@@ -2554,7 +2627,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const carNo = document.getElementById('car-carNo') ? document.getElementById('car-carNo').value.trim() : '';
       const bash = document.getElementById('car-bash') ? document.getElementById('car-bash').value.trim() : '';
       const plet = document.getElementById('car-plet') ? document.getElementById('car-plet').value.trim() : '';
-      const nPshknin = document.getElementById('car-N_pshknin') ? document.getElementById('car-N_pshknin').value.trim() : '';
+      const nPshknin = document.getElementById('car-N_pshknin') ? alignWithAATable(document.getElementById('car-N_pshknin').value.trim()) : 'یەکەم';
 
       if (dfAA) dfAA.value = carNo;
       if (dfBBB) dfBBB.value = bash;
@@ -2600,10 +2673,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!dfCccMenu) return;
     const nQ = normalizeKurdish(filterText);
     const pletList = [
-      "هەولێر", "سلێمانی", "دهۆک", "هەڵەبجە", "کەرکوک", "کاتی هەولێر", "کاتی سلێمانی", "کاتی دهۆک",
-      "کاتی هەڵەبجە", "نەینەوا", "بەغدا", "بەسرە", "ئەنبار", "بابل", "دیالە", "دیوانیە", "ذی قار",
-      "صلاح الدین", "کەربەلا", "موسەننا", "میسان", "نەجەف", "واسط", "ئاکرێ", "ئامێدی", "بەردەڕەش",
-      "دەربەندیخان", "ڕانیە", "زاخۆ", "شەقڵاوە", "شەنگال", "کەلار", "کۆیە", "قەڵادزێ", "مەخمور", "فحص"
+      "سلێمانى", "ه\u0647\u200cولێر", "كاتی سلێمانى", "كاتی دهۆک", "دهۆک", "بغداد", "كاتی هەولێر",
+      "نینوى", "صلاح الدین", "كرکوک", "ديالى", "بێ ژمارە", "هەڵەبجە", "پۆلیس", "فحص مؤقت بغداد",
+      "الانبار", "انبار", "ناوخؤ", "هاتووچۆ", "بصرة", "خوێندنی باڵا", "بابل", "شارەوانى و گەشت و گوزار",
+      "كارەبا", "فحص موقت نينوى", "واست", "مزایده‌", "ڕەگەزنامە", "بێ سەرەتا", "دارایی", "دیالی",
+      "ئاوەدان کردنەوە", "كشتوکاڵ و سەرچاوەکانى ئاو", "فحص مؤقت نینوى", "فحص مؤقت", "فحص موقت ديالى",
+      "پەروەردە", "كربلاء", "دیالى فحص مؤقت", "گواستنەوە و گەیاندن", "القادسية", "تەندروستی",
+      "النجف", "فحص بغداد", "فحص مؤقت الانبار", "فحص مؤقت بابل", "فحص موقت البصرة", "میسان",
+      "زیقار", "فحص مؤقت واسط", "فحص مؤقت میسان", "فحص مؤقت زیقار", "فحص مؤقت کرکوک", "الدیوانیة",
+      "المثنى", "فحص موقت النجف", "فحص مؤقت صلاح الدین", "کەربەلا", "بازرگانی و پیشەسازی",
+      "بەرگری شارستانی", "بەرگری و شارستانی گەرمیان", "بەرگری و فریاکەوتن", "پۆلیسی دارستان",
+      "پۆلیسی نەوت و گاز", "داد", "دەزگای مین", "ژمارەی بیانی", "ڕۆشنبیری", "ڕێکخراوەکان",
+      "وەزارەتی پێشمەرگە", "تصدیر الامارات", "مافی مرۆڤ", "وەزیران", "پلان دانان", "دەستەی ژینگە"
     ];
 
     const filtered = filterText
@@ -3020,9 +3101,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const payload = {
       AA: dfAA ? dfAA.value.trim() : '',
-      BBB: dfBBB ? dfBBB.value.trim() : '',
-      CCC: dfCCC ? dfCCC.value.trim() : '',
-      DDD: dfDDD ? dfDDD.value.trim() : '',
+      BBB: dfBBB ? alignWithAATable(dfBBB.value.trim()) : '',
+      CCC: dfCCC ? alignWithAATable(dfCCC.value.trim()) : '',
+      DDD: dfDDD ? alignWithAATable(dfDDD.value.trim()) : 'یەکەم',
       Psulla: dfPsulla && dfPsulla.value ? dfPsulla.value : null,
       date_: dfDate && dfDate.value ? dfDate.value : new Date().toISOString().slice(0, 10),
       user_: currentUserName,

@@ -54,6 +54,80 @@ const MIME_TYPES = {
 // Max body size: 15MB
 const MAX_BODY_SIZE = 15 * 1024 * 1024;
 
+// ══════════════════════════════════════════════════════════════════
+// ALIGN WITH TABLE [AA] & C4KURD ENCODING (FOR RDLC REPORT ACCURACY)
+// ══════════════════════════════════════════════════════════════════
+function alignWithAATable(text) {
+  if (!text || typeof text !== 'string') return text;
+  const trimmed = text.trim();
+  const map = {
+    // Section (بەش)
+    'کرێ': 'كرێ',
+    'كری': 'كرێ',
+    'كرئ': 'كرێ',
+    'تايبةت': 'تایبەت',
+    'كشتوكاڵی': 'کشتوکاڵی',
+
+    // Governorate / Location (پارێزگا)
+    'سلێمانی': 'سلێمانى',
+    'هەولێر': 'ه\u0647\u200cولێر',
+    'ههولێر': 'ه\u0647\u200cولێر',
+    'کاتی سلێمانی': 'كاتی سلێمانى',
+    'كاتی سلێمانی': 'كاتی سلێمانى',
+    'کاتى سلێمانى': 'كاتی سلێمانى',
+    'کاتی دهۆک': 'كاتی دهۆک',
+    'کاتی هەولێر': 'كاتی هەولێر',
+    'کاتی هه‌ولێر': 'كاتی هەولێر',
+    'کەرکوک': 'كرکوک',
+    'کرکوک': 'كرکوک',
+    'کەرکووک': 'كرکوک',
+    'دیالە': 'ديالى',
+    'دیالی': 'ديالى',
+    'نەینەوا': 'نینوى',
+    'نەینەوا / موسڵ': 'نینوى',
+    'نینوی': 'نینوى',
+    'بەغدا': 'بغداد',
+    'بەسرە': 'بصرة',
+    'ئەنبار': 'الانبار',
+    'کەربەلا': 'كربلاء',
+    'قادسیە': 'القادسیة',
+    'قادسیة': 'القادسیة',
+    'کارەبا': 'كارەبا',
+    'شارەوانی و گەشتوگوزار': 'شارەوانى و گەشت و گوزار',
+    'کشتوکاڵ و سەرچاوەکانی ئاو': 'كشتوکاڵ و سەرچاوەکانى ئاو',
+    // Inspection (پشکنین - یەکەم، دووەم، سێهەم، چوارەم)
+    '1': 'یەکەم',
+    '١': 'یەکەم',
+    'یەكەم': 'یەکەم',
+    'يه‌كه‌م': 'یەکەم',
+    'يةكةم': 'یەکەم',
+    'يه ك م': 'یەکەم',
+    'يه كه م': 'یەکەم',
+    'یکەم': 'یەکەم',
+    'یەکه م': 'یەکەم',
+    'یەکەمچ': 'یەکەم',
+
+    '2': 'دووەم',
+    '٢': 'دووەم',
+    'دووه‌م': 'دووەم',
+    'دووه م': 'دووەم',
+    'دووهم': 'دووەم',
+
+    '3': 'سێهەم',
+    '٣': 'سێهەم',
+    'سێیەم': 'سێهەم',
+    'سێ یەم': 'سێهەم',
+    'سێیه‌م': 'سێهەم',
+    'سێهه‌م': 'سێهەم',
+
+    '4': 'چوارەم',
+    '٤': 'چوارەم',
+    'چواره‌م': 'چوارەم',
+    'چوارهم': 'چوارەم'
+  };
+  return map[trimmed] || trimmed;
+}
+
 // --- SECURE SESSION STORE (ADMIN & OPERATOR TOKENS) ---
 // { [token]: { userId, username, role, expiresAt } }
 const activeSessions = new Map();
@@ -1238,9 +1312,9 @@ const server = http.createServer((req, res) => {
       const date_ = body.date_ || new Date().toISOString().slice(0, 10);
       const user_ = session ? session.username : (body.user_ || 'admin');
       const AA = String(body.AA || '').trim();
-      const BBB = String(body.BBB || '').trim();
-      const CCC = String(body.CCC || '').trim();
-      const DDD = String(body.DDD || '').trim();
+      const BBB = alignWithAATable(String(body.BBB || '').trim());
+      const CCC = alignWithAATable(String(body.CCC || '').trim());
+      const DDD = alignWithAATable(String(body.DDD || '').trim()) || 'یەکەم';
       const EEE = String(body.EEE || '').trim();
 
       const defects = body.defects.map(d => String(d).trim()).filter(Boolean);
@@ -1388,9 +1462,9 @@ const server = http.createServer((req, res) => {
         } = data;
 
         const cleanCarNo = carNo ? String(carNo).trim().slice(0, 8) : '';
-        const cleanBash = bash ? String(bash).trim().slice(0, 30) : '';
-        const cleanPlet = plet ? String(plet).trim().slice(0, 30) : '';
-        const cleanNPshknin = N_pshknin ? String(N_pshknin).trim().slice(0, 50) : '';
+        const cleanBash = alignWithAATable(bash ? String(bash).trim().slice(0, 30) : '');
+        const cleanPlet = alignWithAATable(plet ? String(plet).trim().slice(0, 30) : '');
+        const cleanNPshknin = alignWithAATable(N_pshknin ? String(N_pshknin).trim().slice(0, 50) : '') || 'یەکەم';
         const dateToCheck = (date_into && String(date_into).trim()) ? String(date_into).trim().slice(0, 10) : new Date().toISOString().slice(0, 10);
 
         let picBuffer = null;

@@ -31,8 +31,8 @@ fs.copyFileSync(path.join(rootDir, 'server.js'), path.join(distDir, 'server.js')
 fs.copyFileSync(path.join(rootDir, 'auto-updater.js'), path.join(distDir, 'auto-updater.js'));
 fs.copyFileSync(path.join(rootDir, 'version.json'), path.join(distDir, 'version.json'));
 fs.copyFileSync(path.join(rootDir, 'github-sync.js'), path.join(distDir, 'github-sync.js'));
-fs.copyFileSync(path.join(rootDir, 'config.json'), path.join(distDir, 'config.json'));
-fs.copyFileSync(path.join(rootDir, '.env'), path.join(distDir, '.env'));
+if (fs.existsSync(path.join(rootDir, 'config.json'))) fs.copyFileSync(path.join(rootDir, 'config.json'), path.join(distDir, 'config.json'));
+if (fs.existsSync(path.join(rootDir, '.env'))) fs.copyFileSync(path.join(rootDir, '.env'), path.join(distDir, '.env'));
 fs.copyFileSync(path.join(rootDir, 'package.json'), path.join(distDir, 'package.json'));
 
 ['Start-App.exe', 'CarManagement.exe', 'CreateAppShortcuts.exe', 'MakeShortcut.exe', 'Start-App.bat', 'Start-Desktop-App.bat', 'Start-App-Silent.vbs', 'Start-Desktop-App-Silent.vbs'].forEach(f => {
@@ -49,7 +49,13 @@ console.log('📦 Copying public web assets...');
 execSync(`xcopy /E /I /Y /Q "${path.join(rootDir, 'public')}\\*" "${path.join(distDir, 'public')}\\"`);
 
 console.log('📦 Copying node_modules with fast xcopy...');
-execSync(`xcopy /E /I /Y /Q "${path.join(rootDir, 'node_modules')}\\*" "${path.join(distDir, 'node_modules')}\\"`);
+const nodeModulesSrc = fs.existsSync(path.join(rootDir, 'node_modules'))
+  ? path.join(rootDir, 'node_modules')
+  : (fs.existsSync(path.join(rootDir, '..', 'node_modules')) ? path.join(rootDir, '..', 'node_modules') : null);
+
+if (nodeModulesSrc) {
+  execSync(`xcopy /E /I /Y /Q "${nodeModulesSrc}\\*" "${path.join(distDir, 'node_modules')}\\"`);
+}
 
 // Copy app.ico if present
 if (fs.existsSync(path.join(rootDir, 'app.ico'))) {
