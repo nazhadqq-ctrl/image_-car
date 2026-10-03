@@ -76,8 +76,20 @@ function alignWithAATable(text) {
     'تایبەت': 'تایبەت',
     'بار': 'بار',
     'بار-پاشگر': 'بار-پاشگر',
+    'بار پاشگر': 'بار-پاشگر',
+    'بار - پاشگر': 'بار-پاشگر',
     'بار-پاشگر2': 'بار-پاشگر2',
+    'بار پاشگر2': 'بار-پاشگر2',
+    'بار - پاشگر2': 'بار-پاشگر2',
     'بار-پاشگر3': 'بار-پاشگر3',
+    'بار پاشگر3': 'بار-پاشگر3',
+    'بار - پاشگر3': 'بار-پاشگر3',
+    'بیناسازی پاشگر1': 'بیناسازی پاشگر1',
+    'بیناسازی-پاشگر1': 'بیناسازی پاشگر1',
+    'بیناسازی پاشگر2': 'بیناسازی پاشگر2',
+    'بیناسازی-پاشگر2': 'بیناسازی پاشگر2',
+    'بیناسازی پاشگر3': 'بیناسازی پاشگر3',
+    'بیناسازی-پاشگر3': 'بیناسازی پاشگر3',
     'بیناسازی': 'بیناسازی',
     'ماتۆڕ': 'ماتۆڕ',
     'میری': 'میری',
@@ -1558,6 +1570,11 @@ const server = http.createServer((req, res) => {
           const dupCheck = await checkReq.query(`
             SELECT TOP 1 id FROM dbo.CAR_
             WHERE UPPER(REPLACE(REPLACE(LTRIM(RTRIM(ISNULL(carNo, ''))), ' ', ''), '-', '')) = UPPER(REPLACE(REPLACE(@chkCarNo, ' ', ''), '-', ''))
+              AND REPLACE(REPLACE(LTRIM(RTRIM(ISNULL(bash, ''))), ' ', ''), '-', '') = REPLACE(REPLACE(@chkBash, ' ', ''), '-', '')
+              AND (
+                REPLACE(REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(ISNULL(plet, ''))), ' ', ''), N'ی', N'ى'), N'ک', N'ك'), N'ة', N'ە') = 
+                REPLACE(REPLACE(REPLACE(REPLACE(@chkPlet, ' ', ''), N'ی', N'ى'), N'ک', N'ك'), N'ة', N'ە')
+              )
               AND (
                 LTRIM(RTRIM(ISNULL(N_pshknin, ''))) = @chkNPshknin
                 OR LTRIM(RTRIM(ISNULL(N_pshknin, ''))) = REPLACE(@chkNPshknin, N'سێیەم', N'سێهەم')
@@ -1614,10 +1631,16 @@ if (dupCheck.recordset && dupCheck.recordset.length > 0) {
         } else {
           // In-memory fallback
           const isDuplicate = carRecords.some(r =>
-            String(r.carNo || '').trim().toUpperCase() === cleanCarNo.toUpperCase() &&
-            String(r.bash || '').trim() === cleanBash &&
-            String(r.plet || '').trim() === cleanPlet &&
-            String(r.N_pshknin || '').trim() === cleanNPshknin &&
+            String(r.carNo || '').trim().replace(/[-\s]/g, '').toUpperCase() === cleanCarNo.replace(/[-\s]/g, '').toUpperCase() &&
+            String(r.bash || '').trim().replace(/[-\s]/g, '') === cleanBash.replace(/[-\s]/g, '') &&
+            (
+              normalizeKurdishText(r.plet) === normalizeKurdishText(cleanPlet) ||
+              normalizeKurdishText(r.plet).replace(/ى/g, 'ی') === normalizeKurdishText(cleanPlet).replace(/ى/g, 'ی')
+            ) &&
+            (
+              normalizeKurdishText(r.N_pshknin) === normalizeKurdishText(cleanNPshknin) ||
+              normalizeKurdishText(r.N_pshknin).replace('سێهەم', 'سێیەم') === normalizeKurdishText(cleanNPshknin).replace('سێهەم', 'سێیەم')
+            ) &&
             String(r.date_into || '').slice(0, 10) === dateToCheck
           );
 
