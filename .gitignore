@@ -5,3 +5,4 @@ node_modules/
 .railwayignore
 config.json
 .env
+cloudflared.exe

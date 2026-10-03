@@ -19,7 +19,7 @@
       <div style="min-width:0;">
         <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
           <span class="brand-title">تۆمارکردنی زانیاری و وێنەی ئۆتۆمبێل</span>
-          <span id="app-current-version-label" style="font-size:0.75rem; font-weight:800; color:var(--accent-cyan); background:rgba(34,211,238,0.18); border:1px solid rgba(34,211,238,0.5); padding:0.15rem 0.6rem; border-radius:6px; letter-spacing:0.5px;">v1.5.1</span>
+          <span id="app-current-version-label" style="font-size:0.75rem; font-weight:800; color:var(--accent-cyan); background:rgba(34,211,238,0.18); border:1px solid rgba(34,211,238,0.5); padding:0.15rem 0.6rem; border-radius:6px; letter-spacing:0.5px;">v1.5.3</span>
         </div>
         <div style="font-size:0.68rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" id="header-status">System Ready</div>
       </div>
@@ -317,9 +317,9 @@
           <span>زانیاری ئوتومبێل</span>
         </h2>
         <p class="card-subtitle">زانیاری ئۆتۆمبێل پڕبکەرەوە و وێنە بگرە بۆ پاشەکەوتکردن لە SQL Server</p>
-        <div id="v1.5.1-scanner-badge" style="display:inline-flex; align-items:center; gap:0.4rem; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35); padding:0.35rem 0.85rem; border-radius:8px; color:#34d399; font-size:0.8rem; font-weight:700; margin-bottom:1rem;">
+        <div id="v1.5.3-scanner-badge" style="display:inline-flex; align-items:center; gap:0.4rem; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35); padding:0.35rem 0.85rem; border-radius:8px; color:#34d399; font-size:0.8rem; font-weight:700; margin-bottom:1rem;">
           <i data-lucide="shield-check" style="width:16px;height:16px;"></i>
-          <span>🛡️ وەشانی نوێ v1.5.1: دیاریکردنی بەها سەرەتاییەکان (تایبەت، سلێمانى، یەکەم) بۆ خێراکردنی تۆماری ئۆتۆمبێلەکان</span>
+          <span>🛡️ وەشانی نوێ v1.5.3: هاوتاکردنی تەواوەتی پشکنین و تێکستەکان لەگەڵ تەیبڵی AA و ڕاپۆرتەکان</span>
         </div>
 
         <form id="car-form" class="form-grid">
@@ -334,13 +334,17 @@
           <div class="form-group">
             <label>بەش</label>
             <select id="car-bash" dir="rtl" style="cursor: pointer; font-size: 0.95rem; font-weight: 500;">
-              <option value="تایبەت" selected>تایبەت</option>
+              <option value="">-- هەڵبژێرە --</option>
+              <option value="تایبەت">تایبەت</option>
               <option value="بار">بار</option>
               <option value="بار-پاشگر">بار-پاشگر</option>
               <option value="بار-پاشگر2">بار-پاشگر2</option>
               <option value="بار-پاشگر3">بار-پاشگر3</option>
               <option value="بیناسازی">بیناسازی</option>
-              <option value="كرێ">كرێ</option>
+              <option value="بیناسازی پاشگر1">بیناسازی پاشگر1</option>
+              <option value="بیناسازی پاشگر2">بیناسازی پاشگر2</option>
+              <option value="بیناسازی پاشگر3">بیناسازی پاشگر3</option>
+              <option value="کرێ">کرێ</option>
               <option value="ماتۆڕ">ماتۆڕ</option>
               <option value="میری">میری</option>
               <option value="جۆری تر">جۆری تر</option>
@@ -371,8 +375,11 @@
             <select id="car-N_pshknin" dir="rtl" required style="cursor: pointer; font-size: 0.95rem; font-weight: 700; background-color: #0c1324; color: #38bdf8;">
               <option value="یەکەم" selected>یەکەم (First Inspection)</option>
               <option value="دووەم">دووەم (Second Inspection)</option>
-              <option value="سێهەم">سێهەم (Third Inspection)</option>
+              <option value="سێیەم">سێیەم (Third Inspection)</option>
+              <option value="سێهەم">سێهەم (Third Inspection - Alternate)</option>
               <option value="چوارەم">چوارەم (Fourth Inspection)</option>
+              <option value="پێنجەم">پێنجەم (Fifth Inspection)</option>
+              <option value="شەشەم">شەشەم (Sixth Inspection)</option>
             </select>
           </div>
 
@@ -529,7 +536,10 @@
               <option value="بار-پاشگر2">بار-پاشگر2</option>
               <option value="بار-پاشگر3">بار-پاشگر3</option>
               <option value="بیناسازی">بیناسازی</option>
-              <option value="كرێ">كرێ</option>
+              <option value="بیناسازی پاشگر1">بیناسازی پاشگر1</option>
+              <option value="بیناسازی پاشگر2">بیناسازی پاشگر2</option>
+              <option value="بیناسازی پاشگر3">بیناسازی پاشگر3</option>
+              <option value="کرێ">کرێ</option>
               <option value="ماتۆڕ">ماتۆڕ</option>
               <option value="میری">میری</option>
               <option value="جۆری تر">جۆری تر</option>
@@ -558,8 +568,11 @@
               <option value="">-- هەڵبژێرە --</option>
               <option value="یەکەم">یەکەم</option>
               <option value="دووەم">دووەم</option>
+              <option value="سێیەم">سێیەم</option>
               <option value="سێهەم">سێهەم</option>
               <option value="چوارەم">چوارەم</option>
+              <option value="پێنجەم">پێنجەم</option>
+              <option value="شەشەم">شەشەم</option>
             </select>
           </div>
 
@@ -729,20 +742,23 @@
             <div class="form-group">
               <label>بەش</label>
               <select id="cd-bash" dir="rtl" style="cursor: pointer; font-size: 0.9rem; font-weight: 500; padding: 0.5rem;">
-                <option value="">-- هەڵبژێرە --</option>
-                <option value="تایبەت">تایبەت</option>
-                <option value="بار">بار</option>
-                <option value="بار-پاشگر">بار-پاشگر</option>
-                <option value="بار-پاشگر2">بار-پاشگر2</option>
-                <option value="بار-پاشگر3">بار-پاشگر3</option>
-                <option value="بیناسازی">بیناسازی</option>
-                <option value="كرێ">كرێ</option>
-                <option value="ماتۆڕ">ماتۆڕ</option>
-                <option value="میری">میری</option>
-                <option value="جۆری تر">جۆری تر</option>
-                <option value="ناوخۆ">ناوخۆ</option>
-                <option value="هاتووچۆ">هاتووچۆ</option>
-                <option value="کشتوکاڵی">کشتوکاڵی</option>
+              <option value="">-- هەڵبژێرە --</option>
+              <option value="تایبەت">تایبەت</option>
+              <option value="بار">بار</option>
+              <option value="بار-پاشگر">بار-پاشگر</option>
+              <option value="بار-پاشگر2">بار-پاشگر2</option>
+              <option value="بار-پاشگر3">بار-پاشگر3</option>
+              <option value="بیناسازی">بیناسازی</option>
+              <option value="بیناسازی پاشگر1">بیناسازی پاشگر1</option>
+              <option value="بیناسازی پاشگر2">بیناسازی پاشگر2</option>
+              <option value="بیناسازی پاشگر3">بیناسازی پاشگر3</option>
+              <option value="کرێ">کرێ</option>
+              <option value="ماتۆڕ">ماتۆڕ</option>
+              <option value="میری">میری</option>
+              <option value="جۆری تر">جۆری تر</option>
+              <option value="ناوخۆ">ناوخۆ</option>
+              <option value="هاتووچۆ">هاتووچۆ</option>
+              <option value="کشتوکاڵی">کشتوکاڵی</option>
               </select>
             </div>
             <div class="form-group" style="position: relative;">
@@ -756,11 +772,14 @@
             <div class="form-group">
               <label>پشکنینی</label>
               <select id="cd-N_pshknin" dir="rtl" required style="cursor: pointer; font-size: 0.9rem; font-weight: 500; padding: 0.5rem;">
-                <option value="">-- هەڵبژێرە --</option>
-                <option value="یەکەم">یەکەم</option>
-                <option value="دووەم">دووەم</option>
-                <option value="سێهەم">سێهەم</option>
-                <option value="چوارەم">چوارەم</option>
+              <option value="">-- هەڵبژێرە --</option>
+              <option value="یەکەم">یەکەم</option>
+              <option value="دووەم">دووەم</option>
+              <option value="سێیەم">سێیەم</option>
+              <option value="سێهەم">سێهەم</option>
+              <option value="چوارەم">چوارەم</option>
+              <option value="پێنجەم">پێنجەم</option>
+              <option value="شەشەم">شەشەم</option>
               </select>
             </div>
             <div class="form-group" style="display: flex; flex-direction: column; justify-content: flex-end;">
@@ -1130,8 +1149,8 @@
             <span>Login</span>
           </h2>
           <p class="card-subtitle">Enter credentials to access the system.</p>
-          <div id="v1.5.1-login-badge" style="margin-bottom:1rem; text-align:center; font-size:0.8rem; font-weight:700; color:var(--accent-cyan); background:rgba(34,211,238,0.12); border:1px solid rgba(34,211,238,0.35); border-radius:6px; padding:0.4rem;">
-            ✨ نوێکرایەوە بۆ وەشانی نوێ: v1.5.1 (Build 1001)
+          <div id="v1.5.3-login-badge" style="margin-bottom:1rem; text-align:center; font-size:0.8rem; font-weight:700; color:var(--accent-cyan); background:rgba(34,211,238,0.12); border:1px solid rgba(34,211,238,0.35); border-radius:6px; padding:0.4rem;">
+            ✨ نوێکرایەوە بۆ وەشانی نوێ: v1.5.3 (Build 1003)
           </div>
 
           <form id="login-form">
@@ -1214,6 +1233,6 @@
   </main>
 
   <script src="config.js?v=1.3.3"></script>
-  <script src="app.js?v=1.5.1-build1001"></script>
+  <script src="app.js?v=1.5.3-build1003"></script>
 </body>
 </html>
