@@ -669,7 +669,7 @@ const server = http.createServer((req, res) => {
         return res.end(fs.readFileSync(vPath, 'utf8'));
       }
     } catch (e) {}
-    return res.end(JSON.stringify({ version: '1.1.0', build: 110 }));
+    return res.end(JSON.stringify({ version: '1.5.5', build: 1005 }));
   }
 
   if (pathname === '/api/system/check-update' && req.method === 'POST') {
