@@ -1011,12 +1011,42 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!text || typeof text !== 'string') return text;
     const trimmed = text.trim();
     const map = {
-      // Section (بەش)
-      'کرێ': 'كرێ',
-      'كری': 'كرێ',
-      'كرئ': 'كرێ',
+      // Section (بەش) - هاوتاکردنی تەواوەتی لەگەڵ خشتەی AA لە داتابەیسی تاقیگە
+      'کرێ': 'کرێ',
+      'كری': 'کرێ',
+      'كرئ': 'کرێ',
       'تايبةت': 'تایبەت',
+      'تایبەت': 'تایبەت',
+      'بار': 'بار',
+      'بار-پاشگر': 'بار-پاشگر',
+      'بار پاشگر': 'بار-پاشگر',
+      'بار - پاشگر': 'بار-پاشگر',
+      'بار/پاشگر': 'بار-پاشگر',
+      'پاشگر': 'بار-پاشگر',
+      'بار-پاشگر1': 'بار-پاشگر',
+      'بار پاشگر1': 'بار-پاشگر',
+      'بار - پاشگر1': 'بار-پاشگر',
+      'بار-پاشگر2': 'بار-پاشگر2',
+      'بار پاشگر2': 'بار-پاشگر2',
+      'بار - پاشگر2': 'بار-پاشگر2',
+      'بار-پاشگر3': 'بار-پاشگر3',
+      'بار پاشگر3': 'بار-پاشگر3',
+      'بار - پاشگر3': 'بار-پاشگر3',
+      'بیناسازی': 'بیناسازی',
+      'بیناسازی پاشگر1': 'بیناسازی پاشگر1',
+      'بیناسازی-پاشگر1': 'بیناسازی پاشگر1',
+      'بیناسازی پاشگر2': 'بیناسازی پاشگر2',
+      'بیناسازی-پاشگر2': 'بیناسازی پاشگر2',
+      'بیناسازی پاشگر3': 'بیناسازی پاشگر3',
+      'بیناسازی-پاشگر3': 'بیناسازی پاشگر3',
+      'ماتۆڕ': 'ماتۆڕ',
+      'میری': 'میری',
+      'جۆری تر': 'جۆری تر',
+      'ناوخۆ': 'ناوخۆ',
+      'ناوخؤ': 'ناوخۆ',
+      'هاتووچۆ': 'هاتووچۆ',
       'كشتوكاڵی': 'کشتوکاڵی',
+      'کشتوکاڵی': 'کشتوکاڵی',
 
       // Governorate / Location (پارێزگا)
       'سلێمانی': 'سلێمانى',
@@ -2115,7 +2145,7 @@ document.addEventListener('DOMContentLoaded', () => {
       Nnote: document.getElementById('cd-notes') ? document.getElementById('cd-notes').value.trim() : null,
       uuser: (state.currentUser && state.currentUser.Username) ? state.currentUser.Username : 'کارمەند',
       bar_: capturedGPS ? (capturedGPS.placeName || `GPS: ${capturedGPS.lat}, ${capturedGPS.lng}`) : null,
-      N_pshknin: document.getElementById('cd-N_pshknin') ? document.getElementById('cd-N_pshknin').value.trim() : null,
+      N_pshknin: N_pshknin || (document.getElementById('cd-N_pshknin') ? alignWithAATable(document.getElementById('cd-N_pshknin').value.trim()) : 'یەکەم'),
       driver_name: document.getElementById('cd-driverName') ? document.getElementById('cd-driverName').value.trim() : null,
       mobile: document.getElementById('cd-mobile') ? document.getElementById('cd-mobile').value.trim() : null,
       address: document.getElementById('cd-address') ? document.getElementById('cd-address').value.trim() : null,
@@ -2764,7 +2794,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch(getApiBase() + '/api/search?q=' + encodeURIComponent(carNoVal));
             const records = await res.json();
             if (Array.isArray(records) && records.length > 0) {
-              const matched = records.find(r => (r.carNo || '').toUpperCase() === carNoVal.toUpperCase()) || records[0];
+              const currentBashVal = dfBBB && dfBBB.value ? dfBBB.value.trim() : '';
+              const matched = records.find(r => 
+                (r.carNo || '').toUpperCase() === carNoVal.toUpperCase() &&
+                (!currentBashVal || String(r.bash || '').trim() === currentBashVal)
+              ) || records.find(r => (r.carNo || '').toUpperCase() === carNoVal.toUpperCase()) || records[0];
               if (matched) {
                 if (dfBBB && matched.bash) dfBBB.value = matched.bash;
                 if (dfCCC && matched.plet) dfCCC.value = matched.plet;
