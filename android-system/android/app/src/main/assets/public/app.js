@@ -1006,17 +1006,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ══════════════════════════════════════════════════════════════════
   // ALIGN WITH TABLE [AA] & C4KURD ENCODING (FOR RDLC REPORT ACCURACY)
+  // هاوتاکردنی تەواوەتی لەگەڵ خشتەی AA لە داتابەیسی تاقیگە (Taqega)
   // ══════════════════════════════════════════════════════════════════
   function alignWithAATable(text) {
     if (!text || typeof text !== 'string') return text;
     const trimmed = text.trim();
     const map = {
       // Section (بەش) - هاوتاکردنی تەواوەتی لەگەڵ خشتەی AA لە داتابەیسی تاقیگە
-      'کرێ': 'کرێ',
-      'كری': 'کرێ',
-      'كرئ': 'کرێ',
-      'تايبةت': 'تایبەت',
       'تایبەت': 'تایبەت',
+      'تايبةت': 'تایبەت',
       'بار': 'بار',
       'بار-پاشگر': 'بار-پاشگر',
       'بار پاشگر': 'بار-پاشگر',
@@ -1032,6 +1030,10 @@ document.addEventListener('DOMContentLoaded', () => {
       'بار-پاشگر3': 'بار-پاشگر3',
       'بار پاشگر3': 'بار-پاشگر3',
       'بار - پاشگر3': 'بار-پاشگر3',
+      'كرێ': 'كرێ',
+      'کرێ': 'كرێ',
+      'كری': 'كرێ',
+      'كرئ': 'كرێ',
       'بیناسازی': 'بیناسازی',
       'بیناسازی پاشگر1': 'بیناسازی پاشگر1',
       'بیناسازی-پاشگر1': 'بیناسازی پاشگر1',
@@ -1039,71 +1041,122 @@ document.addEventListener('DOMContentLoaded', () => {
       'بیناسازی-پاشگر2': 'بیناسازی پاشگر2',
       'بیناسازی پاشگر3': 'بیناسازی پاشگر3',
       'بیناسازی-پاشگر3': 'بیناسازی پاشگر3',
-      'ماتۆڕ': 'ماتۆڕ',
       'میری': 'میری',
-      'جۆری تر': 'جۆری تر',
+      'کشتوکاڵی': 'کشتوکاڵی',
+      'كشتوكاڵی': 'کشتوکاڵی',
+      'ماتۆڕ': 'ماتۆڕ',
       'ناوخۆ': 'ناوخۆ',
       'ناوخؤ': 'ناوخۆ',
       'هاتووچۆ': 'هاتووچۆ',
-      'كشتوكاڵی': 'کشتوکاڵی',
-      'کشتوکاڵی': 'کشتوکاڵی',
+      'جۆری تر': 'جۆری تر',
 
-      // Governorate / Location (پارێزگا)
+      // Governorate / Location (پارێزگا) - هاوتا لەگەڵ خشتەی AA
       'سلێمانی': 'سلێمانى',
+      'سلێمانى': 'سلێمانى',
       'هەولێر': 'ه\u0647\u200cولێر',
       'ههولێر': 'ه\u0647\u200cولێر',
+      'هه‌ولێر': 'ه\u0647\u200cولێر',
+      'کاتى سلێمانى': 'كاتی سلێمانى',
       'کاتی سلێمانی': 'كاتی سلێمانى',
       'كاتی سلێمانی': 'كاتی سلێمانى',
-      'کاتى سلێمانى': 'كاتی سلێمانى',
+      'كاتی سلێمانى': 'كاتی سلێمانى',
+      'کاتى دهۆک': 'كاتی دهۆک',
       'کاتی دهۆک': 'كاتی دهۆک',
+      'كاتی دهۆک': 'كاتی دهۆک',
+      'دهۆک': 'دهۆک',
+      'بغداد': 'بغداد',
+      'بەغدا': 'بغداد',
+      'کاتى هەولێر': 'كاتی هەولێر',
       'کاتی هەولێر': 'كاتی هەولێر',
       'کاتی هه‌ولێر': 'كاتی هەولێر',
-      'کەرکوک': 'كرکوک',
-      'کرکوک': 'كرکوک',
-      'کەرکووک': 'كرکوک',
-      'دیالە': 'ديالى',
-      'دیالی': 'ديالى',
+      'كاتی هەولێر': 'كاتی هەولێر',
+      'نینوى': 'نینوى',
+      'نینوی': 'نینوى',
       'نەینەوا': 'نینوى',
       'نەینەوا / موسڵ': 'نینوى',
-      'نینوی': 'نینوى',
-      'بەغدا': 'بغداد',
-      'بەسرە': 'بصرة',
+      'صلاح الدین': 'صلاح الدین',
+      'کرکوک': 'كرکوک',
+      'کەرکوک': 'كرکوک',
+      'کەرکووک': 'كرکوک',
+      'كرکوک': 'كرکوک',
+      'ديالى': 'ديالى',
+      'دیالە': 'ديالى',
+      'دیالی': 'ديالى',
+      'بێ ژمارە': 'بێ ژمارە',
+      'هەڵەبجە': 'هەڵەبجە',
+      'پۆلیس': 'پۆلیس',
+      'الانبار': 'الانبار',
       'ئەنبار': 'الانبار',
+      'انبار': 'انبار',
+      'بصرة': 'بصرة',
+      'بەسرە': 'بصرة',
+      'البصرة': 'بصرة',
+      'كربلاء': 'كربلاء',
       'کەربەلا': 'كربلاء',
-      'قادسیە': 'القادسیة',
-      'قادسیة': 'القادسیة',
-      'کارەبا': 'كارەبا',
+      'القادسية': 'القادسية',
+      'قادسیە': 'القادسية',
+      'قادسیة': 'القادسية',
+      'النجف': 'النجف',
+      'بابل': 'بابل',
+      'میسان': 'میسان',
+      'مثنى': 'مثنى',
+      'واست': 'واست',
+      'واسط': 'واست',
+      'زیقار': 'زیقار',
+      'کارەبا': 'کارەبا',
+      'تەندروستی': 'تەندروستی',
+      'پەروەردە': 'پەروەردە',
+      'داد': 'داد',
+      'دارایی': 'دارایی',
+      'وەزارەتی پێشمەرگە': 'وەزارەتی پێشمەرگە',
       'شارەوانی و گەشتوگوزار': 'شارەوانى و گەشت و گوزار',
-      'کشتوکاڵ و سەرچاوەکانی ئاو': 'كشتوکاڵ و سەرچاوەکانى ئاو',
-    // Inspection (پشکنین - یەکەم، دووەم، سێهەم، چوارەم)
-    '1': 'یەکەم',
-    '١': 'یەکەم',
-    'یەكەم': 'یەکەم',
-    'يه‌كه‌م': 'یەکەم',
-    'يةكةم': 'یەکەم',
-    'يه ك م': 'یەکەم',
-    'يه كه م': 'یەکەم',
-    'یکەم': 'یەکەم',
-    'یەکه م': 'یەکەم',
-    'یەکەمچ': 'یەکەم',
+      'شارەوانى و گەشت و گوزار': 'شارەوانى و گەشت و گوزار',
+      'کشتوکاڵ و سەرچاوەکانی ئاو': 'کشتوکاڵ و سەرچاوەکانى ئاو',
+      'کشتوکاڵ و سەرچاوەکانى ئاو': 'کشتوکاڵ و سەرچاوەکانى ئاو',
 
-    '2': 'دووەم',
-    '٢': 'دووەم',
-    'دووه‌م': 'دووەم',
-    'دووه م': 'دووەم',
-    'دووهم': 'دووەم',
+      // Inspection (پشکنین - یەکەم، دووەم، سێهەم، چوارەم، پێنجەم، شەشەم) - هاوتا لەگەڵ خشتەی AA
+      '1': 'یەکەم',
+      '١': 'یەکەم',
+      'یەکەم': 'یەکەم',
+      'یەكەم': 'یەکەم',
+      'يه‌كه‌م': 'یەکەم',
+      'يةكةم': 'یەکەم',
+      'يه ك م': 'یەکەم',
+      'يه كه م': 'یەکەم',
+      'یکەم': 'یەکەم',
+      'یەکه م': 'یەکەم',
+      'یەکەمچ': 'یەکەم',
 
-    '3': 'سێهەم',
-    '٣': 'سێهەم',
-    'سێیەم': 'سێهەم',
-    'سێ یەم': 'سێهەم',
-    'سێیه‌م': 'سێهەم',
-    'سێهه‌م': 'سێهەم',
+      '2': 'دووەم',
+      '٢': 'دووەم',
+      'دووەم': 'دووەم',
+      'دووه‌م': 'دووەم',
+      'دووه م': 'دووەم',
+      'دووهم': 'دووەم',
+      'دووه م ': 'دووەم',
 
-    '4': 'چوارەم',
-    '٤': 'چوارەم',
-    'چواره‌م': 'چوارەم',
-    'چوارهم': 'چوارەم'
+      '3': 'سێهەم',
+      '٣': 'سێهەم',
+      'سێهەم': 'سێهەم',
+      'سێهه‌م': 'سێهەم',
+      'سێیەم': 'سێهەم',
+      'سێ یەم': 'سێهەم',
+      'سێیه‌م': 'سێهەم',
+
+      '4': 'چوارەم',
+      '٤': 'چوارەم',
+      'چوارەم': 'چوارەم',
+      'چواره‌م': 'چوارەم',
+      'چوارهم': 'چوارەم',
+
+      '5': 'پێنجەم',
+      '٥': 'پێنجەم',
+      'پێنجەم': 'پێنجەم',
+      'پينجەم': 'پێنجەم',
+
+      '6': 'شەشەم',
+      '٦': 'شەشەم',
+      'شەشەم': 'شەشەم'
     };
     return map[trimmed] || trimmed;
   }
@@ -1927,16 +1980,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // ─── 4. CAR SCANNER FORM SUBMIT (#car-form & #btn-save-scanner — تۆمارکردنی زانیاری و وێنە) ───
   function resetScannerForm() {
     const carNoInput = document.getElementById('car-carNo');
-    const bashInput = document.getElementById('car-bash');
-    const pletInput = document.getElementById('car-plet');
-    const nPshkninInput = document.getElementById('car-N_pshknin');
     const notesInput = document.getElementById('car-notes');
     const dateIntoInput = document.getElementById('car-date_into');
 
     if (carNoInput) carNoInput.value = '';
-    if (bashInput) bashInput.value = 'تایبەت';
-    if (pletInput) pletInput.value = 'سلێمانى';
-    if (nPshkninInput) nPshkninInput.value = 'یەکەم';
+    // پاراستنی تەواوی هەڵبژێردراوەکانی بەش، پارێزگا، و پشکنین (وەک دووەم) تا بەهیچ شێوەیەک نەگۆڕێن بۆ یەکەم
     if (notesInput) notesInput.value = '';
     if (dateIntoInput) {
       const today = new Date();
@@ -1977,7 +2025,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const carNo = carNoInput ? carNoInput.value.trim() : '';
     const bash = bashInput ? alignWithAATable(bashInput.value.trim()) : '';
     const plet = pletInput ? alignWithAATable(pletInput.value.trim()) : '';
-    const N_pshknin = nPshkninInput ? alignWithAATable(nPshkninInput.value.trim()) : 'یەکەم';
+    const N_pshknin = nPshkninInput ? alignWithAATable(nPshkninInput.value.trim()) : '';
     const date_into = (dateIntoInput && dateIntoInput.value) ? dateIntoInput.value : new Date().toISOString().slice(0, 10);
     const Nnote = (notesInput && notesInput.value) ? notesInput.value.trim() : null;
     const pic = state.uploadedImageBase64 || null;
@@ -2096,7 +2144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const carNo = document.getElementById('cd-carNo') ? document.getElementById('cd-carNo').value.trim() : '';
     const bash = document.getElementById('cd-bash') ? alignWithAATable(document.getElementById('cd-bash').value.trim()) : '';
     const plet = document.getElementById('cd-plet') ? alignWithAATable(document.getElementById('cd-plet').value.trim()) : '';
-    const N_pshknin = document.getElementById('cd-N_pshknin') ? alignWithAATable(document.getElementById('cd-N_pshknin').value.trim()) : 'یەکەم';
+    const N_pshknin = document.getElementById('cd-N_pshknin') ? alignWithAATable(document.getElementById('cd-N_pshknin').value.trim()) : '';
     const pic = state.uploadedImageBase64 || null;
     const date_into = document.getElementById('cd-date_') ? document.getElementById('cd-date_').value.slice(0, 10) : new Date().toISOString().slice(0, 10);
 
@@ -2145,7 +2193,7 @@ document.addEventListener('DOMContentLoaded', () => {
       Nnote: document.getElementById('cd-notes') ? document.getElementById('cd-notes').value.trim() : null,
       uuser: (state.currentUser && state.currentUser.Username) ? state.currentUser.Username : 'کارمەند',
       bar_: capturedGPS ? (capturedGPS.placeName || `GPS: ${capturedGPS.lat}, ${capturedGPS.lng}`) : null,
-      N_pshknin: N_pshknin || (document.getElementById('cd-N_pshknin') ? alignWithAATable(document.getElementById('cd-N_pshknin').value.trim()) : 'یەکەم'),
+      N_pshknin,
       driver_name: document.getElementById('cd-driverName') ? document.getElementById('cd-driverName').value.trim() : null,
       mobile: document.getElementById('cd-mobile') ? document.getElementById('cd-mobile').value.trim() : null,
       address: document.getElementById('cd-address') ? document.getElementById('cd-address').value.trim() : null,

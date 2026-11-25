@@ -54,6 +54,172 @@ const MIME_TYPES = {
 // Max body size: 15MB
 const MAX_BODY_SIZE = 15 * 1024 * 1024;
 
+// ══════════════════════════════════════════════════════════════════
+// ALIGN WITH TABLE [AA] & C4KURD ENCODING (FOR RDLC REPORT ACCURACY)
+// ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+// ALIGN WITH TABLE [AA] & C# WINFORMS (FOR RDLC REPORT ACCURACY)
+// هاوتاکردنی تەواوەتی لەگەڵ خشتەی AA لە داتابەیسی تاقیگە (Taqega)
+// ══════════════════════════════════════════════════════════════════
+function alignWithAATable(text) {
+  if (!text || typeof text !== 'string') return text;
+  const trimmed = text.trim();
+  const clean = String(text)
+    .replace(/[\u200c\u200d\u200e\u200f\ufeff\u00a0]/g, '')
+    .trim();
+
+  const map = {
+    // Section (بەش) - هاوتاکردنی تەواوەتی لەگەڵ خشتەی AA لە داتابەیسی تاقیگە
+    'تایبەت': 'تایبەت',
+    'تايبةت': 'تایبەت',
+    'بار': 'بار',
+    'بار-پاشگر': 'بار-پاشگر',
+    'بار پاشگر': 'بار-پاشگر',
+    'بار - پاشگر': 'بار-پاشگر',
+    'بار/پاشگر': 'بار-پاشگر',
+    'پاشگر': 'بار-پاشگر',
+    'بار-پاشگر1': 'بار-پاشگر',
+    'بار پاشگر1': 'بار-پاشگر',
+    'بار - پاشگر1': 'بار-پاشگر',
+    'بار-پاشگر2': 'بار-پاشگر2',
+    'بار پاشگر2': 'بار-پاشگر2',
+    'بار - پاشگر2': 'بار-پاشگر2',
+    'بار-پاشگر3': 'بار-پاشگر3',
+    'بار پاشگر3': 'بار-پاشگر3',
+    'بار - پاشگر3': 'بار-پاشگر3',
+    'كرێ': 'كرێ',
+    'کرێ': 'كرێ',
+    'كری': 'كرێ',
+    'كرئ': 'كرێ',
+    'بیناسازی': 'بیناسازی',
+    'بیناسازی پاشگر1': 'بیناسازی پاشگر1',
+    'بیناسازی-پاشگر1': 'بیناسازی پاشگر1',
+    'بیناسازی پاشگر2': 'بیناسازی پاشگر2',
+    'بیناسازی-پاشگر2': 'بیناسازی پاشگر2',
+    'بیناسازی پاشگر3': 'بیناسازی پاشگر3',
+    'بیناسازی-پاشگر3': 'بیناسازی پاشگر3',
+    'میری': 'میری',
+    'کشتوکاڵی': 'کشتوکاڵی',
+    'كشتوكاڵی': 'کشتوکاڵی',
+    'ماتۆڕ': 'ماتۆڕ',
+    'ناوخۆ': 'ناوخۆ',
+    'ناوخؤ': 'ناوخۆ',
+    'هاتووچۆ': 'هاتووچۆ',
+    'جۆری تر': 'جۆری تر',
+
+    // Governorate / Location (پارێزگا) - هاوتا لەگەڵ خشتەی AA
+    'سلێمانی': 'سلێمانى',
+    'سلێمانى': 'سلێمانى',
+    'هەولێر': 'ه\u0647\u200cولێر',
+    'ههولێر': 'ه\u0647\u200cولێر',
+    'هه‌ولێر': 'ه\u0647\u200cولێر',
+    'کاتى سلێمانى': 'كاتی سلێمانى',
+    'کاتی سلێمانی': 'كاتی سلێمانى',
+    'كاتی سلێمانی': 'كاتی سلێمانى',
+    'كاتی سلێمانى': 'كاتی سلێمانى',
+    'کاتى دهۆک': 'كاتی دهۆک',
+    'کاتی دهۆک': 'كاتی دهۆک',
+    'كاتی دهۆک': 'كاتی دهۆک',
+    'دهۆک': 'دهۆک',
+    'بغداد': 'بغداد',
+    'بەغدا': 'بغداد',
+    'کاتى هەولێر': 'كاتی هەولێر',
+    'کاتی هەولێر': 'كاتی هەولێر',
+    'کاتی هه‌ولێر': 'كاتی هەولێر',
+    'كاتی هەولێر': 'كاتی هەولێر',
+    'نینوى': 'نینوى',
+    'نینوی': 'نینوى',
+    'نەینەوا': 'نینوى',
+    'نەینەوا / موسڵ': 'نینوى',
+    'صلاح الدین': 'صلاح الدین',
+    'کرکوک': 'كرکوک',
+    'کەرکوک': 'كرکوک',
+    'کەرکووک': 'كرکوک',
+    'كرکوک': 'كرکوک',
+    'ديالى': 'ديالى',
+    'دیالە': 'ديالى',
+    'دیالی': 'ديالى',
+    'بێ ژمارە': 'بێ ژمارە',
+    'هەڵەبجە': 'هەڵەبجە',
+    'پۆلیس': 'پۆلیس',
+    'الانبار': 'الانبار',
+    'ئەنبار': 'الانبار',
+    'انبار': 'انبار',
+    'بصرة': 'بصرة',
+    'بەسرە': 'بصرة',
+    'البصرة': 'بصرة',
+    'كربلاء': 'كربلاء',
+    'کەربەلا': 'كربلاء',
+    'القادسية': 'القادسية',
+    'قادسیە': 'القادسية',
+    'قادسیة': 'القادسية',
+    'النجف': 'النجف',
+    'بابل': 'بابل',
+    'میسان': 'میسان',
+    'مثنى': 'مثنى',
+    'واست': 'واست',
+    'واسط': 'واست',
+    'زیقار': 'زیقار',
+    'کارەبا': 'کارەبا',
+    'تەندروستی': 'تەندروستی',
+    'پەروەردە': 'پەروەردە',
+    'داد': 'داد',
+    'دارایی': 'دارایی',
+    'وەزارەتی پێشمەرگە': 'وەزارەتی پێشمەرگە',
+    'ئاوەدان کردنەوە': 'ئاوەدان کردنەوە',
+    'ئاوەدانکردنەوە': 'ئاوەدان کردنەوە',
+    'ئەوروپی': 'ئەوروپی',
+    'شارەوانی و گەشتوگوزار': 'شارەوانى و گەشت و گوزار',
+    'شارەوانى و گەشت و گوزار': 'شارەوانى و گەشت و گوزار',
+    'کشتوکاڵ و سەرچاوەکانی ئاو': 'کشتوکاڵ و سەرچاوەکانى ئاو',
+    'کشتوکاڵ و سەرچاوەکانى ئاو': 'کشتوکاڵ و سەرچاوەکانى ئاو',
+
+    // Inspection (پشکنین - یەکەم، دووەم، سێهەم، چوارەم، پێنجەم، شەشەم) - هاوتا لەگەڵ خشتەی AA
+    '1': 'یەکەم',
+    '١': 'یەکەم',
+    'یەکەم': 'یەکەم',
+    'یەكەم': 'یەکەم',
+    'يه‌كه‌م': 'یەکەم',
+    'يةكةم': 'یەکەم',
+    'يه ك م': 'یەکەم',
+    'يه كه م': 'یەکەم',
+    'یکەم': 'یەکەم',
+    'یەکه م': 'یەکەم',
+
+    '2': 'دووەم',
+    '٢': 'دووەم',
+    'دووەم': 'دووەم',
+    'دووه‌م': 'دووەم',
+    'دووه م': 'دووەم',
+    'دووهم': 'دووەم',
+    'دووه م ': 'دووەم',
+
+    '3': 'سێهەم',
+    '٣': 'سێهەم',
+    'سێهەم': 'سێهەم',
+    'سێهه‌م': 'سێهەم',
+    'سێیەم': 'سێهەم',
+    'سێ یەم': 'سێهەم',
+    'سێیه‌م': 'سێهەم',
+
+    '4': 'چوارەم',
+    '٤': 'چوارەم',
+    'چوارەم': 'چوارەم',
+    'چواره‌م': 'چوارەم',
+    'چوارهم': 'چوارەم',
+
+    '5': 'پێنجەم',
+    '٥': 'پێنجەم',
+    'پێنجەم': 'پێنجەم',
+    'پينجەم': 'پێنجەم',
+
+    '6': 'شەشەم',
+    '٦': 'شەشەم',
+    'شەشەم': 'شەشەم'
+  };
+  return map[trimmed] || map[clean] || trimmed;
+}
+
 // --- SECURE SESSION STORE (ADMIN & OPERATOR TOKENS) ---
 // { [token]: { userId, username, role, expiresAt } }
 const activeSessions = new Map();
@@ -521,7 +687,7 @@ const server = http.createServer((req, res) => {
         return res.end(fs.readFileSync(vPath, 'utf8'));
       }
     } catch (e) {}
-    return res.end(JSON.stringify({ version: '1.1.0', build: 110 }));
+    return res.end(JSON.stringify({ version: '1.5.5', build: 1005 }));
   }
 
   if (pathname === '/api/system/check-update' && req.method === 'POST') {
@@ -1238,9 +1404,9 @@ const server = http.createServer((req, res) => {
       const date_ = body.date_ || new Date().toISOString().slice(0, 10);
       const user_ = session ? session.username : (body.user_ || 'admin');
       const AA = String(body.AA || '').trim();
-      const BBB = String(body.BBB || '').trim();
-      const CCC = String(body.CCC || '').trim();
-      const DDD = String(body.DDD || '').trim();
+      const BBB = alignWithAATable(String(body.BBB || '').trim());
+      const CCC = alignWithAATable(String(body.CCC || '').trim());
+      const DDD = alignWithAATable(String(body.DDD || '').trim()) || 'یەکەم';
       const EEE = String(body.EEE || '').trim();
 
       const defects = body.defects.map(d => String(d).trim()).filter(Boolean);
@@ -1376,8 +1542,8 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/car-records' && req.method === 'POST') {
     sanitizeBody(req, async (err, data) => {
       if (err || !data) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ error: 'Invalid record payload' }));
+        res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+        return res.end(JSON.stringify({ success: false, error: 'Invalid record payload' }));
       }
 
       try {
@@ -1387,23 +1553,77 @@ const server = http.createServer((req, res) => {
           inspector_name, price, result, expire_date, lab_name
         } = data;
 
-        if (isSqlServerConnected && sql) {
-          let picBuffer = null;
-          if (pic && typeof pic === 'string' && pic.includes('base64,')) {
-            const base64Data = pic.split('base64,')[1];
+        const cleanCarNo = carNo ? String(carNo).trim().slice(0, 8) : '';
+        const cleanBash = alignWithAATable(bash ? String(bash).trim().slice(0, 30) : '');
+        const cleanPlet = alignWithAATable(plet ? String(plet).trim().slice(0, 30) : '');
+        const cleanNPshknin = alignWithAATable(N_pshknin ? String(N_pshknin).trim().slice(0, 50) : '');
+        const dateToCheck = (date_into && String(date_into).trim()) ? String(date_into).trim().slice(0, 10) : new Date().toISOString().slice(0, 10);
+
+        let picBuffer = null;
+        if (pic && typeof pic === 'string' && pic.includes('base64,')) {
+          const base64Data = pic.split('base64,')[1];
+          if (base64Data && base64Data.trim().length > 0) {
             picBuffer = Buffer.from(base64Data, 'base64');
+          }
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // مەرجی یەکەم: ئەگەر (ژمارە + بەش + ناوی پارێزگا + پشکنینی + وێنەی گیراو) بەتاڵ بوو، کارەکە ڕابگرە
+        // ══════════════════════════════════════════════════════════════════
+        if (!cleanCarNo || !cleanBash || !cleanPlet || !cleanNPshknin || !picBuffer || picBuffer.length === 0) {
+          res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+          return res.end(JSON.stringify({ 
+            success: false, 
+            error: 'تکایە هەموو خانە پێویستەکان (ژمارە، بەش، ناوی پارێزگا، پشکنینی، وێنەی گیراو) پڕبکەرەوە!' 
+          }));
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // مەرجی دووەم: ڕۆژانە یەک جار وێنە تۆمار دەکرێت
+        // ئەگەر هاتوو (ژمارە + بەش + ناوی پارێزگا + پشکنینی + بەرواری پشکنین) یەکسان بوو تۆماری مەکە
+        // ══════════════════════════════════════════════════════════════════
+        if (isSqlServerConnected && sql) {
+          const checkReq = new sql.Request();
+          checkReq.input('chkCarNo', sql.NVarChar(8), cleanCarNo);
+          checkReq.input('chkBash', sql.NVarChar(30), cleanBash);
+          checkReq.input('chkPlet', sql.NVarChar(30), cleanPlet);
+          checkReq.input('chkNPshknin', sql.NVarChar(50), cleanNPshknin);
+          checkReq.input('chkDateInto', sql.Date, dateToCheck);
+
+          const dupCheck = await checkReq.query(`
+            SELECT TOP 1 id FROM dbo.CAR_
+            WHERE UPPER(REPLACE(REPLACE(LTRIM(RTRIM(ISNULL(carNo, ''))), ' ', ''), '-', '')) = UPPER(REPLACE(REPLACE(@chkCarNo, ' ', ''), '-', ''))
+              AND REPLACE(REPLACE(LTRIM(RTRIM(ISNULL(bash, ''))), ' ', ''), '-', '') = REPLACE(REPLACE(@chkBash, ' ', ''), '-', '')
+              AND (
+                REPLACE(REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(ISNULL(plet, ''))), ' ', ''), N'ی', N'ى'), N'ک', N'ك'), N'ة', N'ە') = 
+                REPLACE(REPLACE(REPLACE(REPLACE(@chkPlet, ' ', ''), N'ی', N'ى'), N'ک', N'ك'), N'ة', N'ە')
+              )
+              AND (
+                LTRIM(RTRIM(ISNULL(N_pshknin, ''))) = @chkNPshknin
+                OR LTRIM(RTRIM(ISNULL(N_pshknin, ''))) = REPLACE(@chkNPshknin, N'سێیەم', N'سێهەم')
+                OR LTRIM(RTRIM(ISNULL(N_pshknin, ''))) = REPLACE(@chkNPshknin, N'سێهەم', N'سێیەم')
+              )
+              AND CAST(date_into AS DATE) = CAST(@chkDateInto AS DATE)
+          `);
+if (dupCheck.recordset && dupCheck.recordset.length > 0) {
+            res.writeHead(409, { 'Content-Type': 'application/json; charset=utf-8' });
+            return res.end(JSON.stringify({ 
+              success: false, 
+              duplicate: true, 
+              error: 'ئەم وێنەیە پێشتر تۆمار کراوە' 
+            }));
           }
 
           const request = new sql.Request();
-          request.input('carNo', sql.NVarChar(8), carNo ? String(carNo).trim().slice(0, 8) : null);
-          request.input('bash', sql.NVarChar(30), bash ? String(bash).trim().slice(0, 30) : null);
-          request.input('plet', sql.NVarChar(30), plet ? String(plet).trim().slice(0, 30) : null);
+          request.input('carNo', sql.NVarChar(8), cleanCarNo);
+          request.input('bash', sql.NVarChar(30), cleanBash);
+          request.input('plet', sql.NVarChar(30), cleanPlet);
           request.input('pic', sql.Image, picBuffer);
-          request.input('date_into', sql.Date, date_into || new Date());
+          request.input('date_into', sql.Date, dateToCheck);
           request.input('Nnote', sql.NChar(100), Nnote ? String(Nnote).trim().slice(0, 100) : null);
           request.input('uuser', sql.NVarChar(50), uuser ? String(uuser).trim().slice(0, 50) : 'Operator');
           request.input('bar_', sql.NVarChar(255), bar_ ? String(bar_).trim().slice(0, 255) : null);
-          request.input('N_pshknin', sql.NVarChar(50), N_pshknin ? String(N_pshknin).trim().slice(0, 50) : null);
+          request.input('N_pshknin', sql.NVarChar(50), cleanNPshknin);
           
           request.input('driver_name', sql.NVarChar(100), driver_name ? String(driver_name).trim().slice(0, 100) : null);
           request.input('mobile', sql.NVarChar(20), mobile ? String(mobile).trim().slice(0, 20) : null);
@@ -1433,17 +1653,46 @@ const server = http.createServer((req, res) => {
           `);
         } else {
           // In-memory fallback
+          const isDuplicate = carRecords.some(r =>
+            String(r.carNo || '').trim().replace(/[-\s]/g, '').toUpperCase() === cleanCarNo.replace(/[-\s]/g, '').toUpperCase() &&
+            String(r.bash || '').trim().replace(/[-\s]/g, '') === cleanBash.replace(/[-\s]/g, '') &&
+            (
+              normalizeKurdishText(r.plet) === normalizeKurdishText(cleanPlet) ||
+              normalizeKurdishText(r.plet).replace(/ى/g, 'ی') === normalizeKurdishText(cleanPlet).replace(/ى/g, 'ی')
+            ) &&
+            (
+              normalizeKurdishText(r.N_pshknin) === normalizeKurdishText(cleanNPshknin) ||
+              normalizeKurdishText(r.N_pshknin).replace('سێهەم', 'سێیەم') === normalizeKurdishText(cleanNPshknin).replace('سێهەم', 'سێیەم')
+            ) &&
+            String(r.date_into || '').slice(0, 10) === dateToCheck
+          );
+
+          if (isDuplicate) {
+            res.writeHead(409, { 'Content-Type': 'application/json; charset=utf-8' });
+            return res.end(JSON.stringify({ 
+              success: false, 
+              duplicate: true, 
+              error: 'ئەم وێنەیە پێشتر تۆمار کراوە' 
+            }));
+          }
+
           carRecords.unshift({
             id: carRecords.length + 1,
-            carNo: carNo ? String(carNo).trim().slice(0, 8) : null,
-            bash, plet, pic, date_into: date_into || new Date().toISOString().slice(0, 10),
-            Nnote, uuser: uuser || 'Operator', bar_: bar_ || null, N_pshknin,
+            carNo: cleanCarNo,
+            bash: cleanBash,
+            plet: cleanPlet,
+            pic,
+            date_into: dateToCheck,
+            Nnote,
+            uuser: uuser || 'Operator',
+            bar_: bar_ || null,
+            N_pshknin: cleanNPshknin,
             driver_name, mobile, address, chassis, color, gear, fuel, pistons,
             inspector_name, price, result, expire_date, lab_name
           });
         }
 
-        res.writeHead(201, { 'Content-Type': 'application/json' });
+        res.writeHead(201, { 'Content-Type': 'application/json; charset=utf-8' });
         return res.end(JSON.stringify({ success: true, message: 'Record inserted into CAR_ table successfully!' }));
       } catch (insertErr) {
         console.error('Error inserting into CAR_', insertErr);
