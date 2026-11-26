@@ -45,8 +45,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const type = e.target.type;
       // Apply to text, search, and undefined types, but NOT passwords or emails where exact characters might matter (though rarely typed in Kurdish)
       if (type === 'text' || type === 'search' || !type || e.target.tagName === 'TEXTAREA') {
-         // Skip chassis and barcode as they are strictly alphanumeric/English
-         if (e.target.id === 'cd-chassis' || e.target.id === 'cd-barcode') return;
+         // Skip fields where exact characters must not be modified
+         if (
+           e.target.id === 'cd-chassis' ||
+           e.target.id === 'cd-barcode' ||
+           e.target.id === 'car-carNo' ||
+           e.target.id === 'cd-carNo' ||
+           e.target.id === 'car-plet' ||
+           e.target.id === 'cd-plet' ||
+           e.target.id === 'car-bash' ||
+           e.target.id === 'cd-bash' ||
+           e.target.id === 'car-N_pshknin' ||
+           e.target.id === 'cd-N_pshknin'
+         ) return;
          
          const start = e.target.selectionStart;
          const end = e.target.selectionEnd;
@@ -1009,6 +1020,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // هاوتاکردنی تەواوەتی لەگەڵ خشتەی AA لە داتابەیسی تاقیگە (Taqega)
   // ══════════════════════════════════════════════════════════════════
   function alignWithAATable(text) {
+    if (!text || typeof text !== 'string') return '';
+    return text.trim();
+  }
+  function _unused_alignMap(text) {
     if (!text || typeof text !== 'string') return text;
     const trimmed = text.trim();
     const map = {
@@ -2023,9 +2038,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const notesInput = document.getElementById('car-notes');
 
     const carNo = carNoInput ? carNoInput.value.trim() : '';
-    const bash = bashInput ? alignWithAATable(bashInput.value.trim()) : '';
-    const plet = pletInput ? alignWithAATable(pletInput.value.trim()) : '';
-    const N_pshknin = nPshkninInput ? alignWithAATable(nPshkninInput.value.trim()) : '';
+    const bash = bashInput ? bashInput.value.trim() : '';
+    const plet = pletInput ? pletInput.value.trim() : '';
+    const N_pshknin = nPshkninInput ? nPshkninInput.value.trim() : '';
     const date_into = (dateIntoInput && dateIntoInput.value) ? dateIntoInput.value : new Date().toISOString().slice(0, 10);
     const Nnote = (notesInput && notesInput.value) ? notesInput.value.trim() : null;
     const pic = state.uploadedImageBase64 || null;
@@ -2142,9 +2157,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e) e.preventDefault();
 
     const carNo = document.getElementById('cd-carNo') ? document.getElementById('cd-carNo').value.trim() : '';
-    const bash = document.getElementById('cd-bash') ? alignWithAATable(document.getElementById('cd-bash').value.trim()) : '';
-    const plet = document.getElementById('cd-plet') ? alignWithAATable(document.getElementById('cd-plet').value.trim()) : '';
-    const N_pshknin = document.getElementById('cd-N_pshknin') ? alignWithAATable(document.getElementById('cd-N_pshknin').value.trim()) : '';
+    const bash = document.getElementById('cd-bash') ? document.getElementById('cd-bash').value.trim() : '';
+    const plet = document.getElementById('cd-plet') ? document.getElementById('cd-plet').value.trim() : '';
+    const N_pshknin = document.getElementById('cd-N_pshknin') ? document.getElementById('cd-N_pshknin').value.trim() : '';
     const pic = state.uploadedImageBase64 || null;
     const date_into = document.getElementById('cd-date_') ? document.getElementById('cd-date_').value.slice(0, 10) : new Date().toISOString().slice(0, 10);
 
@@ -2228,8 +2243,23 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.success) {
         alert('✅ زانیارییەکان بە سەرکەوتوویی پاشەکەوت کران!');
         state.lastCarRecord = payload;
-        const cdf = document.getElementById('car-details-form');
-        if (cdf) cdf.reset();
+        
+        // پاراستنی تەواوی هەڵبژێردراوەکانی بەش، پارێزگا، و پشکنین تا نەگۆڕدرێن
+        const savedBash = document.getElementById('cd-bash') ? document.getElementById('cd-bash').value : '';
+        const savedPlet = document.getElementById('cd-plet') ? document.getElementById('cd-plet').value : '';
+        const savedPshknin = document.getElementById('cd-N_pshknin') ? document.getElementById('cd-N_pshknin').value : '';
+
+        // تەنها پاککردنەوەی خانە تایبەتەکانی ئۆتۆمبێل (ژمارە، شاسی، شۆفێر، تێبینی...)
+        ['cd-carNo', 'cd-chassis', 'cd-barcode', 'cd-driverName', 'cd-mobile', 'cd-notes'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+
+        // دڵنیابوونەوە لە مانەوەی هەڵبژاردنەکانی کۆمبۆبۆکس وەک خۆی
+        if (savedBash && document.getElementById('cd-bash')) document.getElementById('cd-bash').value = savedBash;
+        if (savedPlet && document.getElementById('cd-plet')) document.getElementById('cd-plet').value = savedPlet;
+        if (savedPshknin && document.getElementById('cd-N_pshknin')) document.getElementById('cd-N_pshknin').value = savedPshknin;
+
         state.uploadedImageBase64 = null;
         
         const previewWrap = document.getElementById('capture-preview-wrap');
