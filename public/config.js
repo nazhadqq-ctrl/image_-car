@@ -35,5 +35,5 @@ window.APP_CONFIG = {
 
   // App Metadata
   appName: "تۆمارکردنی زانیاری ئۆتۆمبێل",
-  appVersion: "1.5.7"
+  appVersion: "1.5.8"
 };
